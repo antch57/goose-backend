@@ -9,16 +9,22 @@ type Album struct {
 	Songs       []*Song `json:"songs"`
 }
 
+type AlbumInput struct {
+	Title       string       `json:"title"`
+	ReleaseDate string       `json:"releaseDate"`
+	Songs       []*SongInput `json:"songs"`
+}
+
 type Band struct {
-	ID     *string  `json:"id,omitempty"`
+	ID     string   `json:"id"`
 	Name   string   `json:"name"`
 	Genre  string   `json:"genre"`
-	Albums []*Album `json:"albums"`
-	Year   *int     `json:"year,omitempty"`
+	Albums []*Album `json:"albums,omitempty"`
+	Year   int      `json:"year"`
 }
 
 type Bands struct {
-	Bands []*Band `json:"bands"`
+	Bands []*Band `json:"bands,omitempty"`
 }
 
 type Mutation struct {
@@ -29,6 +35,12 @@ type Query struct {
 
 type Song struct {
 	ID       string `json:"id"`
+	Title    string `json:"title"`
+	Duration string `json:"duration"`
+	Album    *Album `json:"album,omitempty"`
+}
+
+type SongInput struct {
 	Title    string `json:"title"`
 	Duration string `json:"duration"`
 }

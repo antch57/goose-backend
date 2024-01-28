@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,41 +16,55 @@ type DBCredentials struct {
 	Password string
 }
 
-type DB struct {
-	*sql.DB
-}
+var Db *sql.DB
 
-func Open(creds DBCredentials) (*DB, error) {
+func Open() {
 	var err error
+	// FIXME: don't hardcode credentials
+	// DB connection
+	creds := DBCredentials{
+		Host:     "localhost",
+		Port:     "3306",
+		Database: "music_library",
+		Username: "root",
+		Password: "my-secret-pw",
+	}
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", creds.Username, creds.Password, creds.Host, creds.Port, creds.Database)
 	fmt.Printf("dsn: %s\n", dsn)
+
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return nil, err
+		log.Panic(err)
 	}
-	return &DB{db}, nil
+
+	Db = db
 }
 
-func (conn *DB) Close() error {
-	err := conn.DB.Close()
-	if err != nil {
-		return fmt.Errorf("close failed: %w", err)
-	}
-	return nil
+func Close() error {
+	return Db.Close()
 }
 
-func (conn *DB) Query(query string, args ...interface{}) (*sql.Rows, error) {
-	rows, err := conn.DB.Query(query, args...) // Call Query method on db.DB instead of db
+func Query(query string, args ...interface{}) (*sql.Rows, error) {
+	rows, err := Db.Query(query, args...) // Call Query method on db.DB instead of db
 	if err != nil {
 		return nil, fmt.Errorf("query failed: %w", err)
 	}
 	return rows, nil
 }
 
-func (conn *DB) Exec(query string, args ...interface{}) (sql.Result, error) {
-	result, err := conn.DB.Exec(query, args...) // Call Exec method on db.DB instead of db
+func Exec(query string, args ...interface{}) (sql.Result, error) {
+	result, err := Db.Exec(query, args...) // Call Exec method on db.DB instead of db
 	if err != nil {
 		return nil, fmt.Errorf("exec failed: %w", err)
 	}
 	return result, nil
+}
+
+func Transacntion() (*sql.Tx, error) {
+	tx, err := Db.Begin()
+	if err != nil {
+		return nil, fmt.Errorf("transaction failed: %w", err)
+	}
+	return tx, nil
 }

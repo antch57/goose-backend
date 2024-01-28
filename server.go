@@ -28,38 +28,15 @@ func playgroundHandler() gin.HandlerFunc {
 	}
 }
 
-// func helloHandler(resolver *graph.Resolver) gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		data, err := resolver.
-// 			c.JSON(200, gin.H{
-// 			"message": "Hello world!",
-// 		})
-// 	}
-// }
-
 func main() {
-	// DB connection
-	creds := db.DBCredentials{
-		Host:     "localhost",
-		Port:     "3306",
-		Database: "goose",
-		Username: "admin",
-		Password: "my-secret-pw",
-	}
 
-	conn, err := db.Open(creds)
-	if err != nil {
-		panic(err)
-	}
-	defer conn.Close()
-
-	// Resolvers
-	resolver := &graph.Resolver{}
+	// Open up DB connection to use throughout the app
+	db.Open()
+	defer db.Close()
 
 	// Setting up Gin
 	r := gin.Default()
-	// r.GET("/hello", helloHandler())
-	r.POST("/query", graphqlHandler(resolver))
+	r.POST("/query", graphqlHandler(&graph.Resolver{}))
 	r.GET("/", playgroundHandler())
 	r.Run()
 }

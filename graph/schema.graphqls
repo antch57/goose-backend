@@ -1,13 +1,13 @@
 type Bands {
-  bands: [Band!]!
+  bands: [Band!]
 }
 
 type Band {
-  id: ID
+  id: ID!
   name: String!
   genre: String!
-  albums: [Album!]!
-  year: Int
+  albums: [Album!]
+  year: Int!
 }
 
 type Album {
@@ -21,17 +21,29 @@ type Song {
   id: ID!
   title: String!
   duration: String!
+  album: Album
+}
+
+input AlbumInput {
+  title: String!
+  releaseDate: String!
+  songs: [SongInput!]!
+}
+
+input SongInput {
+  title: String!
+  duration: String!
 }
 
 type Query {
-  bands: [Band!]!
+  bands: [Band!]
   band(id: ID!): Band
   album(id: ID!): Album
   song(id: ID!): Song
 }
 
 type Mutation {
-  createBand(name: String!, genre: String!): Band!
+  createBand(name: String!, genre: String!, year: Int!, albums: [AlbumInput!]): Band!
   createAlbum(bandId: ID!, title: String!, releaseDate: String!): Album!
   createSong(albumId: ID!, title: String!, duration: String!): Song!
 }

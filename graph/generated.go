@@ -55,11 +55,12 @@ type ComplexityRoot struct {
 	}
 
 	Band struct {
-		Albums func(childComplexity int) int
-		Genre  func(childComplexity int) int
-		ID     func(childComplexity int) int
-		Name   func(childComplexity int) int
-		Year   func(childComplexity int) int
+		Albums      func(childComplexity int) int
+		Description func(childComplexity int) int
+		Genre       func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Year        func(childComplexity int) int
 	}
 
 	Bands struct {
@@ -68,7 +69,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateAlbum func(childComplexity int, bandID string, title string, releaseDate string) int
-		CreateBand  func(childComplexity int, name string, genre string, year int, albums []*model.AlbumInput) int
+		CreateBand  func(childComplexity int, name string, genre string, year int, albums []*model.AlbumInput, description *string) int
 		CreateSong  func(childComplexity int, albumID string, title string, duration string) int
 	}
 
@@ -88,7 +89,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput) (*model.Band, error)
+	CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput, description *string) (*model.Band, error)
 	CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string) (*model.Album, error)
 	CreateSong(ctx context.Context, albumID string, title string, duration string) (*model.Song, error)
 }
@@ -153,6 +154,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Band.Albums(childComplexity), true
 
+	case "Band.description":
+		if e.complexity.Band.Description == nil {
+			break
+		}
+
+		return e.complexity.Band.Description(childComplexity), true
+
 	case "Band.genre":
 		if e.complexity.Band.Genre == nil {
 			break
@@ -210,7 +218,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateBand(childComplexity, args["name"].(string), args["genre"].(string), args["year"].(int), args["albums"].([]*model.AlbumInput)), true
+		return e.complexity.Mutation.CreateBand(childComplexity, args["name"].(string), args["genre"].(string), args["year"].(int), args["albums"].([]*model.AlbumInput), args["description"].(*string)), true
 
 	case "Mutation.createSong":
 		if e.complexity.Mutation.CreateSong == nil {
@@ -493,6 +501,15 @@ func (ec *executionContext) field_Mutation_createBand_args(ctx context.Context, 
 		}
 	}
 	args["albums"] = arg3
+	var arg4 *string
+	if tmp, ok := rawArgs["description"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["description"] = arg4
 	return args, nil
 }
 
@@ -1040,6 +1057,47 @@ func (ec *executionContext) fieldContext_Band_year(ctx context.Context, field gr
 	return fc, nil
 }
 
+func (ec *executionContext) _Band_description(ctx context.Context, field graphql.CollectedField, obj *model.Band) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Band_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Band_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Band",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Bands_bands(ctx context.Context, field graphql.CollectedField, obj *model.Bands) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Bands_bands(ctx, field)
 	if err != nil {
@@ -1086,6 +1144,8 @@ func (ec *executionContext) fieldContext_Bands_bands(ctx context.Context, field 
 				return ec.fieldContext_Band_albums(ctx, field)
 			case "year":
 				return ec.fieldContext_Band_year(ctx, field)
+			case "description":
+				return ec.fieldContext_Band_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -1107,7 +1167,7 @@ func (ec *executionContext) _Mutation_createBand(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateBand(rctx, fc.Args["name"].(string), fc.Args["genre"].(string), fc.Args["year"].(int), fc.Args["albums"].([]*model.AlbumInput))
+		return ec.resolvers.Mutation().CreateBand(rctx, fc.Args["name"].(string), fc.Args["genre"].(string), fc.Args["year"].(int), fc.Args["albums"].([]*model.AlbumInput), fc.Args["description"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1142,6 +1202,8 @@ func (ec *executionContext) fieldContext_Mutation_createBand(ctx context.Context
 				return ec.fieldContext_Band_albums(ctx, field)
 			case "year":
 				return ec.fieldContext_Band_year(ctx, field)
+			case "description":
+				return ec.fieldContext_Band_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -1336,6 +1398,8 @@ func (ec *executionContext) fieldContext_Query_bands(ctx context.Context, field 
 				return ec.fieldContext_Band_albums(ctx, field)
 			case "year":
 				return ec.fieldContext_Band_year(ctx, field)
+			case "description":
+				return ec.fieldContext_Band_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -1389,6 +1453,8 @@ func (ec *executionContext) fieldContext_Query_band(ctx context.Context, field g
 				return ec.fieldContext_Band_albums(ctx, field)
 			case "year":
 				return ec.fieldContext_Band_year(ctx, field)
+			case "description":
+				return ec.fieldContext_Band_description(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -3786,6 +3852,8 @@ func (ec *executionContext) _Band(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "description":
+			out.Values[i] = ec._Band_description(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

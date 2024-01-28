@@ -9,6 +9,7 @@ type Band {
   genre: String!
   albums: [Album!]
   year: Int!
+  description: String
 }
 
 type Album {
@@ -44,7 +45,7 @@ type Query {
 }
 
 type Mutation {
-  createBand(name: String!, genre: String!, year: Int!, albums: [AlbumInput!]): Band!
+  createBand(name: String!, genre: String!, year: Int!, albums: [AlbumInput!], description: String): Band!
   createAlbum(bandId: ID!, title: String!, releaseDate: String!): Album!
   createSong(albumId: ID!, title: String!, duration: String!): Song!
 }

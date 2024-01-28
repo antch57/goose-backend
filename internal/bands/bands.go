@@ -1,15 +1,17 @@
 package bands
 
 import (
+	"database/sql"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/antch57/goose/graph/model"
 	"github.com/antch57/goose/internal/db"
 )
 
-func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumInput) (model.Band, error) {
+func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumInput, description *string) (model.Band, error) {
 	fmt.Println("Creating band...")
 
 	// Being db transaction
@@ -18,8 +20,19 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		return model.Band{}, err
 	}
 
-	res, err := tx.Exec("INSERT INTO Bands (name, genre, year) VALUES (?, ?, ?)", name, genre, year)
+	var res sql.Result
+	if description != nil {
+		res, err = tx.Exec("INSERT INTO Bands (name, genre, year, description) VALUES (?, ?, ?, ?)", name, genre, year, *description)
+	} else {
+		res, err = tx.Exec("INSERT INTO Bands (name, genre, year) VALUES (?, ?, ?, NULL)", name, genre, year)
+	}
 	if err != nil {
+		// Handle unique constraint error
+		if strings.Contains(err.Error(), "Duplicate entry") {
+			tx.Rollback()
+			return model.Band{}, fmt.Errorf("band with name %s and genre %s already exists", name, genre)
+		}
+
 		tx.Rollback()
 		return model.Band{}, err
 	}
@@ -65,11 +78,18 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		return model.Band{}, err
 	}
 
+	var bandDescription *string
+	if description != nil {
+		// Create new string so that the pointer is not pointing to the same memory address
+		bandDescription = new(string)
+		*bandDescription = *description
+	}
 	band := model.Band{
-		Name:   name,
-		Genre:  genre,
-		Year:   year,
-		Albums: albums,
+		Name:        name,
+		Genre:       genre,
+		Year:        year,
+		Albums:      albums,
+		Description: bandDescription,
 	}
 
 	return band, nil
@@ -118,7 +138,7 @@ func GetBands() ([]*model.Band, error) {
 	fmt.Println("Getting band...")
 	bands := []*model.Band{}
 
-	rows, err := db.Query("SELECT id, name, genre, year FROM Bands")
+	rows, err := db.Query("SELECT id, name, genre, year, description FROM Bands")
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +147,7 @@ func GetBands() ([]*model.Band, error) {
 	for rows.Next() {
 		var band model.Band
 
-		err := rows.Scan(&band.ID, &band.Name, &band.Genre, &band.Year)
+		err := rows.Scan(&band.ID, &band.Name, &band.Genre, &band.Year, &band.Description)
 		if err != nil {
 			return nil, err
 		}

@@ -13,9 +13,8 @@ import (
 )
 
 // CreateBand is the resolver for the createBand field.
-func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput) (*model.Band, error) {
-	fmt.Println("Creating band...")
-	band, err := bands.CreateBand(name, genre, year, albums)
+func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput, description *string) (*model.Band, error) {
+	band, err := bands.CreateBand(name, genre, year, albums, description)
 	if err != nil {
 		return nil, err
 	}

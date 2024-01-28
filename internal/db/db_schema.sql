@@ -6,7 +6,9 @@ CREATE TABLE IF NOT EXISTS Bands (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   genre VARCHAR(255) NOT NULL,
-  year INT
+  year INT NOT NULL,
+  description TEXT,
+  UNIQUE (name, genre)
 );
 
 CREATE TABLE IF NOT EXISTS Albums (

@@ -16,11 +16,12 @@ type AlbumInput struct {
 }
 
 type Band struct {
-	ID     string   `json:"id"`
-	Name   string   `json:"name"`
-	Genre  string   `json:"genre"`
-	Albums []*Album `json:"albums,omitempty"`
-	Year   int      `json:"year"`
+	ID          string   `json:"id"`
+	Name        string   `json:"name"`
+	Genre       string   `json:"genre"`
+	Albums      []*Album `json:"albums,omitempty"`
+	Year        int      `json:"year"`
+	Description *string  `json:"description,omitempty"`
 }
 
 type Bands struct {

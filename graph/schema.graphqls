@@ -1,3 +1,4 @@
+# fix the types for fong time and date
 type Bands {
   bands: [Band!]
 }

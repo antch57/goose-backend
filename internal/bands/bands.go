@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/antch57/goose/graph/model"
-	"github.com/antch57/goose/src/db"
+	"github.com/antch57/goose/internal/db"
 )
 
 func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumInput) (model.Band, error) {

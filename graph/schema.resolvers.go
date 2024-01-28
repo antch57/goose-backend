@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	"github.com/antch57/goose/graph/model"
-	"github.com/antch57/goose/src/bands"
+	"github.com/antch57/goose/internal/bands"
 )
 
 // CreateBand is the resolver for the createBand field.

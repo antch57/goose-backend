@@ -4,7 +4,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/antch57/goose/graph"
-	"github.com/antch57/goose/src/db"
+	"github.com/antch57/goose/internal/db"
 	"github.com/gin-gonic/gin"
 )
 

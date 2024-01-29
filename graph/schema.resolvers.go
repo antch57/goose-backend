@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	"github.com/antch57/goose/graph/model"
+	"github.com/antch57/goose/internal/albums"
 	"github.com/antch57/goose/internal/bands"
 )
 
@@ -23,12 +24,31 @@ func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre st
 
 // CreateAlbum is the resolver for the createAlbum field.
 func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string) (*model.Album, error) {
-	panic(fmt.Errorf("not implemented: CreateAlbum - createAlbum"))
+	album, err := albums.CreateAlbum(bandID, title, releaseDate)
+	if err != nil {
+		return nil, err
+	}
+	return album, nil
 }
 
 // CreateSong is the resolver for the createSong field.
-func (r *mutationResolver) CreateSong(ctx context.Context, albumID string, title string, duration int) (*model.Song, error) {
+func (r *mutationResolver) CreateSong(ctx context.Context, bandID string, albumID string, title string, duration int) (*model.Song, error) {
 	panic(fmt.Errorf("not implemented: CreateSong - createSong"))
+}
+
+// DeleteBand is the resolver for the deleteBand field.
+func (r *mutationResolver) DeleteBand(ctx context.Context, bandID string) (bool, error) {
+	panic(fmt.Errorf("not implemented: DeleteBand - deleteBand"))
+}
+
+// DeleteAlbum is the resolver for the deleteAlbum field.
+func (r *mutationResolver) DeleteAlbum(ctx context.Context, albumID string) (bool, error) {
+	panic(fmt.Errorf("not implemented: DeleteAlbum - deleteAlbum"))
+}
+
+// DeleteSong is the resolver for the deleteSong field.
+func (r *mutationResolver) DeleteSong(ctx context.Context, songID string) (bool, error) {
+	panic(fmt.Errorf("not implemented: DeleteSong - deleteSong"))
 }
 
 // Bands is the resolver for the bands field.

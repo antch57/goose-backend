@@ -16,13 +16,14 @@ type Album {
   title: String!
   releaseDate: String!
   songs: [Song!]!
+  bandId: ID!
 }
 
 type Song {
   id: ID!
   title: String!
   duration: Int!
-  album: Album
+  albumId: ID
 }
 
 input AlbumInput {
@@ -34,6 +35,7 @@ input AlbumInput {
 input SongInput {
   title: String!
   duration: Int!
+  albumId: ID
 }
 
 type Query {
@@ -46,5 +48,8 @@ type Query {
 type Mutation {
   createBand(name: String!, genre: String!, year: Int!, albums: [AlbumInput!], description: String): Band!
   createAlbum(bandId: ID!, title: String!, releaseDate: String!): Album!
-  createSong(albumId: ID!, title: String!, duration: Int!): Song!
+  createSong(bandId: ID!, albumId: ID!, title: String!, duration: Int!): Song!
+  deleteBand(bandId: ID!): Boolean!
+  deleteAlbum(albumId: ID!): Boolean!
+  deleteSong(songId: ID!): Boolean!
 }

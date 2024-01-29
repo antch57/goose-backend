@@ -1,4 +1,3 @@
--- okay so run this file when you want use this projects.
 CREATE DATABASE IF NOT EXISTS music_library;
 USE music_library;
 
@@ -14,15 +13,17 @@ CREATE TABLE IF NOT EXISTS Bands (
 CREATE TABLE IF NOT EXISTS Albums (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
-  releaseDate DATE NOT NULL,
-  bandId INT,
-  FOREIGN KEY (bandId) REFERENCES Bands(id)
+  release_date DATE NOT NULL,
+  band_id INT,
+  FOREIGN KEY (band_id) REFERENCES Bands(id)
 );
 
 CREATE TABLE IF NOT EXISTS Songs (
   id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   duration INTEGER NOT NULL,
-  albumId INT,
-  FOREIGN KEY (albumId) REFERENCES Albums(id)
+  album_id INT,
+  band_id INT NOT NULL,
+  FOREIGN KEY (album_id) REFERENCES Albums(id),
+  FOREIGN KEY (band_id) REFERENCES Bands(id)
 );

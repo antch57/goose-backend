@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/antch57/goose/graph/model"
+	"github.com/antch57/goose/internal/albums"
 	"github.com/antch57/goose/internal/db"
 )
 
@@ -43,16 +43,17 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		return model.Band{}, err
 	}
 
-	albums := convertAlbumInputsToAlbums(albumsInput)
+	albumList := albums.ConvertAlbumInputsToAlbums(albumsInput)
 
-	for _, album := range albums {
-		releaseDate, err := convertReleaseDateToTime(album.ReleaseDate)
+	for _, album := range albumList {
+		// FIXME: create album in albums pkg?
+		releaseDate, err := albums.ConvertReleaseDateToTime(album.ReleaseDate)
 		if err != nil {
 			tx.Rollback()
 			return model.Band{}, err
 		}
 
-		res, err := tx.Exec("INSERT INTO Albums (title, releaseDate, bandId) VALUES (?, ?, ?)", album.Title, releaseDate, bandID)
+		res, err := tx.Exec("INSERT INTO Albums (title, release_date, band_id) VALUES (?, ?, ?)", album.Title, releaseDate, bandID)
 		if err != nil {
 			tx.Rollback()
 			return model.Band{}, err
@@ -65,7 +66,8 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		}
 
 		for _, song := range album.Songs {
-			_, err = tx.Exec("INSERT INTO Songs (title, duration, albumId) VALUES (?, ?, ?)", song.Title, song.Duration, albumID)
+			// FIXME: create song in songs pkg?
+			_, err = tx.Exec("INSERT INTO Songs (title, duration, album_id, band_id) VALUES (?, ?, ?, ?)", song.Title, song.Duration, albumID, bandID)
 			if err != nil {
 				tx.Rollback()
 				return model.Band{}, err
@@ -89,13 +91,14 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		Name:        name,
 		Genre:       genre,
 		Year:        year,
-		Albums:      albums,
+		Albums:      albumList,
 		Description: bandDescription,
 	}
 
 	return band, nil
 }
 
+// Grab all bands from the database
 func GetBands() ([]*model.Band, error) {
 	fmt.Println("Getting bands...")
 	bands := []*model.Band{}
@@ -119,7 +122,7 @@ func GetBands() ([]*model.Band, error) {
 			return nil, err
 		}
 
-		albums, err := getAlbumsByBandId(int(bandID))
+		albums, err := albums.GetAlbumsByBandId(int(bandID))
 		if err != nil {
 			return nil, err
 		}
@@ -136,6 +139,7 @@ func GetBands() ([]*model.Band, error) {
 	return bands, nil
 }
 
+// Grab a single band from the database based off of ID
 func GetBand(id string) (*model.Band, error) {
 	fmt.Println("Getting band...")
 	var band model.Band
@@ -151,7 +155,7 @@ func GetBand(id string) (*model.Band, error) {
 		return nil, err
 	}
 
-	albums, err := getAlbumsByBandId(int(bandID))
+	albums, err := albums.GetAlbumsByBandId(int(bandID))
 	if err != nil {
 		return nil, err
 	}
@@ -159,101 +163,4 @@ func GetBand(id string) (*model.Band, error) {
 	band.Albums = albums
 
 	return &band, nil
-}
-
-// Utility function to convert AlbumInput to Album
-func convertAlbumInputsToAlbums(albumInputs []*model.AlbumInput) []*model.Album {
-	albums := []*model.Album{}
-
-	for _, albumInput := range albumInputs {
-		album := &model.Album{
-			Title:       albumInput.Title,
-			ReleaseDate: albumInput.ReleaseDate,
-			Songs:       convertSongInputsToSongs(albumInput.Songs),
-		}
-		albums = append(albums, album)
-	}
-
-	return albums
-}
-
-// Utility function to convert SongInput to Song
-func convertSongInputsToSongs(songInputs []*model.SongInput) []*model.Song {
-	songs := []*model.Song{}
-
-	for _, songInput := range songInputs {
-		song := &model.Song{
-			Title:    songInput.Title,
-			Duration: songInput.Duration,
-		}
-		songs = append(songs, song)
-	}
-
-	return songs
-}
-
-func convertReleaseDateToTime(dateString string) (time.Time, error) {
-	date, err := time.Parse("2006-01-02", dateString)
-	if err != nil {
-		return time.Time{}, err
-	}
-	return date, nil
-}
-
-func getAlbumsByBandId(bandId int) ([]*model.Album, error) {
-	albums := []*model.Album{}
-
-	rows, err := db.Query("SELECT id, title, releaseDate FROM Albums WHERE bandId = ?", bandId)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var album model.Album
-
-		err := rows.Scan(&album.ID, &album.Title, &album.ReleaseDate)
-		if err != nil {
-			return nil, err
-		}
-
-		albumID, err := strconv.Atoi(album.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		songs, err := getSongsByAlbumId(albumID)
-		if err != nil {
-			return nil, err
-		}
-
-		album.Songs = songs
-
-		albums = append(albums, &album)
-	}
-
-	return albums, nil
-}
-
-func getSongsByAlbumId(albumId int) ([]*model.Song, error) {
-	songs := []*model.Song{}
-
-	rows, err := db.Query("SELECT id, title, duration FROM Songs WHERE albumId = ?", albumId)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var song model.Song
-
-		err := rows.Scan(&song.ID, &song.Title, &song.Duration)
-		if err != nil {
-			return nil, err
-		}
-
-		songs = append(songs, &song)
-	}
-
-	return songs, nil
 }

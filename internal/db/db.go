@@ -53,6 +53,10 @@ func Query(query string, args ...interface{}) (*sql.Rows, error) {
 	return rows, nil
 }
 
+func QueryRow(query string, args ...interface{}) *sql.Row {
+	return Db.QueryRow(query, args...)
+}
+
 func Exec(query string, args ...interface{}) (sql.Result, error) {
 	result, err := Db.Exec(query, args...) // Call Exec method on db.DB instead of db
 	if err != nil {

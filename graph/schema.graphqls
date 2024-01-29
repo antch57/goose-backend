@@ -1,6 +1,3 @@
-# fix the types for fong time and date
-# scalar Duration
-
 type Bands {
   bands: [Band!]
 }

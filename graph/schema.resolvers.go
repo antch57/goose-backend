@@ -43,7 +43,11 @@ func (r *queryResolver) Bands(ctx context.Context) ([]*model.Band, error) {
 
 // Band is the resolver for the band field.
 func (r *queryResolver) Band(ctx context.Context, id string) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: Band - band"))
+	band, err := bands.GetBand(id)
+	if err != nil {
+		return nil, err
+	}
+	return band, nil
 }
 
 // Album is the resolver for the album field.

@@ -65,12 +65,6 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		}
 
 		for _, song := range album.Songs {
-			// duration, err := strconv.Atoi(song.Duration)
-			// if err != nil {
-			// 	tx.Rollback()
-			// 	return model.Band{}, err
-			// }
-
 			_, err = tx.Exec("INSERT INTO Songs (title, duration, albumId) VALUES (?, ?, ?)", song.Title, song.Duration, albumID)
 			if err != nil {
 				tx.Rollback()
@@ -91,6 +85,7 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		*bandDescription = *description
 	}
 	band := model.Band{
+		ID:          strconv.Itoa(int(bandID)),
 		Name:        name,
 		Genre:       genre,
 		Year:        year,
@@ -99,6 +94,71 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 	}
 
 	return band, nil
+}
+
+func GetBands() ([]*model.Band, error) {
+	fmt.Println("Getting bands...")
+	bands := []*model.Band{}
+
+	rows, err := db.Query("SELECT id, name, genre, year, description FROM Bands")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var band model.Band
+
+		err := rows.Scan(&band.ID, &band.Name, &band.Genre, &band.Year, &band.Description)
+		if err != nil {
+			return nil, err
+		}
+
+		bandID, err := strconv.Atoi(band.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		albums, err := getAlbumsByBandId(int(bandID))
+		if err != nil {
+			return nil, err
+		}
+
+		band.Albums = albums
+
+		bands = append(bands, &band)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return bands, nil
+}
+
+func GetBand(id string) (*model.Band, error) {
+	fmt.Println("Getting band...")
+	var band model.Band
+
+	row := db.QueryRow("SELECT id, name, genre, year, description FROM Bands WHERE id = ?", id)
+	err := row.Scan(&band.ID, &band.Name, &band.Genre, &band.Year, &band.Description)
+	if err != nil {
+		return nil, err
+	}
+
+	bandID, err := strconv.Atoi(band.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	albums, err := getAlbumsByBandId(int(bandID))
+	if err != nil {
+		return nil, err
+	}
+
+	band.Albums = albums
+
+	return &band, nil
 }
 
 // Utility function to convert AlbumInput to Album
@@ -138,46 +198,6 @@ func convertReleaseDateToTime(dateString string) (time.Time, error) {
 		return time.Time{}, err
 	}
 	return date, nil
-}
-
-func GetBands() ([]*model.Band, error) {
-	fmt.Println("Getting band...")
-	bands := []*model.Band{}
-
-	rows, err := db.Query("SELECT id, name, genre, year, description FROM Bands")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var band model.Band
-
-		err := rows.Scan(&band.ID, &band.Name, &band.Genre, &band.Year, &band.Description)
-		if err != nil {
-			return nil, err
-		}
-
-		bandID, err := strconv.Atoi(band.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		albums, err := getAlbumsByBandId(int(bandID))
-		if err != nil {
-			return nil, err
-		}
-
-		band.Albums = albums
-
-		bands = append(bands, &band)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return bands, nil
 }
 
 func getAlbumsByBandId(bandId int) ([]*model.Album, error) {

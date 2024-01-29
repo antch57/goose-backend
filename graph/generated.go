@@ -70,7 +70,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		CreateAlbum func(childComplexity int, bandID string, title string, releaseDate string) int
 		CreateBand  func(childComplexity int, name string, genre string, year int, albums []*model.AlbumInput, description *string) int
-		CreateSong  func(childComplexity int, albumID string, title string, duration string) int
+		CreateSong  func(childComplexity int, albumID string, title string, duration int) int
 	}
 
 	Query struct {
@@ -91,7 +91,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput, description *string) (*model.Band, error)
 	CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string) (*model.Album, error)
-	CreateSong(ctx context.Context, albumID string, title string, duration string) (*model.Song, error)
+	CreateSong(ctx context.Context, albumID string, title string, duration int) (*model.Song, error)
 }
 type QueryResolver interface {
 	Bands(ctx context.Context) ([]*model.Band, error)
@@ -230,7 +230,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSong(childComplexity, args["albumId"].(string), args["title"].(string), args["duration"].(string)), true
+		return e.complexity.Mutation.CreateSong(childComplexity, args["albumId"].(string), args["title"].(string), args["duration"].(int)), true
 
 	case "Query.album":
 		if e.complexity.Query.Album == nil {
@@ -534,10 +534,10 @@ func (ec *executionContext) field_Mutation_createSong_args(ctx context.Context, 
 		}
 	}
 	args["title"] = arg1
-	var arg2 string
+	var arg2 int
 	if tmp, ok := rawArgs["duration"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("duration"))
-		arg2, err = ec.unmarshalNString2string(ctx, tmp)
+		arg2, err = ec.unmarshalNInt2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1301,7 +1301,7 @@ func (ec *executionContext) _Mutation_createSong(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSong(rctx, fc.Args["albumId"].(string), fc.Args["title"].(string), fc.Args["duration"].(string))
+		return ec.resolvers.Mutation().CreateSong(rctx, fc.Args["albumId"].(string), fc.Args["title"].(string), fc.Args["duration"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1840,9 +1840,9 @@ func (ec *executionContext) _Song_duration(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Song_duration(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1852,7 +1852,7 @@ func (ec *executionContext) fieldContext_Song_duration(ctx context.Context, fiel
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3746,7 +3746,7 @@ func (ec *executionContext) unmarshalInputSongInput(ctx context.Context, obj int
 			it.Title = data
 		case "duration":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("duration"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			data, err := ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}

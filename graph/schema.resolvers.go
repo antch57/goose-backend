@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title
 }
 
 // CreateSong is the resolver for the createSong field.
-func (r *mutationResolver) CreateSong(ctx context.Context, albumID string, title string, duration string) (*model.Song, error) {
+func (r *mutationResolver) CreateSong(ctx context.Context, albumID string, title string, duration int) (*model.Song, error) {
 	panic(fmt.Errorf("not implemented: CreateSong - createSong"))
 }
 

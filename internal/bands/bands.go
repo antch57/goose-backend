@@ -24,7 +24,7 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 	if description != nil {
 		res, err = tx.Exec("INSERT INTO Bands (name, genre, year, description) VALUES (?, ?, ?, ?)", name, genre, year, *description)
 	} else {
-		res, err = tx.Exec("INSERT INTO Bands (name, genre, year) VALUES (?, ?, ?, NULL)", name, genre, year)
+		res, err = tx.Exec("INSERT INTO Bands (name, genre, year) VALUES (?, ?, ?)", name, genre, year)
 	}
 	if err != nil {
 		// Handle unique constraint error
@@ -65,7 +65,13 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		}
 
 		for _, song := range album.Songs {
-			_, err := tx.Exec("INSERT INTO Songs (title, duration, albumId) VALUES (?, ?, ?)", song.Title, song.Duration, albumID)
+			// duration, err := strconv.Atoi(song.Duration)
+			// if err != nil {
+			// 	tx.Rollback()
+			// 	return model.Band{}, err
+			// }
+
+			_, err = tx.Exec("INSERT INTO Songs (title, duration, albumId) VALUES (?, ?, ?)", song.Title, song.Duration, albumID)
 			if err != nil {
 				tx.Rollback()
 				return model.Band{}, err

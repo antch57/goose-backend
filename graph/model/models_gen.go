@@ -37,11 +37,11 @@ type Query struct {
 type Song struct {
 	ID       string `json:"id"`
 	Title    string `json:"title"`
-	Duration string `json:"duration"`
+	Duration int    `json:"duration"`
 	Album    *Album `json:"album,omitempty"`
 }
 
 type SongInput struct {
 	Title    string `json:"title"`
-	Duration string `json:"duration"`
+	Duration int    `json:"duration"`
 }

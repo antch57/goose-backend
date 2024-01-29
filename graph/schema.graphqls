@@ -1,4 +1,6 @@
 # fix the types for fong time and date
+# scalar Duration
+
 type Bands {
   bands: [Band!]
 }
@@ -22,7 +24,7 @@ type Album {
 type Song {
   id: ID!
   title: String!
-  duration: String!
+  duration: Int!
   album: Album
 }
 
@@ -34,7 +36,7 @@ input AlbumInput {
 
 input SongInput {
   title: String!
-  duration: String!
+  duration: Int!
 }
 
 type Query {
@@ -47,5 +49,5 @@ type Query {
 type Mutation {
   createBand(name: String!, genre: String!, year: Int!, albums: [AlbumInput!], description: String): Band!
   createAlbum(bandId: ID!, title: String!, releaseDate: String!): Album!
-  createSong(albumId: ID!, title: String!, duration: String!): Song!
+  createSong(albumId: ID!, title: String!, duration: Int!): Song!
 }

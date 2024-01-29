@@ -6,16 +6,23 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/antch57/goose/graph/model"
 	"github.com/antch57/goose/internal/albums"
 	"github.com/antch57/goose/internal/bands"
+	"github.com/antch57/goose/internal/db"
+	"github.com/antch57/goose/internal/songs"
 )
 
 // CreateBand is the resolver for the createBand field.
 func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput, description *string) (*model.Band, error) {
-	band, err := bands.CreateBand(name, genre, year, albums, description)
+	tx, err := db.Transacntion()
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+
+	band, err := bands.CreateBand(name, genre, year, albums, description, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -23,8 +30,15 @@ func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre st
 }
 
 // CreateAlbum is the resolver for the createAlbum field.
-func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string) (*model.Album, error) {
-	album, err := albums.CreateAlbum(bandID, title, releaseDate)
+func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string, songs []*model.SongInput) (*model.Album, error) {
+	tx, err := db.Transacntion()
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+
+	commitTransaction := true
+	album, err := albums.CreateAlbum(bandID, title, releaseDate, songs, tx, commitTransaction)
 	if err != nil {
 		return nil, err
 	}
@@ -32,28 +46,54 @@ func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title
 }
 
 // CreateSong is the resolver for the createSong field.
-func (r *mutationResolver) CreateSong(ctx context.Context, bandID string, albumID string, title string, duration int) (*model.Song, error) {
-	panic(fmt.Errorf("not implemented: CreateSong - createSong"))
+func (r *mutationResolver) CreateSong(ctx context.Context, bandID string, albumID *string, title string, duration int) (*model.Song, error) {
+	tx, err := db.Transacntion()
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+
+	commitTransaction := true
+	song, err := songs.CreateSong(bandID, *albumID, title, duration, tx, commitTransaction)
+	if err != nil {
+		return nil, err
+	}
+	return song, nil
 }
 
 // DeleteBand is the resolver for the deleteBand field.
 func (r *mutationResolver) DeleteBand(ctx context.Context, bandID string) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteBand - deleteBand"))
+	// TODO: prepared statements?
+	res, err := bands.DeleteBand(bandID)
+	if err != nil || !res {
+		return false, err
+	}
+	return true, nil
 }
 
 // DeleteAlbum is the resolver for the deleteAlbum field.
 func (r *mutationResolver) DeleteAlbum(ctx context.Context, albumID string) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteAlbum - deleteAlbum"))
+	// TODO: prepared statements?
+	res, err := albums.DeleteAlbum(albumID)
+	if err != nil || !res {
+		return false, err
+	}
+	return true, nil
 }
 
 // DeleteSong is the resolver for the deleteSong field.
 func (r *mutationResolver) DeleteSong(ctx context.Context, songID string) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteSong - deleteSong"))
+	// TODO: prepared statements?
+	res, err := songs.DeleteSong(songID)
+	if err != nil || !res {
+		return false, err
+	}
+	return true, nil
 }
 
 // Bands is the resolver for the bands field.
 func (r *queryResolver) Bands(ctx context.Context) ([]*model.Band, error) {
-	// panic(fmt.Errorf("not implemented: Bands - bands"))
+	// TODO: prepared statements?
 	bands, err := bands.GetBands()
 	if err != nil {
 		return nil, err
@@ -63,8 +103,10 @@ func (r *queryResolver) Bands(ctx context.Context) ([]*model.Band, error) {
 
 // Band is the resolver for the band field.
 func (r *queryResolver) Band(ctx context.Context, id string) (*model.Band, error) {
+	// TODO: prepared statements?
 	band, err := bands.GetBand(id)
 	if err != nil {
+		// TODO: better error handling
 		return nil, err
 	}
 	return band, nil
@@ -72,12 +114,24 @@ func (r *queryResolver) Band(ctx context.Context, id string) (*model.Band, error
 
 // Album is the resolver for the album field.
 func (r *queryResolver) Album(ctx context.Context, id string) (*model.Album, error) {
-	panic(fmt.Errorf("not implemented: Album - album"))
+	// TODO: prepared statements?
+	album, err := albums.GetAlbum(id)
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+	return album, nil
 }
 
 // Song is the resolver for the song field.
 func (r *queryResolver) Song(ctx context.Context, id string) (*model.Song, error) {
-	panic(fmt.Errorf("not implemented: Song - song"))
+	// TODO: prepared statements?
+	song, err := songs.GetSong(id)
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+	return song, nil
 }
 
 // Mutation returns MutationResolver implementation.

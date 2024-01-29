@@ -11,26 +11,21 @@ import (
 	"github.com/antch57/goose/internal/db"
 )
 
-func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumInput, description *string) (model.Band, error) {
+func CreateBand(bandName string, genre string, year int, albumsInput []*model.AlbumInput, description *string, tx *sql.Tx) (model.Band, error) {
 	fmt.Println("Creating band...")
 
-	// Being db transaction
-	tx, err := db.Transacntion()
-	if err != nil {
-		return model.Band{}, err
-	}
-
 	var res sql.Result
+	var err error
 	if description != nil {
-		res, err = tx.Exec("INSERT INTO Bands (name, genre, year, description) VALUES (?, ?, ?, ?)", name, genre, year, *description)
+		res, err = tx.Exec("INSERT INTO Bands (name, genre, year, description) VALUES (?, ?, ?, ?)", bandName, genre, year, *description)
 	} else {
-		res, err = tx.Exec("INSERT INTO Bands (name, genre, year) VALUES (?, ?, ?)", name, genre, year)
+		res, err = tx.Exec("INSERT INTO Bands (name, genre, year) VALUES (?, ?, ?)", bandName, genre, year)
 	}
 	if err != nil {
 		// Handle unique constraint error
 		if strings.Contains(err.Error(), "Duplicate entry") {
 			tx.Rollback()
-			return model.Band{}, fmt.Errorf("band with name %s and genre %s already exists", name, genre)
+			return model.Band{}, fmt.Errorf("band with name %s and genre %s already exists", bandName, genre)
 		}
 
 		tx.Rollback()
@@ -43,36 +38,20 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		return model.Band{}, err
 	}
 
-	albumList := albums.ConvertAlbumInputsToAlbums(albumsInput)
+	bandIDString := strconv.Itoa(int(bandID))
 
-	for _, album := range albumList {
-		// FIXME: create album in albums pkg?
-		releaseDate, err := albums.ConvertReleaseDateToTime(album.ReleaseDate)
+	var albumList = []*model.Album{}
+	var songArray = []*model.Song{}
+	for _, album := range albumsInput {
+		commitAlbumTransaction := false
+		res, err := albums.CreateAlbum(bandIDString, album.Title, album.ReleaseDate, album.Songs, tx, commitAlbumTransaction)
 		if err != nil {
 			tx.Rollback()
 			return model.Band{}, err
 		}
 
-		res, err := tx.Exec("INSERT INTO Albums (title, release_date, band_id) VALUES (?, ?, ?)", album.Title, releaseDate, bandID)
-		if err != nil {
-			tx.Rollback()
-			return model.Band{}, err
-		}
-
-		albumID, err := res.LastInsertId()
-		if err != nil {
-			tx.Rollback()
-			return model.Band{}, err
-		}
-
-		for _, song := range album.Songs {
-			// FIXME: create song in songs pkg?
-			_, err = tx.Exec("INSERT INTO Songs (title, duration, album_id, band_id) VALUES (?, ?, ?, ?)", song.Title, song.Duration, albumID, bandID)
-			if err != nil {
-				tx.Rollback()
-				return model.Band{}, err
-			}
-		}
+		albumList = append(albumList, res)
+		songArray = append(songArray, res.Songs...)
 	}
 
 	err = tx.Commit()
@@ -86,16 +65,29 @@ func CreateBand(name string, genre string, year int, albumsInput []*model.AlbumI
 		bandDescription = new(string)
 		*bandDescription = *description
 	}
+
+	// TODO: add songs array in return value
 	band := model.Band{
-		ID:          strconv.Itoa(int(bandID)),
-		Name:        name,
+		ID:          bandIDString,
+		Name:        bandName,
 		Genre:       genre,
 		Year:        year,
 		Albums:      albumList,
 		Description: bandDescription,
+		Songs:       songArray,
 	}
 
 	return band, nil
+}
+
+func DeleteBand(bandID string) (bool, error) {
+	fmt.Println("Deleting Band...")
+	_, err := db.Exec("DELETE FROM Bands WHERE id = ?", bandID)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // Grab all bands from the database
@@ -127,7 +119,14 @@ func GetBands() ([]*model.Band, error) {
 			return nil, err
 		}
 
-		band.Albums = albums
+		band = model.Band{
+			ID:          band.ID,
+			Name:        band.Name,
+			Genre:       band.Genre,
+			Albums:      albums,
+			Year:        band.Year,
+			Description: band.Description,
+		}
 
 		bands = append(bands, &band)
 	}
@@ -160,7 +159,14 @@ func GetBand(id string) (*model.Band, error) {
 		return nil, err
 	}
 
-	band.Albums = albums
+	band = model.Band{
+		ID:          band.ID,
+		Name:        band.Name,
+		Genre:       band.Genre,
+		Albums:      albums,
+		Year:        band.Year,
+		Description: band.Description,
+	}
 
 	return &band, nil
 }

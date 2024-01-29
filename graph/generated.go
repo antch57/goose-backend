@@ -61,6 +61,7 @@ type ComplexityRoot struct {
 		Genre       func(childComplexity int) int
 		ID          func(childComplexity int) int
 		Name        func(childComplexity int) int
+		Songs       func(childComplexity int) int
 		Year        func(childComplexity int) int
 	}
 
@@ -69,9 +70,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateAlbum func(childComplexity int, bandID string, title string, releaseDate string) int
+		CreateAlbum func(childComplexity int, bandID string, title string, releaseDate string, songs []*model.SongInput) int
 		CreateBand  func(childComplexity int, name string, genre string, year int, albums []*model.AlbumInput, description *string) int
-		CreateSong  func(childComplexity int, bandID string, albumID string, title string, duration int) int
+		CreateSong  func(childComplexity int, bandID string, albumID *string, title string, duration int) int
 		DeleteAlbum func(childComplexity int, albumID string) int
 		DeleteBand  func(childComplexity int, bandID string) int
 		DeleteSong  func(childComplexity int, songID string) int
@@ -86,6 +87,7 @@ type ComplexityRoot struct {
 
 	Song struct {
 		AlbumID  func(childComplexity int) int
+		BandID   func(childComplexity int) int
 		Duration func(childComplexity int) int
 		ID       func(childComplexity int) int
 		Title    func(childComplexity int) int
@@ -94,8 +96,8 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput, description *string) (*model.Band, error)
-	CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string) (*model.Album, error)
-	CreateSong(ctx context.Context, bandID string, albumID string, title string, duration int) (*model.Song, error)
+	CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string, songs []*model.SongInput) (*model.Album, error)
+	CreateSong(ctx context.Context, bandID string, albumID *string, title string, duration int) (*model.Song, error)
 	DeleteBand(ctx context.Context, bandID string) (bool, error)
 	DeleteAlbum(ctx context.Context, albumID string) (bool, error)
 	DeleteSong(ctx context.Context, songID string) (bool, error)
@@ -196,6 +198,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Band.Name(childComplexity), true
 
+	case "Band.songs":
+		if e.complexity.Band.Songs == nil {
+			break
+		}
+
+		return e.complexity.Band.Songs(childComplexity), true
+
 	case "Band.year":
 		if e.complexity.Band.Year == nil {
 			break
@@ -220,7 +229,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateAlbum(childComplexity, args["bandId"].(string), args["title"].(string), args["releaseDate"].(string)), true
+		return e.complexity.Mutation.CreateAlbum(childComplexity, args["bandId"].(string), args["title"].(string), args["releaseDate"].(string), args["songs"].([]*model.SongInput)), true
 
 	case "Mutation.createBand":
 		if e.complexity.Mutation.CreateBand == nil {
@@ -244,7 +253,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSong(childComplexity, args["bandId"].(string), args["albumId"].(string), args["title"].(string), args["duration"].(int)), true
+		return e.complexity.Mutation.CreateSong(childComplexity, args["bandId"].(string), args["albumId"].(*string), args["title"].(string), args["duration"].(int)), true
 
 	case "Mutation.deleteAlbum":
 		if e.complexity.Mutation.DeleteAlbum == nil {
@@ -331,6 +340,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Song.AlbumID(childComplexity), true
+
+	case "Song.bandId":
+		if e.complexity.Song.BandID == nil {
+			break
+		}
+
+		return e.complexity.Song.BandID(childComplexity), true
 
 	case "Song.duration":
 		if e.complexity.Song.Duration == nil {
@@ -509,6 +525,15 @@ func (ec *executionContext) field_Mutation_createAlbum_args(ctx context.Context,
 		}
 	}
 	args["releaseDate"] = arg2
+	var arg3 []*model.SongInput
+	if tmp, ok := rawArgs["songs"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("songs"))
+		arg3, err = ec.unmarshalNSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongInputᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["songs"] = arg3
 	return args, nil
 }
 
@@ -575,10 +600,10 @@ func (ec *executionContext) field_Mutation_createSong_args(ctx context.Context, 
 		}
 	}
 	args["bandId"] = arg0
-	var arg1 string
+	var arg1 *string
 	if tmp, ok := rawArgs["albumId"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("albumId"))
-		arg1, err = ec.unmarshalNID2string(ctx, tmp)
+		arg1, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -927,6 +952,8 @@ func (ec *executionContext) fieldContext_Album_songs(ctx context.Context, field 
 				return ec.fieldContext_Song_duration(ctx, field)
 			case "albumId":
 				return ec.fieldContext_Song_albumId(ctx, field)
+			case "bandId":
+				return ec.fieldContext_Song_bandId(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Song", field.Name)
 		},
@@ -1248,6 +1275,59 @@ func (ec *executionContext) fieldContext_Band_description(ctx context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _Band_songs(ctx context.Context, field graphql.CollectedField, obj *model.Band) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Band_songs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Songs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Song)
+	fc.Result = res
+	return ec.marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Band_songs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Band",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Song_id(ctx, field)
+			case "title":
+				return ec.fieldContext_Song_title(ctx, field)
+			case "duration":
+				return ec.fieldContext_Song_duration(ctx, field)
+			case "albumId":
+				return ec.fieldContext_Song_albumId(ctx, field)
+			case "bandId":
+				return ec.fieldContext_Song_bandId(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Song", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Bands_bands(ctx context.Context, field graphql.CollectedField, obj *model.Bands) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Bands_bands(ctx, field)
 	if err != nil {
@@ -1296,6 +1376,8 @@ func (ec *executionContext) fieldContext_Bands_bands(ctx context.Context, field 
 				return ec.fieldContext_Band_year(ctx, field)
 			case "description":
 				return ec.fieldContext_Band_description(ctx, field)
+			case "songs":
+				return ec.fieldContext_Band_songs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -1354,6 +1436,8 @@ func (ec *executionContext) fieldContext_Mutation_createBand(ctx context.Context
 				return ec.fieldContext_Band_year(ctx, field)
 			case "description":
 				return ec.fieldContext_Band_description(ctx, field)
+			case "songs":
+				return ec.fieldContext_Band_songs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -1386,7 +1470,7 @@ func (ec *executionContext) _Mutation_createAlbum(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateAlbum(rctx, fc.Args["bandId"].(string), fc.Args["title"].(string), fc.Args["releaseDate"].(string))
+		return ec.resolvers.Mutation().CreateAlbum(rctx, fc.Args["bandId"].(string), fc.Args["title"].(string), fc.Args["releaseDate"].(string), fc.Args["songs"].([]*model.SongInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1453,7 +1537,7 @@ func (ec *executionContext) _Mutation_createSong(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSong(rctx, fc.Args["bandId"].(string), fc.Args["albumId"].(string), fc.Args["title"].(string), fc.Args["duration"].(int))
+		return ec.resolvers.Mutation().CreateSong(rctx, fc.Args["bandId"].(string), fc.Args["albumId"].(*string), fc.Args["title"].(string), fc.Args["duration"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1486,6 +1570,8 @@ func (ec *executionContext) fieldContext_Mutation_createSong(ctx context.Context
 				return ec.fieldContext_Song_duration(ctx, field)
 			case "albumId":
 				return ec.fieldContext_Song_albumId(ctx, field)
+			case "bandId":
+				return ec.fieldContext_Song_bandId(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Song", field.Name)
 		},
@@ -1717,6 +1803,8 @@ func (ec *executionContext) fieldContext_Query_bands(ctx context.Context, field 
 				return ec.fieldContext_Band_year(ctx, field)
 			case "description":
 				return ec.fieldContext_Band_description(ctx, field)
+			case "songs":
+				return ec.fieldContext_Band_songs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -1772,6 +1860,8 @@ func (ec *executionContext) fieldContext_Query_band(ctx context.Context, field g
 				return ec.fieldContext_Band_year(ctx, field)
 			case "description":
 				return ec.fieldContext_Band_description(ctx, field)
+			case "songs":
+				return ec.fieldContext_Band_songs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Band", field.Name)
 		},
@@ -1898,6 +1988,8 @@ func (ec *executionContext) fieldContext_Query_song(ctx context.Context, field g
 				return ec.fieldContext_Song_duration(ctx, field)
 			case "albumId":
 				return ec.fieldContext_Song_albumId(ctx, field)
+			case "bandId":
+				return ec.fieldContext_Song_bandId(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Song", field.Name)
 		},
@@ -2206,6 +2298,50 @@ func (ec *executionContext) _Song_albumId(ctx context.Context, field graphql.Col
 }
 
 func (ec *executionContext) fieldContext_Song_albumId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Song",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Song_bandId(ctx context.Context, field graphql.CollectedField, obj *model.Song) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Song_bandId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BandID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Song_bandId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Song",
 		Field:      field,
@@ -4039,7 +4175,7 @@ func (ec *executionContext) unmarshalInputSongInput(ctx context.Context, obj int
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "duration", "albumId"}
+	fieldsInOrder := [...]string{"title", "duration", "albumId", "bandId"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -4067,6 +4203,13 @@ func (ec *executionContext) unmarshalInputSongInput(ctx context.Context, obj int
 				return it, err
 			}
 			it.AlbumID = data
+		case "bandId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bandId"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BandID = data
 		}
 	}
 
@@ -4175,6 +4318,8 @@ func (ec *executionContext) _Band(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "description":
 			out.Values[i] = ec._Band_description(ctx, field, obj)
+		case "songs":
+			out.Values[i] = ec._Band_songs(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -4472,6 +4617,11 @@ func (ec *executionContext) _Song(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "albumId":
 			out.Values[i] = ec._Song_albumId(ctx, field, obj)
+		case "bandId":
+			out.Values[i] = ec._Song_bandId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5415,6 +5565,53 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 	}
 	res := graphql.MarshalID(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Song) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalOSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v *model.Song) graphql.Marshaler {

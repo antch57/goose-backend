@@ -23,6 +23,7 @@ type Band struct {
 	Albums      []*Album `json:"albums,omitempty"`
 	Year        int      `json:"year"`
 	Description *string  `json:"description,omitempty"`
+	Songs       []*Song  `json:"songs,omitempty"`
 }
 
 type Bands struct {
@@ -40,10 +41,12 @@ type Song struct {
 	Title    string  `json:"title"`
 	Duration int     `json:"duration"`
 	AlbumID  *string `json:"albumId,omitempty"`
+	BandID   string  `json:"bandId"`
 }
 
 type SongInput struct {
 	Title    string  `json:"title"`
 	Duration int     `json:"duration"`
 	AlbumID  *string `json:"albumId,omitempty"`
+	BandID   *string `json:"bandId,omitempty"`
 }

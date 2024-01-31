@@ -4,6 +4,7 @@
 end goal is to make a website with this... for now its my playground to learn some graphql.
 
 run: `go server.go` to start the graphql server
+
 run: `go run github.com/99designs/gqlgen generate` to regenerate resolvers if you make changes to your graphql schema.
 
 

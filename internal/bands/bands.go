@@ -9,6 +9,7 @@ import (
 	"github.com/antch57/goose/graph/model"
 	"github.com/antch57/goose/internal/albums"
 	"github.com/antch57/goose/internal/db"
+	"github.com/antch57/goose/internal/songs"
 )
 
 func CreateBand(bandName string, genre string, year int, albumsInput []*model.AlbumInput, description *string, tx *sql.Tx) (model.Band, error) {
@@ -66,7 +67,6 @@ func CreateBand(bandName string, genre string, year int, albumsInput []*model.Al
 		*bandDescription = *description
 	}
 
-	// TODO: add songs array in return value
 	band := model.Band{
 		ID:          bandIDString,
 		Name:        bandName,
@@ -109,12 +109,12 @@ func GetBands() ([]*model.Band, error) {
 			return nil, err
 		}
 
-		bandID, err := strconv.Atoi(band.ID)
+		albums, err := albums.GetAlbumsByBandId(band.ID)
 		if err != nil {
 			return nil, err
 		}
 
-		albums, err := albums.GetAlbumsByBandId(int(bandID))
+		bandSongs, err := songs.GetSongsByBandId(band.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -126,6 +126,7 @@ func GetBands() ([]*model.Band, error) {
 			Albums:      albums,
 			Year:        band.Year,
 			Description: band.Description,
+			Songs:       bandSongs,
 		}
 
 		bands = append(bands, &band)
@@ -139,22 +140,22 @@ func GetBands() ([]*model.Band, error) {
 }
 
 // Grab a single band from the database based off of ID
-func GetBand(id string) (*model.Band, error) {
+func GetBand(bandId string) (*model.Band, error) {
 	fmt.Println("Getting band...")
 	var band model.Band
 
-	row := db.QueryRow("SELECT id, name, genre, year, description FROM Bands WHERE id = ?", id)
+	row := db.QueryRow("SELECT id, name, genre, year, description FROM Bands WHERE id = ?", bandId)
 	err := row.Scan(&band.ID, &band.Name, &band.Genre, &band.Year, &band.Description)
 	if err != nil {
 		return nil, err
 	}
 
-	bandID, err := strconv.Atoi(band.ID)
+	albums, err := albums.GetAlbumsByBandId(bandId)
 	if err != nil {
 		return nil, err
 	}
 
-	albums, err := albums.GetAlbumsByBandId(int(bandID))
+	bandSongs, err := songs.GetSongsByBandId(bandId)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +167,96 @@ func GetBand(id string) (*model.Band, error) {
 		Albums:      albums,
 		Year:        band.Year,
 		Description: band.Description,
+		Songs:       bandSongs,
 	}
 
+	return &band, nil
+}
+
+func UpdateBand(bandID string, name *string, genre *string, year *int, description *string, tx *sql.Tx, shouldCommit bool) (*model.Band, error) {
+	fmt.Println("Updating Band...")
+	var band model.Band
+	if name == nil && genre == nil && year == nil && description == nil {
+		return nil, fmt.Errorf("no fields to update")
+	}
+
+	// Start building the SQL query
+	query := "UPDATE Bands SET "
+	args := []interface{}{}
+
+	if name != nil {
+		query += "name = ?, "
+		args = append(args, name)
+	}
+	if genre != nil {
+		query += "genre = ?, "
+		args = append(args, genre)
+	}
+	if year != nil {
+		query += "year = ?, "
+		args = append(args, year)
+	}
+	if description != nil {
+		query += "description = ?, "
+		args = append(args, description)
+	}
+
+	query = strings.TrimSuffix(query, ", ")
+
+	query += " WHERE id = ?"
+	args = append(args, bandID)
+
+	_, err := tx.Exec(query, args...)
+	if err != nil {
+		tx.Rollback()
+		return &model.Band{}, err
+	}
+
+	err = tx.QueryRow("SELECT id, name, genre, year, description FROM Bands WHERE id = ?", bandID).Scan(&band.ID, &band.Name, &band.Genre, &band.Year, &band.Description)
+	if err != nil {
+		tx.Rollback()
+		return &model.Band{}, err
+	}
+
+	albumList, err := albums.GetAlbumsByBandId(band.ID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	for _, album := range albumList {
+		songList, err := songs.GetSongsByAlbumId(album.ID)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		// Add the songs to the album
+		album.Songs = songList
+		band.Albums = append(band.Albums, album)
+	}
+
+	allSongs, err := songs.GetSongsByBandId(bandID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if shouldCommit {
+		err = tx.Commit()
+		if err != nil {
+			return &model.Band{}, err
+		}
+	}
+
+	band = model.Band{
+		ID:          band.ID,
+		Name:        band.Name,
+		Genre:       band.Genre,
+		Year:        band.Year,
+		Description: band.Description,
+		Albums:      band.Albums,
+		Songs:       allSongs,
+	}
 	return &band, nil
 }

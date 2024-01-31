@@ -15,14 +15,14 @@ import (
 )
 
 // CreateBand is the resolver for the createBand field.
-func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre string, year int, albums []*model.AlbumInput, description *string) (*model.Band, error) {
+func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre string, year int, albumList []*model.AlbumInput, description *string) (*model.Band, error) {
 	tx, err := db.Transacntion()
 	if err != nil {
 		// TODO: better error handling
 		return nil, err
 	}
 
-	band, err := bands.CreateBand(name, genre, year, albums, description, tx)
+	band, err := bands.CreateBand(name, genre, year, albumList, description, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +30,7 @@ func (r *mutationResolver) CreateBand(ctx context.Context, name string, genre st
 }
 
 // CreateAlbum is the resolver for the createAlbum field.
-func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string, songs []*model.SongInput) (*model.Album, error) {
+func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title string, releaseDate string, songList []*model.SongInput) (*model.Album, error) {
 	tx, err := db.Transacntion()
 	if err != nil {
 		// TODO: better error handling
@@ -38,7 +38,7 @@ func (r *mutationResolver) CreateAlbum(ctx context.Context, bandID string, title
 	}
 
 	commitTransaction := true
-	album, err := albums.CreateAlbum(bandID, title, releaseDate, songs, tx, commitTransaction)
+	album, err := albums.CreateAlbum(bandID, title, releaseDate, songList, tx, commitTransaction)
 	if err != nil {
 		return nil, err
 	}
@@ -89,6 +89,54 @@ func (r *mutationResolver) DeleteSong(ctx context.Context, songID string) (bool,
 		return false, err
 	}
 	return true, nil
+}
+
+// UpdateBand is the resolver for the updateBand field.
+func (r *mutationResolver) UpdateBand(ctx context.Context, bandID string, name *string, genre *string, year *int, description *string) (*model.Band, error) {
+	tx, err := db.Transacntion()
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+
+	commitTransaction := true
+	band, err := bands.UpdateBand(bandID, name, genre, year, description, tx, commitTransaction)
+	if err != nil {
+		return nil, err
+	}
+	return band, nil
+}
+
+// UpdateAlbum is the resolver for the updateAlbum field.
+func (r *mutationResolver) UpdateAlbum(ctx context.Context, albumID string, title *string, releaseDate *string) (*model.Album, error) {
+	tx, err := db.Transacntion()
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+
+	commitTransaction := true
+	album, err := albums.UpdateAlbum(albumID, title, releaseDate, tx, commitTransaction)
+	if err != nil {
+		return nil, err
+	}
+	return album, nil
+}
+
+// UpdateSong is the resolver for the updateSong field.
+func (r *mutationResolver) UpdateSong(ctx context.Context, songID string, title *string, duration *int) (*model.Song, error) {
+	tx, err := db.Transacntion()
+	if err != nil {
+		// TODO: better error handling
+		return nil, err
+	}
+
+	commitTransaction := true
+	song, err := songs.UpdateSong(songID, title, duration, tx, commitTransaction)
+	if err != nil {
+		return nil, err
+	}
+	return song, nil
 }
 
 // Bands is the resolver for the bands field.

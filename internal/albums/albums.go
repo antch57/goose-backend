@@ -68,11 +68,115 @@ func CreateAlbum(bandID string, title string, releaseDateString string, songsLis
 	return &album, nil
 }
 
-func GetAlbumsByBandId(bandId int) ([]*model.Album, error) {
-	albums := []*model.Album{}
+func DeleteAlbum(albumID string) (bool, error) {
+	fmt.Println("Deleting album...")
+	_, err := db.Exec("DELETE FROM Albums WHERE id = ?", albumID)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func UpdateAlbum(albumID string, title *string, releaseDateString *string, tx *sql.Tx, shouldCommit bool) (*model.Album, error) {
+	fmt.Println("Updating album...")
+	var album model.Album
+
+	// Validate that we have something to update
+	if title == nil && releaseDateString == nil {
+		return &model.Album{}, fmt.Errorf("no fields to update")
+	}
+
+	// Start building the SQL query
+	query := "UPDATE Albums SET "
+	args := []interface{}{}
+
+	if releaseDateString != nil {
+		releaseDate, err := ConvertReleaseDateToTime(*releaseDateString)
+		if err != nil {
+			tx.Rollback()
+			return &model.Album{}, err
+		}
+
+		query += "release_date = ?, "
+		args = append(args, releaseDate)
+	}
+	if title != nil {
+		query += "title = ?, "
+		args = append(args, title)
+	}
+
+	query = strings.TrimSuffix(query, ", ")
+	query += " WHERE id = ?"
+	args = append(args, albumID)
+
+	_, err := tx.Exec(query, args...)
+	if err != nil {
+		tx.Rollback()
+		return &model.Album{}, err
+	}
+
+	err = tx.QueryRow("SELECT id, title, release_date, band_id FROM Albums WHERE id = ?", albumID).Scan(&album.ID, &album.Title, &album.ReleaseDate, &album.BandID)
+	if err != nil {
+		return &model.Album{}, err
+	}
+
+	// FIXME: this is not a transaction
+	songList, err := songs.GetSongsByAlbumId(albumID)
+	if err != nil {
+		tx.Rollback()
+		return &model.Album{}, err
+	}
+
+	if shouldCommit {
+		err = tx.Commit()
+		if err != nil {
+			return &model.Album{}, err
+		}
+	}
+
+	album = model.Album{
+		ID:          album.ID,
+		Title:       album.Title,
+		ReleaseDate: album.ReleaseDate,
+		Songs:       songList,
+		BandID:      album.BandID,
+	}
+
+	return &album, nil
+}
+
+func GetAlbum(albumID string) (*model.Album, error) {
+	fmt.Println("Getting Album...")
+	var album model.Album
+
+	row := db.QueryRow("SELECT id, title, release_date, band_id FROM Albums WHERE id = ?", albumID)
+	err := row.Scan(&album.ID, &album.Title, &album.ReleaseDate, &album.BandID)
+	if err != nil {
+		return nil, err
+	}
+
+	albumSongs, err := songs.GetSongsByAlbumId(albumID)
+	if err != nil {
+		return nil, err
+	}
+	album = model.Album{
+		ID:          album.ID,
+		Title:       album.Title,
+		ReleaseDate: album.ReleaseDate,
+		BandID:      album.BandID,
+		Songs:       albumSongs,
+	}
+	return &album, nil
+}
+
+func GetAlbumsByBandId(bandId string) ([]*model.Album, error) {
+	fmt.Println("Getting Albums by bandId...")
+	albumList := []*model.Album{}
 
 	rows, err := db.Query("SELECT id, title, release_date, band_id FROM Albums WHERE band_id = ?", bandId)
 	if err != nil {
+		fmt.Println("err: ", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -85,12 +189,7 @@ func GetAlbumsByBandId(bandId int) ([]*model.Album, error) {
 			return nil, err
 		}
 
-		albumID, err := strconv.Atoi(album.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		songs, err := songs.GetSongsByAlbumId(albumID)
+		songs, err := songs.GetSongsByAlbumId(album.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -103,39 +202,10 @@ func GetAlbumsByBandId(bandId int) ([]*model.Album, error) {
 			BandID:      album.BandID,
 		}
 
-		albums = append(albums, &album)
+		albumList = append(albumList, &album)
 	}
 
-	return albums, nil
-}
-
-func DeleteAlbum(albumID string) (bool, error) {
-	fmt.Println("Deleting album...")
-	_, err := db.Exec("DELETE FROM Albums WHERE id = ?", albumID)
-	if err != nil {
-		return false, err
-	}
-
-	return true, nil
-}
-
-func GetAlbum(id string) (*model.Album, error) {
-	fmt.Println("Getting Album...")
-	var album model.Album
-
-	row := db.QueryRow("SELECT id, title, release_date, band_id FROM Albums WHERE id = ?", id)
-	err := row.Scan(&album.ID, &album.Title, &album.ReleaseDate, &album.BandID)
-	if err != nil {
-		return nil, err
-	}
-
-	album = model.Album{
-		ID:          album.ID,
-		Title:       album.Title,
-		ReleaseDate: album.ReleaseDate,
-		BandID:      album.BandID,
-	}
-	return &album, nil
+	return albumList, nil
 }
 
 // Utility function to convert AlbumInput to Album

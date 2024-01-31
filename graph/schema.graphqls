@@ -49,10 +49,13 @@ type Query {
 }
 
 type Mutation {
-  createBand(name: String!, genre: String!, year: Int!, albums: [AlbumInput!], description: String): Band!
-  createAlbum(bandId: ID!, title: String!, releaseDate: String!, songs: [SongInput!]!): Album!
+  createBand(name: String!, genre: String!, year: Int!, albumList: [AlbumInput!], description: String): Band!
+  createAlbum(bandId: ID!, title: String!, releaseDate: String!, songList: [SongInput!]!): Album!
   createSong(bandId: ID!, albumId: ID, title: String!, duration: Int!): Song!
   deleteBand(bandId: ID!): Boolean!
   deleteAlbum(albumId: ID!): Boolean!
   deleteSong(songId: ID!): Boolean!
+  updateBand(bandId: ID!, name: String, genre: String, year: Int, description: String): Band!
+  updateAlbum(albumId: ID!, title: String, releaseDate: String): Album!
+  updateSong(songId: ID!, title: String, duration: Int): Song!
 }

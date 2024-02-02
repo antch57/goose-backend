@@ -42,3 +42,5 @@ just be sure to swap out for your creds.
     - start graphql server
     - go to localhost:8080
 
+## TODO:
+- impliment dataloader for graphql

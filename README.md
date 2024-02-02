@@ -1,7 +1,7 @@
 # graphql with go, gin, gqlgen
 
 
-end goal is to make a website with this... for now its my playground to learn some graphql.
+end goal is to make a website with this...
 
 run: `go server.go` to start the graphql server
 
@@ -43,4 +43,8 @@ just be sure to swap out for your creds.
     - go to localhost:8080
 
 ## TODO:
+
+major stuffs:
 - impliment dataloader for graphql
+- create auth workflow
+- setup db schema for tracking statz

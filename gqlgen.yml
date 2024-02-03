@@ -88,3 +88,61 @@ models:
   Duration:
     model:
       - github.com/99designs/gqlgen/graphql.Duration
+  Date:
+    model:
+      - github.com/99designs/gqlgen/graphql.Time
+  Band:
+    model:
+      - github.com/antch57/goose/graph/model.Band
+    fields:
+      albums:
+        resolver: true
+  Album:
+    model:
+      - github.com/antch57/goose/graph/model.Album
+    fields:
+      band:
+        resolver: true
+      songs:
+        resolver: true
+  AlbumSong:
+    # model:
+    #   - github.com/antch57/goose/graph/model.AlbumSong
+    fields:
+      album:
+        resolver: true
+      song:
+        resolver: true
+      band:
+        resolver: true
+  Song:
+    # model:
+    #   - github.com/antch57/goose/graph/model.Song
+    fields:
+      band:
+        resolver: true
+  Venue:
+    # model:
+    #   - github.com/antch57/goose/graph/model.Venue
+    fields:
+      performances:
+        resolver: true
+  Performance:
+    # model:
+    #   - github.com/antch57/goose/graph/model.Performance
+    fields:
+      venue:
+        resolver: true
+      band:
+        resolver: true
+      songs:
+        resolver: true
+  PerformanceSong:
+    # model:
+    #   - github.com/antch57/goose/graph/model.PerformanceSong
+    fields:
+      performance:
+        resolver: true
+      song:
+        resolver: true
+

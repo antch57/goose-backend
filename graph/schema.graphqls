@@ -1,61 +1,149 @@
-type Bands {
-  bands: [Band!]
-}
+scalar Date
+scalar Duration
 
 type Band {
   id: ID!
   name: String!
   genre: String!
-  albums: [Album!]
   year: Int!
   description: String
-  songs: [Song!]
+  albums: [Album!]
 }
 
 type Album {
   id: ID!
   title: String!
-  releaseDate: String!
-  songs: [Song!]!
-  bandId: ID!
+  band: Band!
+  releaseDate: Date!
+  songs: [AlbumSong!]!
+}
+
+type Venue {
+  id: ID!
+  name: String!
+  location: String
+  performances: [Performance!]
+}
+
+type Performance {
+  id: ID!
+  band: Band!
+  venue: Venue!
+  performanceDate: Date!
+  duration: Duration!
+  songs: [PerformanceSong!]!
 }
 
 type Song {
   id: ID!
   title: String!
-  duration: Int!
-  albumId: ID
-  bandId: ID!
+  band: Band
+}
+
+type PerformanceSong {
+  id: ID!
+  song: Song!
+  duration: Duration!
+  performance: Performance!
+  isCover: Boolean!
+  notes: String
+}
+
+type AlbumSong {
+  id: ID!
+  song: Song!
+  album: Album!
+  band: Band!
+  duration: Duration!
+  track_number: Int!
+  isCover: Boolean
+}
+
+input BandInput {
+  name: String!
+  genre: String!
+  year: Int!
+  description: String
+  albums: [AlbumInput!]
 }
 
 input AlbumInput {
   title: String!
-  releaseDate: String!
-  songs: [SongInput!]!
+  bandId: ID!
+  releaseDate: Date!
+  albumSongs: [AlbumSongInput!]
+}
+
+input PerformanceInput {
+  bandId: ID!
+  venue: ID!
+  performanceDate: Date!
+  duration: Duration
+  performanceSongs: [PerformanceSongInput!]
+}
+
+input AlbumSongInput {
+  songId: ID!
+  albumId: ID!
+  bandId: ID!
+  duration: Duration!
+  trackNumber: Int!
+  isCover: Boolean!
+}
+
+input PerformanceSongInput {
+  songId: ID!
+  duration: Duration!
+  performanceId: ID!
+  notes: String
+  isCover: Boolean!
 }
 
 input SongInput {
   title: String!
-  duration: Int!
-  albumId: ID
-  bandId: ID
+  bandId: ID # this will be for creation of song and sometimes we don't know who made the damn song
+}
+
+input VenueInput {
+  name: String!
+  location: String!
 }
 
 type Query {
-  bands: [Band!]
   band(id: ID!): Band
+  bands: [Band!]
   album(id: ID!): Album
+  albums: [Album!]
+  venue(id: ID!): Venue
+  venues: [Venue!]
+  performance(id: ID!): Performance
+  performances: [Performance!]
   song(id: ID!): Song
+  songs: [Song!]
+  performanceSong(id: ID!): PerformanceSong
+  albumSong(id: ID!): AlbumSong
 }
 
 type Mutation {
-  createBand(name: String!, genre: String!, year: Int!, albumList: [AlbumInput!], description: String): Band!
-  createAlbum(bandId: ID!, title: String!, releaseDate: String!, songList: [SongInput!]!): Album!
-  createSong(bandId: ID!, albumId: ID, title: String!, duration: Int!): Song!
-  deleteBand(bandId: ID!): Boolean!
-  deleteAlbum(albumId: ID!): Boolean!
-  deleteSong(songId: ID!): Boolean!
-  updateBand(bandId: ID!, name: String, genre: String, year: Int, description: String): Band!
-  updateAlbum(albumId: ID!, title: String, releaseDate: String): Album!
-  updateSong(songId: ID!, title: String, duration: Int): Song!
+  createBand(input: BandInput): Band
+  updateBand(id: ID!, input: BandInput): Band
+  deleteBand(id: ID!): Boolean
+  createAlbum(input: AlbumInput): Album
+  updateAlbum(id: ID!, input: AlbumInput): Album
+  deleteAlbum(id: ID!): Boolean
+  createVenue(input: VenueInput): Venue
+  updateVenue(id: ID!, input: VenueInput): Venue
+  deleteVenue(id: ID!): Boolean
+  createPerformance(input: PerformanceInput): Performance
+  updatePerformance(id: ID!, input: PerformanceInput): Performance
+  deletePerformance(id: ID!): Boolean
+  createSong(input: SongInput): Song
+  updateSong(id: ID!, input: SongInput): Song
+  deleteSong(id: ID!): Boolean
+  createPerformanceSong(input: PerformanceSongInput): PerformanceSong
+  updatePerformanceSong(id: ID!, input: PerformanceSongInput): PerformanceSong
+  deletePerformanceSong(id: ID!): Boolean
+  createAlbumSong(input: AlbumSongInput): AlbumSong
+  updateAlbumSong(id: ID!, input: AlbumSongInput): AlbumSong
+  deleteAlbumSong(id: ID!): Boolean
 }

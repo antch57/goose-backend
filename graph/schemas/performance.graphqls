@@ -1,0 +1,33 @@
+type Performance {
+  id: ID!
+  band: Band!
+  venue: Venue!
+  performanceDate: Date!
+  duration: Duration!
+  songs: [PerformanceSong!]!
+}
+
+input PerformanceInput {
+  bandId: ID!
+  venue: ID!
+  performanceDate: Date!
+  duration: Duration
+  performanceSongs: [PerformanceSongInput!]
+}
+
+type PerformanceSong {
+  id: ID!
+  song: Song!
+  duration: Duration!
+  performance: Performance!
+  isCover: Boolean!
+  notes: String
+}
+
+input PerformanceSongInput {
+  songId: ID!
+  duration: Duration!
+  performanceId: ID!
+  notes: String
+  isCover: Boolean!
+}

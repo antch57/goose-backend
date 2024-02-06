@@ -10,7 +10,7 @@ type Mutation struct {
 }
 
 type Performance struct {
-	ID              string             `json:"id"`
+	ID              int                `json:"id"`
 	Band            *Band              `json:"band"`
 	Venue           *Venue             `json:"venue"`
 	PerformanceDate time.Time          `json:"performanceDate"`
@@ -19,15 +19,15 @@ type Performance struct {
 }
 
 type PerformanceInput struct {
-	BandID           string                  `json:"bandId"`
-	Venue            string                  `json:"venue"`
+	BandID           int                     `json:"bandId"`
+	Venue            int                     `json:"venue"`
 	PerformanceDate  time.Time               `json:"performanceDate"`
 	Duration         *time.Duration          `json:"duration,omitempty"`
 	PerformanceSongs []*PerformanceSongInput `json:"performanceSongs,omitempty"`
 }
 
 type PerformanceSong struct {
-	ID          string        `json:"id"`
+	ID          int           `json:"id"`
 	Song        *Song         `json:"song"`
 	Duration    time.Duration `json:"duration"`
 	Performance *Performance  `json:"performance"`
@@ -36,9 +36,9 @@ type PerformanceSong struct {
 }
 
 type PerformanceSongInput struct {
-	SongID        string        `json:"songId"`
+	SongID        int           `json:"songId"`
 	Duration      time.Duration `json:"duration"`
-	PerformanceID string        `json:"performanceId"`
+	PerformanceID int           `json:"performanceId"`
 	Notes         *string       `json:"notes,omitempty"`
 	IsCover       bool          `json:"isCover"`
 }
@@ -46,19 +46,8 @@ type PerformanceSongInput struct {
 type Query struct {
 }
 
-type Song struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-	Band  *Band  `json:"band,omitempty"`
-}
-
-type SongInput struct {
-	Title  string  `json:"title"`
-	BandID *string `json:"bandId,omitempty"`
-}
-
 type Venue struct {
-	ID           string         `json:"id"`
+	ID           int            `json:"id"`
 	Name         string         `json:"name"`
 	Location     *string        `json:"location,omitempty"`
 	Performances []*Performance `json:"performances,omitempty"`

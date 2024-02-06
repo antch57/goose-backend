@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS songs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     band_id INT,
-    FOREIGN KEY (band_id) REFERENCES bands(id) ON DELETE CASCADE
+    FOREIGN KEY (band_id) REFERENCES bands(id) ON DELETE CASCADE,
+    UNIQUE (title, band_id)  -- Prevent duplicate songs for the same band
   );
 
 CREATE TABLE IF NOT EXISTS performance_songs (

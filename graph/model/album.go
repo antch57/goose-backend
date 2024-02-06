@@ -2,34 +2,39 @@ package model
 
 import "time"
 
+func (Album) TableName() string {
+	return "albums"
+}
+
 type Album struct {
-	ID          string    `json:"id"`
+	ID          int       `json:"id"`
 	Title       string    `json:"title"`
-	BandID      string    `json:"bandId"`
+	BandID      int       `json:"bandId"`
 	ReleaseDate time.Time `json:"releaseDate"`
 }
 
 type AlbumInput struct {
 	Title       string    `json:"title"`
-	BandID      string    `json:"bandId"`
+	BandID      int       `json:"bandId"`
 	ReleaseDate time.Time `json:"releaseDate"`
+	// AlbumSongs  []*AlbumSongInput `json:"albumSongs,omitempty"`
 }
 
 type AlbumSong struct {
-	ID          string        `json:"id"`
-	SongID      string        `json:"songId"`
-	AlbumID     string        `json:"albumId"`
-	BandID      string        `json:"bandId"`
-	Duration    time.Duration `json:"duration"`
-	TrackNumber int           `json:"track_number"`
-	IsCover     *bool         `json:"isCover,omitempty"`
+	ID          int   `json:"id"`
+	SongID      int   `json:"songId"`
+	AlbumID     int   `json:"albumId"`
+	BandID      int   `json:"band"`
+	Duration    int   `json:"duration"` // FIXME: should be time.Duration
+	TrackNumber int   `json:"track_number"`
+	IsCover     *bool `json:"isCover,omitempty"`
 }
 
 type AlbumSongInput struct {
-	SongID      string        `json:"songId"`
-	AlbumID     string        `json:"albumId"`
-	BandID      string        `json:"bandId"`
-	Duration    time.Duration `json:"duration"`
-	TrackNumber int           `json:"trackNumber"`
-	IsCover     bool          `json:"isCover"`
+	SongID      int  `json:"songId"`
+	AlbumID     int  `json:"albumId"`
+	BandID      int  `json:"bandId"`
+	Duration    int  `json:"duration"` // FIXME: should be time.Duration
+	TrackNumber int  `json:"trackNumber"`
+	IsCover     bool `json:"isCover"`
 }

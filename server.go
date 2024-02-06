@@ -3,9 +3,13 @@ package main
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/antch57/goose/graph"
-	"github.com/antch57/goose/internal/db"
 	"github.com/gin-gonic/gin"
+
+	"github.com/antch57/goose/graph"
+	"github.com/antch57/goose/pkg/albums"
+	"github.com/antch57/goose/pkg/bands"
+	"github.com/antch57/goose/pkg/db"
+	"github.com/antch57/goose/pkg/songs"
 )
 
 // Defining the Graphql handler
@@ -31,12 +35,20 @@ func playgroundHandler() gin.HandlerFunc {
 func main() {
 
 	// Open up DB connection to use throughout the app
-	db.Open()
-	defer db.Close()
+	DB, err := db.InitDB()
+	if err != nil {
+		panic(err)
+	}
+
+	resolvers := &graph.Resolver{
+		BandRepo:  bands.BandRepo{DB: DB},
+		AlbumRepo: albums.AlbumRepo{DB: DB},
+		SongRepo:  songs.SongRepo{DB: DB},
+	}
 
 	// Setting up Gin
 	r := gin.Default()
-	r.POST("/query", graphqlHandler(&graph.Resolver{}))
+	r.POST("/query", graphqlHandler(resolvers))
 	r.GET("/", playgroundHandler())
 	r.Run()
 }

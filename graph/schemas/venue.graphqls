@@ -1,0 +1,11 @@
+type Venue {
+  id: ID!
+  name: String!
+  location: String
+  performances: [Performance!]
+}
+
+input VenueInput {
+  name: String!
+  location: String!
+}

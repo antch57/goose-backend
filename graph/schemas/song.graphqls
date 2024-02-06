@@ -1,0 +1,10 @@
+type Song {
+  id: ID!
+  title: String!
+  band: Band
+}
+
+input SongInput {
+  title: String!
+  bandId: ID # this will be for creation of song and sometimes we don't know who made the damn song
+}

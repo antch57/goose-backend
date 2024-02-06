@@ -7,161 +7,47 @@ package graph
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/antch57/goose/graph/model"
 )
 
-var bands = []*model.Band{
-	{
-		ID:          "1",
-		Name:        "phish",
-		Genre:       "rock",
-		Year:        1983,
-		Description: nil,
-	},
-	{
-		ID:          "2",
-		Name:        "grateful dead",
-		Genre:       "rock",
-		Year:        1965,
-		Description: nil,
-	},
-}
-
-var albums = []*model.Album{
-	{
-		ID:          "1",
-		Title:       "Junta",
-		BandID:      "1",
-		ReleaseDate: time.Date(1989, time.May, 8, 0, 0, 0, 0, time.UTC),
-	},
-	{
-		ID:          "2",
-		Title:       "grateful dead album",
-		BandID:      "2",
-		ReleaseDate: time.Date(1967, time.March, 17, 0, 0, 0, 0, time.UTC),
-	},
-}
-
-var albumSongs = []*model.AlbumSong{
-	{
-		ID:          "1",
-		SongID:      "1",
-		AlbumID:     "1",
-		BandID:      "1",
-		Duration:    time.Duration(5 * time.Minute),
-		TrackNumber: 1,
-	},
-	{
-		ID:          "2",
-		SongID:      "2",
-		AlbumID:     "2",
-		BandID:      "2",
-		Duration:    time.Duration(6 * time.Minute),
-		TrackNumber: 2,
-		IsCover:     nil,
-	},
-}
-
-var songs = []*model.Song{
-	{
-		ID:    "1",
-		Title: "you enjoy myself",
-	},
-	{
-		ID:    "2",
-		Title: "sugar magnolia",
-	},
-}
-
-// Band is the resolver for the band field.
-func (r *albumResolver) Band(ctx context.Context, obj *model.Album) (*model.Band, error) {
-	band := new(model.Band)
-	for _, b := range bands {
-		if b.ID == obj.BandID {
-			band = b
-			break
-		}
-	}
-
-	if band == nil {
-		return nil, fmt.Errorf("band not found")
-	}
-	return band, nil
-	// panic(fmt.Errorf("not implemented: Band - band"))
-}
-
-// Songs is the resolver for the songs field.
-func (r *albumResolver) Songs(ctx context.Context, obj *model.Album) ([]*model.AlbumSong, error) {
-	var albumSongList []*model.AlbumSong
-	for _, albumSong := range albumSongs {
-		if albumSong.AlbumID == obj.ID {
-			albumSongList = append(albumSongList, albumSong)
-		}
-	}
-
-	return albumSongList, nil
-}
-
-// Song is the resolver for the song field.
-func (r *albumSongResolver) Song(ctx context.Context, obj *model.AlbumSong) (*model.Song, error) {
-	for _, song := range songs {
-		if song.ID == obj.SongID {
-			return song, nil
-		}
-	}
-	return nil, fmt.Errorf("song not found")
-}
-
-// Album is the resolver for the album field.
-func (r *albumSongResolver) Album(ctx context.Context, obj *model.AlbumSong) (*model.Album, error) {
-	panic(fmt.Errorf("not implemented: Album - album"))
-}
-
-// Band is the resolver for the band field.
-func (r *albumSongResolver) Band(ctx context.Context, obj *model.AlbumSong) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: Band - band"))
-}
-
-// Albums is the resolver for the albums field.
-func (r *bandResolver) Albums(ctx context.Context, obj *model.Band) ([]*model.Album, error) {
-	var albumList []*model.Album
-	for _, album := range albums {
-		if album.BandID == obj.ID {
-			albumList = append(albumList, album)
-		}
-	}
-	return albumList, nil
-}
-
 // CreateBand is the resolver for the createBand field.
 func (r *mutationResolver) CreateBand(ctx context.Context, input *model.BandInput) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: CreateBand - createBand"))
+	res, err := r.BandRepo.CreateBand(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // UpdateBand is the resolver for the updateBand field.
-func (r *mutationResolver) UpdateBand(ctx context.Context, id string, input *model.BandInput) (*model.Band, error) {
+func (r *mutationResolver) UpdateBand(ctx context.Context, id int, input *model.BandInput) (*model.Band, error) {
 	panic(fmt.Errorf("not implemented: UpdateBand - updateBand"))
 }
 
 // DeleteBand is the resolver for the deleteBand field.
-func (r *mutationResolver) DeleteBand(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeleteBand(ctx context.Context, id int) (*bool, error) {
 	panic(fmt.Errorf("not implemented: DeleteBand - deleteBand"))
 }
 
 // CreateAlbum is the resolver for the createAlbum field.
 func (r *mutationResolver) CreateAlbum(ctx context.Context, input *model.AlbumInput) (*model.Album, error) {
-	panic(fmt.Errorf("not implemented: CreateAlbum - createAlbum"))
+	res, err := r.AlbumRepo.CreateAlbum(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // UpdateAlbum is the resolver for the updateAlbum field.
-func (r *mutationResolver) UpdateAlbum(ctx context.Context, id string, input *model.AlbumInput) (*model.Album, error) {
+func (r *mutationResolver) UpdateAlbum(ctx context.Context, id int, input *model.AlbumInput) (*model.Album, error) {
 	panic(fmt.Errorf("not implemented: UpdateAlbum - updateAlbum"))
 }
 
 // DeleteAlbum is the resolver for the deleteAlbum field.
-func (r *mutationResolver) DeleteAlbum(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeleteAlbum(ctx context.Context, id int) (*bool, error) {
 	panic(fmt.Errorf("not implemented: DeleteAlbum - deleteAlbum"))
 }
 
@@ -171,12 +57,12 @@ func (r *mutationResolver) CreateVenue(ctx context.Context, input *model.VenueIn
 }
 
 // UpdateVenue is the resolver for the updateVenue field.
-func (r *mutationResolver) UpdateVenue(ctx context.Context, id string, input *model.VenueInput) (*model.Venue, error) {
+func (r *mutationResolver) UpdateVenue(ctx context.Context, id int, input *model.VenueInput) (*model.Venue, error) {
 	panic(fmt.Errorf("not implemented: UpdateVenue - updateVenue"))
 }
 
 // DeleteVenue is the resolver for the deleteVenue field.
-func (r *mutationResolver) DeleteVenue(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeleteVenue(ctx context.Context, id int) (*bool, error) {
 	panic(fmt.Errorf("not implemented: DeleteVenue - deleteVenue"))
 }
 
@@ -186,27 +72,32 @@ func (r *mutationResolver) CreatePerformance(ctx context.Context, input *model.P
 }
 
 // UpdatePerformance is the resolver for the updatePerformance field.
-func (r *mutationResolver) UpdatePerformance(ctx context.Context, id string, input *model.PerformanceInput) (*model.Performance, error) {
+func (r *mutationResolver) UpdatePerformance(ctx context.Context, id int, input *model.PerformanceInput) (*model.Performance, error) {
 	panic(fmt.Errorf("not implemented: UpdatePerformance - updatePerformance"))
 }
 
 // DeletePerformance is the resolver for the deletePerformance field.
-func (r *mutationResolver) DeletePerformance(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeletePerformance(ctx context.Context, id int) (*bool, error) {
 	panic(fmt.Errorf("not implemented: DeletePerformance - deletePerformance"))
 }
 
 // CreateSong is the resolver for the createSong field.
 func (r *mutationResolver) CreateSong(ctx context.Context, input *model.SongInput) (*model.Song, error) {
-	panic(fmt.Errorf("not implemented: CreateSong - createSong"))
+	res, err := r.SongRepo.CreateSong(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // UpdateSong is the resolver for the updateSong field.
-func (r *mutationResolver) UpdateSong(ctx context.Context, id string, input *model.SongInput) (*model.Song, error) {
+func (r *mutationResolver) UpdateSong(ctx context.Context, id int, input *model.SongInput) (*model.Song, error) {
 	panic(fmt.Errorf("not implemented: UpdateSong - updateSong"))
 }
 
 // DeleteSong is the resolver for the deleteSong field.
-func (r *mutationResolver) DeleteSong(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeleteSong(ctx context.Context, id int) (*bool, error) {
 	panic(fmt.Errorf("not implemented: DeleteSong - deleteSong"))
 }
 
@@ -216,78 +107,62 @@ func (r *mutationResolver) CreatePerformanceSong(ctx context.Context, input *mod
 }
 
 // UpdatePerformanceSong is the resolver for the updatePerformanceSong field.
-func (r *mutationResolver) UpdatePerformanceSong(ctx context.Context, id string, input *model.PerformanceSongInput) (*model.PerformanceSong, error) {
+func (r *mutationResolver) UpdatePerformanceSong(ctx context.Context, id int, input *model.PerformanceSongInput) (*model.PerformanceSong, error) {
 	panic(fmt.Errorf("not implemented: UpdatePerformanceSong - updatePerformanceSong"))
 }
 
 // DeletePerformanceSong is the resolver for the deletePerformanceSong field.
-func (r *mutationResolver) DeletePerformanceSong(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeletePerformanceSong(ctx context.Context, id int) (*bool, error) {
 	panic(fmt.Errorf("not implemented: DeletePerformanceSong - deletePerformanceSong"))
 }
 
 // CreateAlbumSong is the resolver for the createAlbumSong field.
 func (r *mutationResolver) CreateAlbumSong(ctx context.Context, input *model.AlbumSongInput) (*model.AlbumSong, error) {
-	panic(fmt.Errorf("not implemented: CreateAlbumSong - createAlbumSong"))
+	res, err := r.AlbumRepo.CreateAlbumSong(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // UpdateAlbumSong is the resolver for the updateAlbumSong field.
-func (r *mutationResolver) UpdateAlbumSong(ctx context.Context, id string, input *model.AlbumSongInput) (*model.AlbumSong, error) {
+func (r *mutationResolver) UpdateAlbumSong(ctx context.Context, id int, input *model.AlbumSongInput) (*model.AlbumSong, error) {
 	panic(fmt.Errorf("not implemented: UpdateAlbumSong - updateAlbumSong"))
 }
 
 // DeleteAlbumSong is the resolver for the deleteAlbumSong field.
-func (r *mutationResolver) DeleteAlbumSong(ctx context.Context, id string) (*bool, error) {
+func (r *mutationResolver) DeleteAlbumSong(ctx context.Context, id int) (*bool, error) {
 	panic(fmt.Errorf("not implemented: DeleteAlbumSong - deleteAlbumSong"))
 }
 
 // Band is the resolver for the band field.
-func (r *performanceResolver) Band(ctx context.Context, obj *model.Performance) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: Band - band"))
-}
-
-// Venue is the resolver for the venue field.
-func (r *performanceResolver) Venue(ctx context.Context, obj *model.Performance) (*model.Venue, error) {
-	panic(fmt.Errorf("not implemented: Venue - venue"))
-}
-
-// Songs is the resolver for the songs field.
-func (r *performanceResolver) Songs(ctx context.Context, obj *model.Performance) ([]*model.PerformanceSong, error) {
-	panic(fmt.Errorf("not implemented: Songs - songs"))
-}
-
-// Song is the resolver for the song field.
-func (r *performanceSongResolver) Song(ctx context.Context, obj *model.PerformanceSong) (*model.Song, error) {
-	panic(fmt.Errorf("not implemented: Song - song"))
-}
-
-// Performance is the resolver for the performance field.
-func (r *performanceSongResolver) Performance(ctx context.Context, obj *model.PerformanceSong) (*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: Performance - performance"))
-}
-
-// Band is the resolver for the band field.
-func (r *queryResolver) Band(ctx context.Context, id string) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: Band - band"))
+func (r *queryResolver) Band(ctx context.Context, id int) (*model.Band, error) {
+	panic(fmt.Errorf("not implemented: Band - band query resolver"))
 }
 
 // Bands is the resolver for the bands field.
 func (r *queryResolver) Bands(ctx context.Context) ([]*model.Band, error) {
-	// panic(fmt.Errorf("not implemented: Bands - bands"))
-	return bands, nil
+	res, err := r.BandRepo.GetBands()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Album is the resolver for the album field.
-func (r *queryResolver) Album(ctx context.Context, id string) (*model.Album, error) {
+func (r *queryResolver) Album(ctx context.Context, id int) (*model.Album, error) {
 	panic(fmt.Errorf("not implemented: Album - album"))
 }
 
 // Albums is the resolver for the albums field.
 func (r *queryResolver) Albums(ctx context.Context) ([]*model.Album, error) {
-	panic(fmt.Errorf("not implemented: Albums - albums"))
+	panic(fmt.Errorf("not implemented: Albums - albums, query resolver"))
 }
 
 // Venue is the resolver for the venue field.
-func (r *queryResolver) Venue(ctx context.Context, id string) (*model.Venue, error) {
+func (r *queryResolver) Venue(ctx context.Context, id int) (*model.Venue, error) {
 	panic(fmt.Errorf("not implemented: Venue - venue"))
 }
 
@@ -297,7 +172,7 @@ func (r *queryResolver) Venues(ctx context.Context) ([]*model.Venue, error) {
 }
 
 // Performance is the resolver for the performance field.
-func (r *queryResolver) Performance(ctx context.Context, id string) (*model.Performance, error) {
+func (r *queryResolver) Performance(ctx context.Context, id int) (*model.Performance, error) {
 	panic(fmt.Errorf("not implemented: Performance - performance"))
 }
 
@@ -307,93 +182,40 @@ func (r *queryResolver) Performances(ctx context.Context) ([]*model.Performance,
 }
 
 // Song is the resolver for the song field.
-func (r *queryResolver) Song(ctx context.Context, id string) (*model.Song, error) {
-	panic(fmt.Errorf("not implemented: Song - song"))
+func (r *queryResolver) Song(ctx context.Context, id int) (*model.Song, error) {
+	res, err := r.SongRepo.GetSongById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Songs is the resolver for the songs field.
 func (r *queryResolver) Songs(ctx context.Context) ([]*model.Song, error) {
-	panic(fmt.Errorf("not implemented: Songs - songs"))
+	res, err := r.SongRepo.GetSongs()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // PerformanceSong is the resolver for the performanceSong field.
-func (r *queryResolver) PerformanceSong(ctx context.Context, id string) (*model.PerformanceSong, error) {
+func (r *queryResolver) PerformanceSong(ctx context.Context, id int) (*model.PerformanceSong, error) {
 	panic(fmt.Errorf("not implemented: PerformanceSong - performanceSong"))
 }
 
 // AlbumSong is the resolver for the albumSong field.
-func (r *queryResolver) AlbumSong(ctx context.Context, id string) (*model.AlbumSong, error) {
+func (r *queryResolver) AlbumSong(ctx context.Context, id int) (*model.AlbumSong, error) {
 	panic(fmt.Errorf("not implemented: AlbumSong - albumSong"))
 }
-
-// Band is the resolver for the band field.
-func (r *songResolver) Band(ctx context.Context, obj *model.Song) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: Band - band"))
-}
-
-// Performances is the resolver for the performances field.
-func (r *venueResolver) Performances(ctx context.Context, obj *model.Venue) ([]*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: Performances - performances"))
-}
-
-// AlbumSongs is the resolver for the albumSongs field.
-func (r *albumInputResolver) AlbumSongs(ctx context.Context, obj *model.AlbumInput, data []*model.AlbumSongInput) error {
-	panic(fmt.Errorf("not implemented: AlbumSongs - albumSongs"))
-}
-
-// Albums is the resolver for the albums field.
-func (r *bandInputResolver) Albums(ctx context.Context, obj *model.BandInput, data []*model.AlbumInput) error {
-	panic(fmt.Errorf("not implemented: Albums - albums"))
-}
-
-// Album returns AlbumResolver implementation.
-func (r *Resolver) Album() AlbumResolver { return &albumResolver{r} }
-
-// AlbumSong returns AlbumSongResolver implementation.
-func (r *Resolver) AlbumSong() AlbumSongResolver { return &albumSongResolver{r} }
-
-// Band returns BandResolver implementation.
-func (r *Resolver) Band() BandResolver { return &bandResolver{r} }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
-// Performance returns PerformanceResolver implementation.
-func (r *Resolver) Performance() PerformanceResolver { return &performanceResolver{r} }
-
-// PerformanceSong returns PerformanceSongResolver implementation.
-func (r *Resolver) PerformanceSong() PerformanceSongResolver { return &performanceSongResolver{r} }
-
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-// Song returns SongResolver implementation.
-func (r *Resolver) Song() SongResolver { return &songResolver{r} }
-
-// Venue returns VenueResolver implementation.
-func (r *Resolver) Venue() VenueResolver { return &venueResolver{r} }
-
-// AlbumInput returns AlbumInputResolver implementation.
-func (r *Resolver) AlbumInput() AlbumInputResolver { return &albumInputResolver{r} }
-
-// BandInput returns BandInputResolver implementation.
-func (r *Resolver) BandInput() BandInputResolver { return &bandInputResolver{r} }
-
-type albumResolver struct{ *Resolver }
-type albumSongResolver struct{ *Resolver }
-type bandResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
-type performanceResolver struct{ *Resolver }
-type performanceSongResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type songResolver struct{ *Resolver }
-type venueResolver struct{ *Resolver }
-type albumInputResolver struct{ *Resolver }
-type bandInputResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.

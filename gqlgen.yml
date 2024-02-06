@@ -1,6 +1,6 @@
 # Where are all the schema files located? globs are supported eg  src/**/*.graphqls
 schema:
-  - graph/*.graphqls
+  - graph/schemas/*.graphqls
 
 # Where should the generated server code go?
 exec:
@@ -66,7 +66,7 @@ resolver:
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
-#  - "github.com/antch57/goose/graph/model"
+ - "github.com/antch57/goose/graph/model"
 
 # This section declares type mapping between the GraphQL and go type systems
 #
@@ -76,6 +76,7 @@ autobind:
 models:
   ID:
     model:
+      - github.com/99designs/gqlgen/graphql.IntID # force type 'ID' to convert to type 'int' during generation
       - github.com/99designs/gqlgen/graphql.ID
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
@@ -106,8 +107,8 @@ models:
       songs:
         resolver: true
   AlbumSong:
-    # model:
-    #   - github.com/antch57/goose/graph/model.AlbumSong
+    model:
+      - github.com/antch57/goose/graph/model.AlbumSong
     fields:
       album:
         resolver: true
@@ -116,33 +117,33 @@ models:
       band:
         resolver: true
   Song:
-    # model:
-    #   - github.com/antch57/goose/graph/model.Song
+    model:
+      - github.com/antch57/goose/graph/model.Song
     fields:
       band:
         resolver: true
-  Venue:
+  # Venue:
     # model:
     #   - github.com/antch57/goose/graph/model.Venue
-    fields:
-      performances:
-        resolver: true
-  Performance:
+  #   fields:
+  #     performances:
+  #       resolver: true
+  # Performance:
     # model:
     #   - github.com/antch57/goose/graph/model.Performance
-    fields:
-      venue:
-        resolver: true
-      band:
-        resolver: true
-      songs:
-        resolver: true
-  PerformanceSong:
+  #   fields:
+  #     venue:
+  #       resolver: true
+  #     band:
+  #       resolver: true
+  #     songs:
+  #       resolver: true
+  # PerformanceSong:
     # model:
     #   - github.com/antch57/goose/graph/model.PerformanceSong
-    fields:
-      performance:
-        resolver: true
-      song:
-        resolver: true
+    # fields:
+    #   performance:
+    #     resolver: true
+    #   song:
+    #     resolver: true
 

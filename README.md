@@ -23,7 +23,7 @@ step 1 build dockerfile:
 - `docker build -t my-mariadb internal/db/`
 
 step 2 run dockerfile:
-- `docker run --detach --name test-mariadb --env MARIADB_ROOT_PASSWORD=my-secret-pw -p 3306:3306 test-mariadb`
+- `docker run --detach --name test-mariadb --env MARIADB_ROOT_PASSWORD=my-secret-pw -p 3306:3306 my-mariadb`
 
 you now have your db setup.
 

@@ -44,13 +44,9 @@ type ResolverRoot interface {
 	AlbumSong() AlbumSongResolver
 	Band() BandResolver
 	Mutation() MutationResolver
-	Performance() PerformanceResolver
-	PerformanceSong() PerformanceSongResolver
 	Query() QueryResolver
 	Song() SongResolver
-	Venue() VenueResolver
 	AlbumInput() AlbumInputResolver
-	BandInput() BandInputResolver
 }
 
 type DirectiveRoot struct {
@@ -92,20 +88,20 @@ type ComplexityRoot struct {
 		CreatePerformanceSong func(childComplexity int, input *model.PerformanceSongInput) int
 		CreateSong            func(childComplexity int, input *model.SongInput) int
 		CreateVenue           func(childComplexity int, input *model.VenueInput) int
-		DeleteAlbum           func(childComplexity int, id string) int
-		DeleteAlbumSong       func(childComplexity int, id string) int
-		DeleteBand            func(childComplexity int, id string) int
-		DeletePerformance     func(childComplexity int, id string) int
-		DeletePerformanceSong func(childComplexity int, id string) int
-		DeleteSong            func(childComplexity int, id string) int
-		DeleteVenue           func(childComplexity int, id string) int
-		UpdateAlbum           func(childComplexity int, id string, input *model.AlbumInput) int
-		UpdateAlbumSong       func(childComplexity int, id string, input *model.AlbumSongInput) int
-		UpdateBand            func(childComplexity int, id string, input *model.BandInput) int
-		UpdatePerformance     func(childComplexity int, id string, input *model.PerformanceInput) int
-		UpdatePerformanceSong func(childComplexity int, id string, input *model.PerformanceSongInput) int
-		UpdateSong            func(childComplexity int, id string, input *model.SongInput) int
-		UpdateVenue           func(childComplexity int, id string, input *model.VenueInput) int
+		DeleteAlbum           func(childComplexity int, id int) int
+		DeleteAlbumSong       func(childComplexity int, id int) int
+		DeleteBand            func(childComplexity int, id int) int
+		DeletePerformance     func(childComplexity int, id int) int
+		DeletePerformanceSong func(childComplexity int, id int) int
+		DeleteSong            func(childComplexity int, id int) int
+		DeleteVenue           func(childComplexity int, id int) int
+		UpdateAlbum           func(childComplexity int, id int, input *model.AlbumInput) int
+		UpdateAlbumSong       func(childComplexity int, id int, input *model.AlbumSongInput) int
+		UpdateBand            func(childComplexity int, id int, input *model.BandInput) int
+		UpdatePerformance     func(childComplexity int, id int, input *model.PerformanceInput) int
+		UpdatePerformanceSong func(childComplexity int, id int, input *model.PerformanceSongInput) int
+		UpdateSong            func(childComplexity int, id int, input *model.SongInput) int
+		UpdateVenue           func(childComplexity int, id int, input *model.VenueInput) int
 	}
 
 	Performance struct {
@@ -127,17 +123,17 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Album           func(childComplexity int, id string) int
-		AlbumSong       func(childComplexity int, id string) int
+		Album           func(childComplexity int, id int) int
+		AlbumSong       func(childComplexity int, id int) int
 		Albums          func(childComplexity int) int
-		Band            func(childComplexity int, id string) int
+		Band            func(childComplexity int, id int) int
 		Bands           func(childComplexity int) int
-		Performance     func(childComplexity int, id string) int
-		PerformanceSong func(childComplexity int, id string) int
+		Performance     func(childComplexity int, id int) int
+		PerformanceSong func(childComplexity int, id int) int
 		Performances    func(childComplexity int) int
-		Song            func(childComplexity int, id string) int
+		Song            func(childComplexity int, id int) int
 		Songs           func(childComplexity int) int
-		Venue           func(childComplexity int, id string) int
+		Venue           func(childComplexity int, id int) int
 		Venues          func(childComplexity int) int
 	}
 
@@ -170,64 +166,47 @@ type BandResolver interface {
 }
 type MutationResolver interface {
 	CreateBand(ctx context.Context, input *model.BandInput) (*model.Band, error)
-	UpdateBand(ctx context.Context, id string, input *model.BandInput) (*model.Band, error)
-	DeleteBand(ctx context.Context, id string) (*bool, error)
+	UpdateBand(ctx context.Context, id int, input *model.BandInput) (*model.Band, error)
+	DeleteBand(ctx context.Context, id int) (*bool, error)
 	CreateAlbum(ctx context.Context, input *model.AlbumInput) (*model.Album, error)
-	UpdateAlbum(ctx context.Context, id string, input *model.AlbumInput) (*model.Album, error)
-	DeleteAlbum(ctx context.Context, id string) (*bool, error)
+	UpdateAlbum(ctx context.Context, id int, input *model.AlbumInput) (*model.Album, error)
+	DeleteAlbum(ctx context.Context, id int) (*bool, error)
 	CreateVenue(ctx context.Context, input *model.VenueInput) (*model.Venue, error)
-	UpdateVenue(ctx context.Context, id string, input *model.VenueInput) (*model.Venue, error)
-	DeleteVenue(ctx context.Context, id string) (*bool, error)
+	UpdateVenue(ctx context.Context, id int, input *model.VenueInput) (*model.Venue, error)
+	DeleteVenue(ctx context.Context, id int) (*bool, error)
 	CreatePerformance(ctx context.Context, input *model.PerformanceInput) (*model.Performance, error)
-	UpdatePerformance(ctx context.Context, id string, input *model.PerformanceInput) (*model.Performance, error)
-	DeletePerformance(ctx context.Context, id string) (*bool, error)
+	UpdatePerformance(ctx context.Context, id int, input *model.PerformanceInput) (*model.Performance, error)
+	DeletePerformance(ctx context.Context, id int) (*bool, error)
 	CreateSong(ctx context.Context, input *model.SongInput) (*model.Song, error)
-	UpdateSong(ctx context.Context, id string, input *model.SongInput) (*model.Song, error)
-	DeleteSong(ctx context.Context, id string) (*bool, error)
+	UpdateSong(ctx context.Context, id int, input *model.SongInput) (*model.Song, error)
+	DeleteSong(ctx context.Context, id int) (*bool, error)
 	CreatePerformanceSong(ctx context.Context, input *model.PerformanceSongInput) (*model.PerformanceSong, error)
-	UpdatePerformanceSong(ctx context.Context, id string, input *model.PerformanceSongInput) (*model.PerformanceSong, error)
-	DeletePerformanceSong(ctx context.Context, id string) (*bool, error)
+	UpdatePerformanceSong(ctx context.Context, id int, input *model.PerformanceSongInput) (*model.PerformanceSong, error)
+	DeletePerformanceSong(ctx context.Context, id int) (*bool, error)
 	CreateAlbumSong(ctx context.Context, input *model.AlbumSongInput) (*model.AlbumSong, error)
-	UpdateAlbumSong(ctx context.Context, id string, input *model.AlbumSongInput) (*model.AlbumSong, error)
-	DeleteAlbumSong(ctx context.Context, id string) (*bool, error)
-}
-type PerformanceResolver interface {
-	Band(ctx context.Context, obj *model.Performance) (*model.Band, error)
-	Venue(ctx context.Context, obj *model.Performance) (*model.Venue, error)
-
-	Songs(ctx context.Context, obj *model.Performance) ([]*model.PerformanceSong, error)
-}
-type PerformanceSongResolver interface {
-	Song(ctx context.Context, obj *model.PerformanceSong) (*model.Song, error)
-
-	Performance(ctx context.Context, obj *model.PerformanceSong) (*model.Performance, error)
+	UpdateAlbumSong(ctx context.Context, id int, input *model.AlbumSongInput) (*model.AlbumSong, error)
+	DeleteAlbumSong(ctx context.Context, id int) (*bool, error)
 }
 type QueryResolver interface {
-	Band(ctx context.Context, id string) (*model.Band, error)
+	Band(ctx context.Context, id int) (*model.Band, error)
 	Bands(ctx context.Context) ([]*model.Band, error)
-	Album(ctx context.Context, id string) (*model.Album, error)
+	Album(ctx context.Context, id int) (*model.Album, error)
 	Albums(ctx context.Context) ([]*model.Album, error)
-	Venue(ctx context.Context, id string) (*model.Venue, error)
+	Venue(ctx context.Context, id int) (*model.Venue, error)
 	Venues(ctx context.Context) ([]*model.Venue, error)
-	Performance(ctx context.Context, id string) (*model.Performance, error)
+	Performance(ctx context.Context, id int) (*model.Performance, error)
 	Performances(ctx context.Context) ([]*model.Performance, error)
-	Song(ctx context.Context, id string) (*model.Song, error)
+	Song(ctx context.Context, id int) (*model.Song, error)
 	Songs(ctx context.Context) ([]*model.Song, error)
-	PerformanceSong(ctx context.Context, id string) (*model.PerformanceSong, error)
-	AlbumSong(ctx context.Context, id string) (*model.AlbumSong, error)
+	PerformanceSong(ctx context.Context, id int) (*model.PerformanceSong, error)
+	AlbumSong(ctx context.Context, id int) (*model.AlbumSong, error)
 }
 type SongResolver interface {
 	Band(ctx context.Context, obj *model.Song) (*model.Band, error)
 }
-type VenueResolver interface {
-	Performances(ctx context.Context, obj *model.Venue) ([]*model.Performance, error)
-}
 
 type AlbumInputResolver interface {
 	AlbumSongs(ctx context.Context, obj *model.AlbumInput, data []*model.AlbumSongInput) error
-}
-type BandInputResolver interface {
-	Albums(ctx context.Context, obj *model.BandInput, data []*model.AlbumInput) error
 }
 
 type executableSchema struct {
@@ -469,7 +448,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteAlbum(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeleteAlbum(childComplexity, args["id"].(int)), true
 
 	case "Mutation.deleteAlbumSong":
 		if e.complexity.Mutation.DeleteAlbumSong == nil {
@@ -481,7 +460,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteAlbumSong(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeleteAlbumSong(childComplexity, args["id"].(int)), true
 
 	case "Mutation.deleteBand":
 		if e.complexity.Mutation.DeleteBand == nil {
@@ -493,7 +472,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteBand(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeleteBand(childComplexity, args["id"].(int)), true
 
 	case "Mutation.deletePerformance":
 		if e.complexity.Mutation.DeletePerformance == nil {
@@ -505,7 +484,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeletePerformance(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeletePerformance(childComplexity, args["id"].(int)), true
 
 	case "Mutation.deletePerformanceSong":
 		if e.complexity.Mutation.DeletePerformanceSong == nil {
@@ -517,7 +496,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeletePerformanceSong(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeletePerformanceSong(childComplexity, args["id"].(int)), true
 
 	case "Mutation.deleteSong":
 		if e.complexity.Mutation.DeleteSong == nil {
@@ -529,7 +508,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteSong(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeleteSong(childComplexity, args["id"].(int)), true
 
 	case "Mutation.deleteVenue":
 		if e.complexity.Mutation.DeleteVenue == nil {
@@ -541,7 +520,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteVenue(childComplexity, args["id"].(string)), true
+		return e.complexity.Mutation.DeleteVenue(childComplexity, args["id"].(int)), true
 
 	case "Mutation.updateAlbum":
 		if e.complexity.Mutation.UpdateAlbum == nil {
@@ -553,7 +532,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAlbum(childComplexity, args["id"].(string), args["input"].(*model.AlbumInput)), true
+		return e.complexity.Mutation.UpdateAlbum(childComplexity, args["id"].(int), args["input"].(*model.AlbumInput)), true
 
 	case "Mutation.updateAlbumSong":
 		if e.complexity.Mutation.UpdateAlbumSong == nil {
@@ -565,7 +544,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateAlbumSong(childComplexity, args["id"].(string), args["input"].(*model.AlbumSongInput)), true
+		return e.complexity.Mutation.UpdateAlbumSong(childComplexity, args["id"].(int), args["input"].(*model.AlbumSongInput)), true
 
 	case "Mutation.updateBand":
 		if e.complexity.Mutation.UpdateBand == nil {
@@ -577,7 +556,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateBand(childComplexity, args["id"].(string), args["input"].(*model.BandInput)), true
+		return e.complexity.Mutation.UpdateBand(childComplexity, args["id"].(int), args["input"].(*model.BandInput)), true
 
 	case "Mutation.updatePerformance":
 		if e.complexity.Mutation.UpdatePerformance == nil {
@@ -589,7 +568,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdatePerformance(childComplexity, args["id"].(string), args["input"].(*model.PerformanceInput)), true
+		return e.complexity.Mutation.UpdatePerformance(childComplexity, args["id"].(int), args["input"].(*model.PerformanceInput)), true
 
 	case "Mutation.updatePerformanceSong":
 		if e.complexity.Mutation.UpdatePerformanceSong == nil {
@@ -601,7 +580,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdatePerformanceSong(childComplexity, args["id"].(string), args["input"].(*model.PerformanceSongInput)), true
+		return e.complexity.Mutation.UpdatePerformanceSong(childComplexity, args["id"].(int), args["input"].(*model.PerformanceSongInput)), true
 
 	case "Mutation.updateSong":
 		if e.complexity.Mutation.UpdateSong == nil {
@@ -613,7 +592,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSong(childComplexity, args["id"].(string), args["input"].(*model.SongInput)), true
+		return e.complexity.Mutation.UpdateSong(childComplexity, args["id"].(int), args["input"].(*model.SongInput)), true
 
 	case "Mutation.updateVenue":
 		if e.complexity.Mutation.UpdateVenue == nil {
@@ -625,7 +604,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateVenue(childComplexity, args["id"].(string), args["input"].(*model.VenueInput)), true
+		return e.complexity.Mutation.UpdateVenue(childComplexity, args["id"].(int), args["input"].(*model.VenueInput)), true
 
 	case "Performance.band":
 		if e.complexity.Performance.Band == nil {
@@ -721,7 +700,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Album(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.Album(childComplexity, args["id"].(int)), true
 
 	case "Query.albumSong":
 		if e.complexity.Query.AlbumSong == nil {
@@ -733,7 +712,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.AlbumSong(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.AlbumSong(childComplexity, args["id"].(int)), true
 
 	case "Query.albums":
 		if e.complexity.Query.Albums == nil {
@@ -752,7 +731,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Band(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.Band(childComplexity, args["id"].(int)), true
 
 	case "Query.bands":
 		if e.complexity.Query.Bands == nil {
@@ -771,7 +750,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Performance(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.Performance(childComplexity, args["id"].(int)), true
 
 	case "Query.performanceSong":
 		if e.complexity.Query.PerformanceSong == nil {
@@ -783,7 +762,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.PerformanceSong(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.PerformanceSong(childComplexity, args["id"].(int)), true
 
 	case "Query.performances":
 		if e.complexity.Query.Performances == nil {
@@ -802,7 +781,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Song(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.Song(childComplexity, args["id"].(int)), true
 
 	case "Query.songs":
 		if e.complexity.Query.Songs == nil {
@@ -821,7 +800,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Venue(childComplexity, args["id"].(string)), true
+		return e.complexity.Query.Venue(childComplexity, args["id"].(int)), true
 
 	case "Query.venues":
 		if e.complexity.Query.Venues == nil {
@@ -990,7 +969,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "schema.graphqls"
+//go:embed "schemas/album.graphqls" "schemas/band.graphqls" "schemas/performance.graphqls" "schemas/schema.graphqls" "schemas/song.graphqls" "schemas/venue.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1002,7 +981,12 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
-	{Name: "schema.graphqls", Input: sourceData("schema.graphqls"), BuiltIn: false},
+	{Name: "schemas/album.graphqls", Input: sourceData("schemas/album.graphqls"), BuiltIn: false},
+	{Name: "schemas/band.graphqls", Input: sourceData("schemas/band.graphqls"), BuiltIn: false},
+	{Name: "schemas/performance.graphqls", Input: sourceData("schemas/performance.graphqls"), BuiltIn: false},
+	{Name: "schemas/schema.graphqls", Input: sourceData("schemas/schema.graphqls"), BuiltIn: false},
+	{Name: "schemas/song.graphqls", Input: sourceData("schemas/song.graphqls"), BuiltIn: false},
+	{Name: "schemas/venue.graphqls", Input: sourceData("schemas/venue.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -1118,10 +1102,10 @@ func (ec *executionContext) field_Mutation_createVenue_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_deleteAlbumSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1133,10 +1117,10 @@ func (ec *executionContext) field_Mutation_deleteAlbumSong_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_deleteAlbum_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1148,10 +1132,10 @@ func (ec *executionContext) field_Mutation_deleteAlbum_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_deleteBand_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1163,10 +1147,10 @@ func (ec *executionContext) field_Mutation_deleteBand_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_deletePerformanceSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1178,10 +1162,10 @@ func (ec *executionContext) field_Mutation_deletePerformanceSong_args(ctx contex
 func (ec *executionContext) field_Mutation_deletePerformance_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1193,10 +1177,10 @@ func (ec *executionContext) field_Mutation_deletePerformance_args(ctx context.Co
 func (ec *executionContext) field_Mutation_deleteSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1208,10 +1192,10 @@ func (ec *executionContext) field_Mutation_deleteSong_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_deleteVenue_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1223,10 +1207,10 @@ func (ec *executionContext) field_Mutation_deleteVenue_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_updateAlbumSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1247,10 +1231,10 @@ func (ec *executionContext) field_Mutation_updateAlbumSong_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_updateAlbum_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1271,10 +1255,10 @@ func (ec *executionContext) field_Mutation_updateAlbum_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_updateBand_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1295,10 +1279,10 @@ func (ec *executionContext) field_Mutation_updateBand_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_updatePerformanceSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1319,10 +1303,10 @@ func (ec *executionContext) field_Mutation_updatePerformanceSong_args(ctx contex
 func (ec *executionContext) field_Mutation_updatePerformance_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1343,10 +1327,10 @@ func (ec *executionContext) field_Mutation_updatePerformance_args(ctx context.Co
 func (ec *executionContext) field_Mutation_updateSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1367,10 +1351,10 @@ func (ec *executionContext) field_Mutation_updateSong_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_updateVenue_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1406,10 +1390,10 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_albumSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1421,10 +1405,10 @@ func (ec *executionContext) field_Query_albumSong_args(ctx context.Context, rawA
 func (ec *executionContext) field_Query_album_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1436,10 +1420,10 @@ func (ec *executionContext) field_Query_album_args(ctx context.Context, rawArgs 
 func (ec *executionContext) field_Query_band_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1451,10 +1435,10 @@ func (ec *executionContext) field_Query_band_args(ctx context.Context, rawArgs m
 func (ec *executionContext) field_Query_performanceSong_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1466,10 +1450,10 @@ func (ec *executionContext) field_Query_performanceSong_args(ctx context.Context
 func (ec *executionContext) field_Query_performance_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1481,10 +1465,10 @@ func (ec *executionContext) field_Query_performance_args(ctx context.Context, ra
 func (ec *executionContext) field_Query_song_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1496,10 +1480,10 @@ func (ec *executionContext) field_Query_song_args(ctx context.Context, rawArgs m
 func (ec *executionContext) field_Query_venue_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
+	var arg0 int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1572,9 +1556,9 @@ func (ec *executionContext) _Album_id(ctx context.Context, field graphql.Collect
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Album_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1822,9 +1806,9 @@ func (ec *executionContext) _AlbumSong_id(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AlbumSong_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1861,14 +1845,11 @@ func (ec *executionContext) _AlbumSong_song(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Song)
 	fc.Result = res
-	return ec.marshalNSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
+	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AlbumSong_song(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1913,14 +1894,11 @@ func (ec *executionContext) _AlbumSong_album(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Album)
 	fc.Result = res
-	return ec.marshalNAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
+	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AlbumSong_album(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1969,14 +1947,11 @@ func (ec *executionContext) _AlbumSong_band(ctx context.Context, field graphql.C
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(*model.Band)
 	fc.Result = res
-	return ec.marshalNBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
+	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AlbumSong_band(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2032,9 +2007,9 @@ func (ec *executionContext) _AlbumSong_duration(ctx context.Context, field graph
 		}
 		return graphql.Null
 	}
-	res := resTmp.(time.Duration)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNDuration2timeᚐDuration(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AlbumSong_duration(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2044,7 +2019,7 @@ func (ec *executionContext) fieldContext_AlbumSong_duration(ctx context.Context,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Duration does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2161,9 +2136,9 @@ func (ec *executionContext) _Band_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Band_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2485,7 +2460,7 @@ func (ec *executionContext) _Mutation_updateBand(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateBand(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.BandInput))
+		return ec.resolvers.Mutation().UpdateBand(rctx, fc.Args["id"].(int), fc.Args["input"].(*model.BandInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2551,7 +2526,7 @@ func (ec *executionContext) _Mutation_deleteBand(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteBand(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeleteBand(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2667,7 +2642,7 @@ func (ec *executionContext) _Mutation_updateAlbum(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAlbum(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.AlbumInput))
+		return ec.resolvers.Mutation().UpdateAlbum(rctx, fc.Args["id"].(int), fc.Args["input"].(*model.AlbumInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2731,7 +2706,7 @@ func (ec *executionContext) _Mutation_deleteAlbum(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteAlbum(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeleteAlbum(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2845,7 +2820,7 @@ func (ec *executionContext) _Mutation_updateVenue(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateVenue(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.VenueInput))
+		return ec.resolvers.Mutation().UpdateVenue(rctx, fc.Args["id"].(int), fc.Args["input"].(*model.VenueInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2907,7 +2882,7 @@ func (ec *executionContext) _Mutation_deleteVenue(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteVenue(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeleteVenue(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3025,7 +3000,7 @@ func (ec *executionContext) _Mutation_updatePerformance(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePerformance(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.PerformanceInput))
+		return ec.resolvers.Mutation().UpdatePerformance(rctx, fc.Args["id"].(int), fc.Args["input"].(*model.PerformanceInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3091,7 +3066,7 @@ func (ec *executionContext) _Mutation_deletePerformance(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeletePerformance(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeletePerformance(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3203,7 +3178,7 @@ func (ec *executionContext) _Mutation_updateSong(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateSong(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.SongInput))
+		return ec.resolvers.Mutation().UpdateSong(rctx, fc.Args["id"].(int), fc.Args["input"].(*model.SongInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3263,7 +3238,7 @@ func (ec *executionContext) _Mutation_deleteSong(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteSong(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeleteSong(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3381,7 +3356,7 @@ func (ec *executionContext) _Mutation_updatePerformanceSong(ctx context.Context,
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdatePerformanceSong(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.PerformanceSongInput))
+		return ec.resolvers.Mutation().UpdatePerformanceSong(rctx, fc.Args["id"].(int), fc.Args["input"].(*model.PerformanceSongInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3447,7 +3422,7 @@ func (ec *executionContext) _Mutation_deletePerformanceSong(ctx context.Context,
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeletePerformanceSong(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeletePerformanceSong(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3567,7 +3542,7 @@ func (ec *executionContext) _Mutation_updateAlbumSong(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateAlbumSong(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.AlbumSongInput))
+		return ec.resolvers.Mutation().UpdateAlbumSong(rctx, fc.Args["id"].(int), fc.Args["input"].(*model.AlbumSongInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3635,7 +3610,7 @@ func (ec *executionContext) _Mutation_deleteAlbumSong(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteAlbumSong(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Mutation().DeleteAlbumSong(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3699,9 +3674,9 @@ func (ec *executionContext) _Performance_id(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Performance_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3731,7 +3706,7 @@ func (ec *executionContext) _Performance_band(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Performance().Band(rctx, obj)
+		return obj.Band, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3752,8 +3727,8 @@ func (ec *executionContext) fieldContext_Performance_band(ctx context.Context, f
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -3789,7 +3764,7 @@ func (ec *executionContext) _Performance_venue(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Performance().Venue(rctx, obj)
+		return obj.Venue, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3810,8 +3785,8 @@ func (ec *executionContext) fieldContext_Performance_venue(ctx context.Context, 
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -3931,7 +3906,7 @@ func (ec *executionContext) _Performance_songs(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Performance().Songs(rctx, obj)
+		return obj.Songs, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3952,8 +3927,8 @@ func (ec *executionContext) fieldContext_Performance_songs(ctx context.Context, 
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -4001,9 +3976,9 @@ func (ec *executionContext) _PerformanceSong_id(ctx context.Context, field graph
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PerformanceSong_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4033,7 +4008,7 @@ func (ec *executionContext) _PerformanceSong_song(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PerformanceSong().Song(rctx, obj)
+		return obj.Song, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4054,8 +4029,8 @@ func (ec *executionContext) fieldContext_PerformanceSong_song(ctx context.Contex
 	fc = &graphql.FieldContext{
 		Object:     "PerformanceSong",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -4129,7 +4104,7 @@ func (ec *executionContext) _PerformanceSong_performance(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.PerformanceSong().Performance(rctx, obj)
+		return obj.Performance, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4150,8 +4125,8 @@ func (ec *executionContext) fieldContext_PerformanceSong_performance(ctx context
 	fc = &graphql.FieldContext{
 		Object:     "PerformanceSong",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -4272,7 +4247,7 @@ func (ec *executionContext) _Query_band(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Band(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().Band(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4393,7 +4368,7 @@ func (ec *executionContext) _Query_album(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Album(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().Album(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4510,7 +4485,7 @@ func (ec *executionContext) _Query_venue(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Venue(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().Venue(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4623,7 +4598,7 @@ func (ec *executionContext) _Query_performance(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Performance(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().Performance(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4744,7 +4719,7 @@ func (ec *executionContext) _Query_song(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Song(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().Song(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4853,7 +4828,7 @@ func (ec *executionContext) _Query_performanceSong(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().PerformanceSong(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().PerformanceSong(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4919,7 +4894,7 @@ func (ec *executionContext) _Query_albumSong(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().AlbumSong(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().AlbumSong(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5128,9 +5103,9 @@ func (ec *executionContext) _Song_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Song_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5271,9 +5246,9 @@ func (ec *executionContext) _Venue_id(ctx context.Context, field graphql.Collect
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Venue_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5388,7 +5363,7 @@ func (ec *executionContext) _Venue_performances(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Venue().Performances(rctx, obj)
+		return obj.Performances, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5406,8 +5381,8 @@ func (ec *executionContext) fieldContext_Venue_performances(ctx context.Context,
 	fc = &graphql.FieldContext{
 		Object:     "Venue",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -7225,7 +7200,7 @@ func (ec *executionContext) unmarshalInputAlbumInput(ctx context.Context, obj in
 			it.Title = data
 		case "bandId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bandId"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7268,28 +7243,28 @@ func (ec *executionContext) unmarshalInputAlbumSongInput(ctx context.Context, ob
 		switch k {
 		case "songId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("songId"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.SongID = data
 		case "albumId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("albumId"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.AlbumID = data
 		case "bandId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bandId"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.BandID = data
 		case "duration":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("duration"))
-			data, err := ec.unmarshalNDuration2timeᚐDuration(ctx, v)
+			data, err := ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7362,9 +7337,7 @@ func (ec *executionContext) unmarshalInputBandInput(ctx context.Context, obj int
 			if err != nil {
 				return it, err
 			}
-			if err = ec.resolvers.BandInput().Albums(ctx, &it, data); err != nil {
-				return it, err
-			}
+			it.Albums = data
 		}
 	}
 
@@ -7387,14 +7360,14 @@ func (ec *executionContext) unmarshalInputPerformanceInput(ctx context.Context, 
 		switch k {
 		case "bandId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bandId"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.BandID = data
 		case "venue":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("venue"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7442,7 +7415,7 @@ func (ec *executionContext) unmarshalInputPerformanceSongInput(ctx context.Conte
 		switch k {
 		case "songId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("songId"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7456,7 +7429,7 @@ func (ec *executionContext) unmarshalInputPerformanceSongInput(ctx context.Conte
 			it.Duration = data
 		case "performanceId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performanceId"))
-			data, err := ec.unmarshalNID2string(ctx, v)
+			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7504,7 +7477,7 @@ func (ec *executionContext) unmarshalInputSongInput(ctx context.Context, obj int
 			it.Title = data
 		case "bandId":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bandId"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7704,9 +7677,6 @@ func (ec *executionContext) _AlbumSong(ctx context.Context, sel ast.SelectionSet
 					}
 				}()
 				res = ec._AlbumSong_song(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
 				return res
 			}
 
@@ -7740,9 +7710,6 @@ func (ec *executionContext) _AlbumSong(ctx context.Context, sel ast.SelectionSet
 					}
 				}()
 				res = ec._AlbumSong_album(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
 				return res
 			}
 
@@ -7776,9 +7743,6 @@ func (ec *executionContext) _AlbumSong(ctx context.Context, sel ast.SelectionSet
 					}
 				}()
 				res = ec._AlbumSong_band(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
 				return res
 			}
 
@@ -8066,126 +8030,33 @@ func (ec *executionContext) _Performance(ctx context.Context, sel ast.SelectionS
 		case "id":
 			out.Values[i] = ec._Performance_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "band":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Performance_band(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._Performance_band(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "venue":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Performance_venue(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._Performance_venue(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "performanceDate":
 			out.Values[i] = ec._Performance_performanceDate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "duration":
 			out.Values[i] = ec._Performance_duration(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "songs":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Performance_songs(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._Performance_songs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8223,89 +8094,27 @@ func (ec *executionContext) _PerformanceSong(ctx context.Context, sel ast.Select
 		case "id":
 			out.Values[i] = ec._PerformanceSong_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "song":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PerformanceSong_song(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._PerformanceSong_song(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "duration":
 			out.Values[i] = ec._PerformanceSong_duration(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "performance":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._PerformanceSong_performance(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._PerformanceSong_performance(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "isCover":
 			out.Values[i] = ec._PerformanceSong_isCover(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "notes":
 			out.Values[i] = ec._PerformanceSong_notes(ctx, field, obj)
@@ -8701,48 +8510,17 @@ func (ec *executionContext) _Venue(ctx context.Context, sel ast.SelectionSet, ob
 		case "id":
 			out.Values[i] = ec._Venue_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "name":
 			out.Values[i] = ec._Venue_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
+				out.Invalids++
 			}
 		case "location":
 			out.Values[i] = ec._Venue_location(ctx, field, obj)
 		case "performances":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Venue_performances(ctx, field, obj)
-				return res
-			}
-
-			if field.Deferrable != nil {
-				dfs, ok := deferred[field.Deferrable.Label]
-				di := 0
-				if ok {
-					dfs.AddField(field)
-					di = len(dfs.Values) - 1
-				} else {
-					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
-					deferred[field.Deferrable.Label] = dfs
-				}
-				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
-					return innerFunc(ctx, dfs)
-				})
-
-				// don't run the out.Concurrently() call below
-				out.Values[i] = graphql.Null
-				continue
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			out.Values[i] = ec._Venue_performances(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9092,10 +8870,6 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAlbum2githubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx context.Context, sel ast.SelectionSet, v model.Album) graphql.Marshaler {
-	return ec._Album(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx context.Context, sel ast.SelectionSet, v *model.Album) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9229,13 +9003,13 @@ func (ec *executionContext) marshalNDuration2timeᚐDuration(ctx context.Context
 	return res
 }
 
-func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalID(v)
+func (ec *executionContext) unmarshalNID2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalIntID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalID(v)
+func (ec *executionContext) marshalNID2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalIntID(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9257,10 +9031,6 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalNPerformance2githubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v model.Performance) graphql.Marshaler {
-	return ec._Performance(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v *model.Performance) graphql.Marshaler {
@@ -9332,10 +9102,6 @@ func (ec *executionContext) unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋant
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSong2githubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v model.Song) graphql.Marshaler {
-	return ec._Song(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v *model.Song) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9359,10 +9125,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalNVenue2githubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v model.Venue) graphql.Marshaler {
-	return ec._Venue(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v *model.Venue) graphql.Marshaler {
@@ -9849,19 +9611,19 @@ func (ec *executionContext) marshalODuration2ᚖtimeᚐDuration(ctx context.Cont
 	return res
 }
 
-func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+func (ec *executionContext) unmarshalOID2ᚖint(ctx context.Context, v interface{}) (*int, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := graphql.UnmarshalID(v)
+	res, err := graphql.UnmarshalIntID(v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+func (ec *executionContext) marshalOID2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	res := graphql.MarshalID(*v)
+	res := graphql.MarshalIntID(*v)
 	return res
 }
 

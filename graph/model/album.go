@@ -17,14 +17,12 @@ type AlbumInput struct {
 	Title       string    `json:"title"`
 	BandID      int       `json:"bandId"`
 	ReleaseDate time.Time `json:"releaseDate"`
-	// AlbumSongs  []*AlbumSongInput `json:"albumSongs,omitempty"`
 }
 
 type AlbumSong struct {
 	ID          int   `json:"id"`
 	SongID      int   `json:"songId"`
 	AlbumID     int   `json:"albumId"`
-	BandID      int   `json:"band"`
 	Duration    int   `json:"duration"` // FIXME: should be time.Duration
 	TrackNumber int   `json:"track_number"`
 	IsCover     *bool `json:"isCover,omitempty"`
@@ -33,7 +31,6 @@ type AlbumSong struct {
 type AlbumSongInput struct {
 	SongID      int  `json:"songId"`
 	AlbumID     int  `json:"albumId"`
-	BandID      int  `json:"bandId"`
 	Duration    int  `json:"duration"` // FIXME: should be time.Duration
 	TrackNumber int  `json:"trackNumber"`
 	IsCover     bool `json:"isCover"`

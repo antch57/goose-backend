@@ -60,12 +60,10 @@ CREATE TABLE IF NOT EXISTS album_songs (
   id INT AUTO_INCREMENT PRIMARY KEY,
   song_id INT NOT NULL,
   album_id INT NOT NULL,
-  band_id INT NOT NULL,
   duration INT NOT NULL,
   track_number INT NOT NULL,
   is_cover BOOLEAN DEFAULT FALSE,  -- Indicates whether the song is a cover
   FOREIGN KEY (album_id) REFERENCES albums(id) ON DELETE CASCADE,
-  FOREIGN KEY (band_id) REFERENCES bands(id) ON DELETE CASCADE,
   FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE,
   UNIQUE (song_id, album_id)  -- Prevent duplicate songs for the same album
 );

@@ -93,12 +93,22 @@ func (r *mutationResolver) CreateSong(ctx context.Context, input *model.SongInpu
 
 // UpdateSong is the resolver for the updateSong field.
 func (r *mutationResolver) UpdateSong(ctx context.Context, id int, input *model.SongInput) (*model.Song, error) {
-	panic(fmt.Errorf("not implemented: UpdateSong - updateSong"))
+	res, err := r.SongRepo.UpdateSong(id, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // DeleteSong is the resolver for the deleteSong field.
 func (r *mutationResolver) DeleteSong(ctx context.Context, id int) (*bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteSong - deleteSong"))
+	res, err := r.SongRepo.DeleteSong(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
 }
 
 // CreatePerformanceSong is the resolver for the createPerformanceSong field.

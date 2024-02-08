@@ -11,6 +11,8 @@ type SongRepo struct {
 	DB *gorm.DB
 }
 
+// Song CRUD Operations
+// Create
 func (s *SongRepo) CreateSong(input *model.SongInput) (*model.Song, error) {
 	var songInsert = &model.Song{}
 	songInsert.Title = input.Title
@@ -27,6 +29,7 @@ func (s *SongRepo) CreateSong(input *model.SongInput) (*model.Song, error) {
 	return songInsert, nil
 }
 
+// Read
 func (s *SongRepo) GetSongs() ([]*model.Song, error) {
 	var songsList []*model.Song
 	res := s.DB.Find(&songsList)
@@ -49,8 +52,6 @@ func (s *SongRepo) GetSongById(songId int) (*model.Song, error) {
 	return song, nil
 }
 
-// func (s *SongRepo) GetSongsByAlbumId(albumId int)
-
 func (s *SongRepo) GetSongsByBandId(bandId int) ([]*model.Song, error) {
 	var songsList []*model.Song
 
@@ -62,18 +63,28 @@ func (s *SongRepo) GetSongsByBandId(bandId int) ([]*model.Song, error) {
 	return songsList, nil
 }
 
-// func (s *SongRepo) UpdateSong(input *model.SongInput) (*model.Song, error) {
-// 	song := &model.Song{
-// 		Title:  input.Title,
-// 		BandID: input.BandID,
-// 	}
+// Update
+func (s *SongRepo) UpdateSong(songId int, input *model.SongInput) (*model.Song, error) {
+	song := &model.Song{
+		ID:     songId,
+		Title:  input.Title,
+		BandID: input.BandID,
+	}
 
-// 	db.Model(&User{}).Where("active = ?", true).Update("name", "hello")
+	res := s.DB.Model(&model.Song{}).Where("id = ?", songId).Updates(song)
+	if res.Error != nil {
+		return nil, res.Error
+	}
 
-// 	res := s.DB.Model(&model.Song{}).Where("id = ?", input.ID).Updates(song)
-// 	if res.Error != nil {
-// 		return nil, res.Error
-// 	}
+	return song, nil
+}
 
-// 	return song, nil
-// }
+// Delete
+func (s *SongRepo) DeleteSong(songId int) (bool, error) {
+	res := s.DB.Delete(&model.Song{}, songId)
+	if res.Error != nil {
+		return false, res.Error
+	}
+
+	return true, nil
+}

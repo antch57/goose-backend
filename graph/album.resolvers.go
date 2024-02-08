@@ -46,16 +46,6 @@ func (r *albumSongResolver) Album(ctx context.Context, obj *model.AlbumSong) (*m
 	return res, nil
 }
 
-// Band is the resolver for the band field.
-func (r *albumSongResolver) Band(ctx context.Context, obj *model.AlbumSong) (*model.Band, error) {
-	res, err := r.BandRepo.GetBandByID(obj.BandID)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-}
-
 // AlbumSongs is the resolver for the albumSongs field.
 func (r *albumInputResolver) AlbumSongs(ctx context.Context, obj *model.AlbumInput, data []*model.AlbumSongInput) error {
 	panic(fmt.Errorf("not implemented: AlbumSongs - albumSongs, album song resolver"))

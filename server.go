@@ -3,9 +3,11 @@ package main
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/antch57/goose/graph"
+
 	"github.com/antch57/goose/pkg/albums"
 	"github.com/antch57/goose/pkg/bands"
 	"github.com/antch57/goose/pkg/db"

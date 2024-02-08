@@ -9,6 +9,8 @@ type AlbumRepo struct {
 	DB *gorm.DB
 }
 
+// Album CRUD Operations
+// Create
 func (a *AlbumRepo) CreateAlbum(input *model.AlbumInput) (*model.Album, error) {
 	var albumInsert = &model.Album{
 		Title:       input.Title,
@@ -24,22 +26,15 @@ func (a *AlbumRepo) CreateAlbum(input *model.AlbumInput) (*model.Album, error) {
 	return albumInsert, nil
 }
 
-func (a *AlbumRepo) CreateAlbumSong(input *model.AlbumSongInput) (*model.AlbumSong, error) {
-	var albumSongInsert = &model.AlbumSong{
-		SongID:      input.SongID,
-		AlbumID:     input.AlbumID,
-		BandID:      input.BandID,
-		Duration:    input.Duration,
-		TrackNumber: input.TrackNumber,
-		IsCover:     &input.IsCover,
-	}
-
-	res := a.DB.Create(albumSongInsert)
+// Read
+func (a *AlbumRepo) GetAlbums() ([]*model.Album, error) {
+	var albumsList []*model.Album
+	res := a.DB.Find(&albumsList)
 	if res.Error != nil {
 		return nil, res.Error
 	}
 
-	return albumSongInsert, nil
+	return albumsList, nil
 }
 
 func (a *AlbumRepo) GetAlbumByID(albumId int) (*model.Album, error) {
@@ -56,12 +51,49 @@ func (a *AlbumRepo) GetAlbumByID(albumId int) (*model.Album, error) {
 func (a *AlbumRepo) GetAlbumsByBandId(bandId int) ([]*model.Album, error) {
 	var albumsList []*model.Album
 
-	// TODO: fix this next
-	// FIXME: only selects first row. should be all rows
-	res := a.DB.First(&albumsList, bandId)
+	res := a.DB.Where("`albums`.`band_id` = ?", bandId).Find(&albumsList)
 	if res.Error != nil {
 		return nil, res.Error
 	}
 
 	return albumsList, nil
+}
+
+// AlbumSong CRUD Operations
+func (a *AlbumRepo) CreateAlbumSong(input *model.AlbumSongInput) (*model.AlbumSong, error) {
+	var albumSongInsert = &model.AlbumSong{
+		SongID:      input.SongID,
+		AlbumID:     input.AlbumID,
+		Duration:    input.Duration,
+		TrackNumber: input.TrackNumber,
+		IsCover:     &input.IsCover,
+	}
+
+	res := a.DB.Create(albumSongInsert)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return albumSongInsert, nil
+}
+
+func (a *AlbumRepo) GetAlbumSongByID(albumSongId int) (*model.AlbumSong, error) {
+	var albumSong *model.AlbumSong
+
+	res := a.DB.First(&albumSong, albumSongId)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return albumSong, nil
+}
+
+func (a *AlbumRepo) GetAlbumSongs() ([]*model.AlbumSong, error) {
+	var albumSongsList []*model.AlbumSong
+	res := a.DB.Find(&albumSongsList)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return albumSongsList, nil
 }

@@ -104,8 +104,6 @@ func TestSongRepo_GetSongById(t *testing.T) {
 	assert.Equal(t, bandIdAssertion, song.BandID)
 }
 
-// TODO: implement GetSongsByAlbumId
-
 func TestSongRepo_GetSongsByBandId(t *testing.T) {
 	db, mock, err := mockDb()
 	if err != nil {
@@ -132,37 +130,60 @@ func TestSongRepo_GetSongsByBandId(t *testing.T) {
 }
 
 // Update
-// func TestSongRepo_UpdateSong(t *testing.T) {
-// 	db, mock, err := mockDb()
-// 	if err != nil {
-// 		t.Errorf("Error creating mock database: %v", err)
-// 	}
+func TestSongRepo_UpdateSong(t *testing.T) {
+	db, mock, err := mockDb()
+	if err != nil {
+		t.Errorf("Error creating mock database: %v", err)
+	}
 
-// 	// Test data
-// 	testBandId := 9
-// 	sqlmock.NewRows([]string{"id", "title", "band_id"}).
-// 		AddRow(1, "Test Song 1", testBandId).
-// 		AddRow(2, "Test Song 2", testBandId)
+	// Test data
+	testBandId := 9
+	sqlmock.NewRows([]string{"id", "title", "band_id"}).
+		AddRow(1, "Test Song 1", testBandId).
+		AddRow(2, "Test Song 2", testBandId)
 
-// 	repo := &SongRepo{DB: db}
+	repo := &SongRepo{DB: db}
 
-// 	input := &model.SongInput{
-// 		Title: "New Song!",
-// 	}
+	input := &model.SongInput{
+		Title:  "New Song!",
+		BandID: &testBandId,
+	}
 
-// 	// Test the update
-// 	mock.ExpectBegin()
-// 	mock.ExpectExec("^UPDATE `songs`").WillReturnResult(sqlmock.NewResult(1, 1))
-// 	mock.ExpectCommit()
+	// Test the update
+	mock.ExpectBegin()
+	mock.ExpectExec("^UPDATE `songs`").WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
 
-// 	song, err := repo.UpdateSong(input)
+	testSongId := 1
+	song, err := repo.UpdateSong(testSongId, input)
 
-// 	// Assert
-// 	assert.NoError(t, err)
-// 	assert.NotNil(t, song)
-// 	assert.Equal(t, "New Song!", song.Title)
-// 	assert.Equal(t, testBandId, *song.BandID)
-// }
+	// Assert
+	assert.NoError(t, err)
+	assert.NotNil(t, song)
+	assert.Equal(t, "New Song!", song.Title)
+	assert.Equal(t, testBandId, *song.BandID)
+}
 
 // Delete
-// TODO: implement DeleteSong
+func TestSongRepo_DeleteSong(t *testing.T) {
+	db, mock, err := mockDb()
+	if err != nil {
+		t.Errorf("Error creating mock database: %v", err)
+	}
+
+	// Test data
+	testBandId := 9
+	sqlmock.NewRows([]string{"id", "title", "band_id"}).
+		AddRow(1, "Test Song 1", testBandId)
+
+	// Test the delete
+	mock.ExpectBegin()
+	mock.ExpectExec("^DELETE FROM `songs`").WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	repo := &SongRepo{DB: db}
+	res, err := repo.DeleteSong(1)
+
+	assert.NoError(t, err)
+	assert.True(t, res)
+}

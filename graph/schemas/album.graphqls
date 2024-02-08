@@ -17,7 +17,6 @@ type AlbumSong {
   id: ID!
   song: Song
   album: Album
-  band: Band
   # FIXME: Duration scalar
   # duration: Duration!
   duration: Int!
@@ -28,7 +27,6 @@ type AlbumSong {
 input AlbumSongInput {
   songId: ID!
   albumId: ID!
-  bandId: ID!
   # FIXME: Duration scalar
   # duration: Duration!
   duration: Int!

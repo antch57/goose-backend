@@ -1,7 +1,7 @@
 package albums
 
 import (
-	"github.com/antch57/goose/graph/model"
+	"github.com/antch57/jam-statz/graph/model"
 	"gorm.io/gorm"
 )
 

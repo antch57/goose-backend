@@ -7,7 +7,7 @@ package graph
 import (
 	"context"
 
-	"github.com/antch57/goose/graph/model"
+	"github.com/antch57/jam-statz/graph/model"
 )
 
 // Albums is the resolver for the albums field.

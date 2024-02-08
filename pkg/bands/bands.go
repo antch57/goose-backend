@@ -3,7 +3,7 @@ package bands
 import (
 	"fmt"
 
-	"github.com/antch57/goose/graph/model"
+	"github.com/antch57/jam-statz/graph/model"
 	"gorm.io/gorm"
 )
 

@@ -6,12 +6,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/antch57/goose/graph"
+	"github.com/antch57/jam-statz/graph"
 
-	"github.com/antch57/goose/pkg/albums"
-	"github.com/antch57/goose/pkg/bands"
-	"github.com/antch57/goose/pkg/db"
-	"github.com/antch57/goose/pkg/songs"
+	"github.com/antch57/jam-statz/pkg/albums"
+	"github.com/antch57/jam-statz/pkg/bands"
+	"github.com/antch57/jam-statz/pkg/db"
+	"github.com/antch57/jam-statz/pkg/songs"
 )
 
 // Defining the Graphql handler

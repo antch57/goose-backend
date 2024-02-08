@@ -15,7 +15,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/antch57/goose/graph/model"
+	"github.com/antch57/jam-statz/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -991,7 +991,7 @@ func (ec *executionContext) field_Mutation_createAlbumSong_args(ctx context.Cont
 	var arg0 *model.AlbumSongInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongInput(ctx, tmp)
+		arg0, err = ec.unmarshalOAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1006,7 +1006,7 @@ func (ec *executionContext) field_Mutation_createAlbum_args(ctx context.Context,
 	var arg0 *model.AlbumInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOAlbumInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumInput(ctx, tmp)
+		arg0, err = ec.unmarshalOAlbumInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1021,7 +1021,7 @@ func (ec *executionContext) field_Mutation_createBand_args(ctx context.Context, 
 	var arg0 *model.BandInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOBandInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBandInput(ctx, tmp)
+		arg0, err = ec.unmarshalOBandInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBandInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1036,7 +1036,7 @@ func (ec *executionContext) field_Mutation_createPerformanceSong_args(ctx contex
 	var arg0 *model.PerformanceSongInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongInput(ctx, tmp)
+		arg0, err = ec.unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1051,7 +1051,7 @@ func (ec *executionContext) field_Mutation_createPerformance_args(ctx context.Co
 	var arg0 *model.PerformanceInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceInput(ctx, tmp)
+		arg0, err = ec.unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1066,7 +1066,7 @@ func (ec *executionContext) field_Mutation_createSong_args(ctx context.Context, 
 	var arg0 *model.SongInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongInput(ctx, tmp)
+		arg0, err = ec.unmarshalOSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSongInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1081,7 +1081,7 @@ func (ec *executionContext) field_Mutation_createVenue_args(ctx context.Context,
 	var arg0 *model.VenueInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOVenueInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenueInput(ctx, tmp)
+		arg0, err = ec.unmarshalOVenueInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenueInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1210,7 +1210,7 @@ func (ec *executionContext) field_Mutation_updateAlbumSong_args(ctx context.Cont
 	var arg1 *model.AlbumSongInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongInput(ctx, tmp)
+		arg1, err = ec.unmarshalOAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1234,7 +1234,7 @@ func (ec *executionContext) field_Mutation_updateAlbum_args(ctx context.Context,
 	var arg1 *model.AlbumInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOAlbumInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumInput(ctx, tmp)
+		arg1, err = ec.unmarshalOAlbumInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1258,7 +1258,7 @@ func (ec *executionContext) field_Mutation_updateBand_args(ctx context.Context, 
 	var arg1 *model.BandInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOBandInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBandInput(ctx, tmp)
+		arg1, err = ec.unmarshalOBandInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBandInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1282,7 +1282,7 @@ func (ec *executionContext) field_Mutation_updatePerformanceSong_args(ctx contex
 	var arg1 *model.PerformanceSongInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongInput(ctx, tmp)
+		arg1, err = ec.unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1306,7 +1306,7 @@ func (ec *executionContext) field_Mutation_updatePerformance_args(ctx context.Co
 	var arg1 *model.PerformanceInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceInput(ctx, tmp)
+		arg1, err = ec.unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1330,7 +1330,7 @@ func (ec *executionContext) field_Mutation_updateSong_args(ctx context.Context, 
 	var arg1 *model.SongInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongInput(ctx, tmp)
+		arg1, err = ec.unmarshalOSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSongInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1354,7 +1354,7 @@ func (ec *executionContext) field_Mutation_updateVenue_args(ctx context.Context,
 	var arg1 *model.VenueInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOVenueInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenueInput(ctx, tmp)
+		arg1, err = ec.unmarshalOVenueInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenueInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1637,7 +1637,7 @@ func (ec *executionContext) _Album_band(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.Band)
 	fc.Result = res
-	return ec.marshalNBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
+	return ec.marshalNBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Album_band(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1739,7 +1739,7 @@ func (ec *executionContext) _Album_songs(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.AlbumSong)
 	fc.Result = res
-	return ec.marshalNAlbumSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongᚄ(ctx, field.Selections, res)
+	return ec.marshalNAlbumSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Album_songs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1838,7 +1838,7 @@ func (ec *executionContext) _AlbumSong_song(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Song)
 	fc.Result = res
-	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
+	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AlbumSong_song(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1887,7 +1887,7 @@ func (ec *executionContext) _AlbumSong_album(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*model.Album)
 	fc.Result = res
-	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
+	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AlbumSong_album(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2286,7 +2286,7 @@ func (ec *executionContext) _Band_albums(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Album)
 	fc.Result = res
-	return ec.marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumᚄ(ctx, field.Selections, res)
+	return ec.marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Band_albums(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2339,7 +2339,7 @@ func (ec *executionContext) _Mutation_createBand(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Band)
 	fc.Result = res
-	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
+	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createBand(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2405,7 +2405,7 @@ func (ec *executionContext) _Mutation_updateBand(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Band)
 	fc.Result = res
-	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
+	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateBand(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2523,7 +2523,7 @@ func (ec *executionContext) _Mutation_createAlbum(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Album)
 	fc.Result = res
-	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
+	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAlbum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2587,7 +2587,7 @@ func (ec *executionContext) _Mutation_updateAlbum(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Album)
 	fc.Result = res
-	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
+	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAlbum(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2703,7 +2703,7 @@ func (ec *executionContext) _Mutation_createVenue(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Venue)
 	fc.Result = res
-	return ec.marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
+	return ec.marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createVenue(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2765,7 +2765,7 @@ func (ec *executionContext) _Mutation_updateVenue(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Venue)
 	fc.Result = res
-	return ec.marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
+	return ec.marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateVenue(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2879,7 +2879,7 @@ func (ec *executionContext) _Mutation_createPerformance(ctx context.Context, fie
 	}
 	res := resTmp.(*model.Performance)
 	fc.Result = res
-	return ec.marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
+	return ec.marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createPerformance(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2945,7 +2945,7 @@ func (ec *executionContext) _Mutation_updatePerformance(ctx context.Context, fie
 	}
 	res := resTmp.(*model.Performance)
 	fc.Result = res
-	return ec.marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
+	return ec.marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updatePerformance(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3063,7 +3063,7 @@ func (ec *executionContext) _Mutation_createSong(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Song)
 	fc.Result = res
-	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
+	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3123,7 +3123,7 @@ func (ec *executionContext) _Mutation_updateSong(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Song)
 	fc.Result = res
-	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
+	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3235,7 +3235,7 @@ func (ec *executionContext) _Mutation_createPerformanceSong(ctx context.Context,
 	}
 	res := resTmp.(*model.PerformanceSong)
 	fc.Result = res
-	return ec.marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSong(ctx, field.Selections, res)
+	return ec.marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createPerformanceSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3301,7 +3301,7 @@ func (ec *executionContext) _Mutation_updatePerformanceSong(ctx context.Context,
 	}
 	res := resTmp.(*model.PerformanceSong)
 	fc.Result = res
-	return ec.marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSong(ctx, field.Selections, res)
+	return ec.marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updatePerformanceSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3419,7 +3419,7 @@ func (ec *executionContext) _Mutation_createAlbumSong(ctx context.Context, field
 	}
 	res := resTmp.(*model.AlbumSong)
 	fc.Result = res
-	return ec.marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSong(ctx, field.Selections, res)
+	return ec.marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createAlbumSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3485,7 +3485,7 @@ func (ec *executionContext) _Mutation_updateAlbumSong(ctx context.Context, field
 	}
 	res := resTmp.(*model.AlbumSong)
 	fc.Result = res
-	return ec.marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSong(ctx, field.Selections, res)
+	return ec.marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateAlbumSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3650,7 +3650,7 @@ func (ec *executionContext) _Performance_band(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Band)
 	fc.Result = res
-	return ec.marshalNBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
+	return ec.marshalNBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Performance_band(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3708,7 +3708,7 @@ func (ec *executionContext) _Performance_venue(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Venue)
 	fc.Result = res
-	return ec.marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
+	return ec.marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Performance_venue(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3850,7 +3850,7 @@ func (ec *executionContext) _Performance_songs(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.PerformanceSong)
 	fc.Result = res
-	return ec.marshalNPerformanceSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongᚄ(ctx, field.Selections, res)
+	return ec.marshalNPerformanceSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Performance_songs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3952,7 +3952,7 @@ func (ec *executionContext) _PerformanceSong_song(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Song)
 	fc.Result = res
-	return ec.marshalNSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
+	return ec.marshalNSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PerformanceSong_song(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4048,7 +4048,7 @@ func (ec *executionContext) _PerformanceSong_performance(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Performance)
 	fc.Result = res
-	return ec.marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
+	return ec.marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PerformanceSong_performance(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4188,7 +4188,7 @@ func (ec *executionContext) _Query_band(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.Band)
 	fc.Result = res
-	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
+	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_band(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4254,7 +4254,7 @@ func (ec *executionContext) _Query_bands(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Band)
 	fc.Result = res
-	return ec.marshalOBand2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBandᚄ(ctx, field.Selections, res)
+	return ec.marshalOBand2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBandᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_bands(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4309,7 +4309,7 @@ func (ec *executionContext) _Query_album(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Album)
 	fc.Result = res
-	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
+	return ec.marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbum(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_album(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4373,7 +4373,7 @@ func (ec *executionContext) _Query_albums(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Album)
 	fc.Result = res
-	return ec.marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumᚄ(ctx, field.Selections, res)
+	return ec.marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_albums(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4426,7 +4426,7 @@ func (ec *executionContext) _Query_venue(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Venue)
 	fc.Result = res
-	return ec.marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
+	return ec.marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_venue(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4488,7 +4488,7 @@ func (ec *executionContext) _Query_venues(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.([]*model.Venue)
 	fc.Result = res
-	return ec.marshalOVenue2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenueᚄ(ctx, field.Selections, res)
+	return ec.marshalOVenue2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenueᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_venues(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4539,7 +4539,7 @@ func (ec *executionContext) _Query_performance(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Performance)
 	fc.Result = res
-	return ec.marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
+	return ec.marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_performance(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4605,7 +4605,7 @@ func (ec *executionContext) _Query_performances(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Performance)
 	fc.Result = res
-	return ec.marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceᚄ(ctx, field.Selections, res)
+	return ec.marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_performances(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4660,7 +4660,7 @@ func (ec *executionContext) _Query_song(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.Song)
 	fc.Result = res
-	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
+	return ec.marshalOSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_song(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4720,7 +4720,7 @@ func (ec *executionContext) _Query_songs(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Song)
 	fc.Result = res
-	return ec.marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongᚄ(ctx, field.Selections, res)
+	return ec.marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSongᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_songs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4769,7 +4769,7 @@ func (ec *executionContext) _Query_performanceSong(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.PerformanceSong)
 	fc.Result = res
-	return ec.marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSong(ctx, field.Selections, res)
+	return ec.marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_performanceSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4835,7 +4835,7 @@ func (ec *executionContext) _Query_albumSong(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*model.AlbumSong)
 	fc.Result = res
-	return ec.marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSong(ctx, field.Selections, res)
+	return ec.marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSong(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_albumSong(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5118,7 +5118,7 @@ func (ec *executionContext) _Song_band(ctx context.Context, field graphql.Collec
 	}
 	res := resTmp.(*model.Band)
 	fc.Result = res
-	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
+	return ec.marshalOBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Song_band(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5302,7 +5302,7 @@ func (ec *executionContext) _Venue_performances(ctx context.Context, field graph
 	}
 	res := resTmp.([]*model.Performance)
 	fc.Result = res
-	return ec.marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceᚄ(ctx, field.Selections, res)
+	return ec.marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Venue_performances(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7142,7 +7142,7 @@ func (ec *executionContext) unmarshalInputAlbumInput(ctx context.Context, obj in
 			it.ReleaseDate = data
 		case "albumSongs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("albumSongs"))
-			data, err := ec.unmarshalOAlbumSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongInputᚄ(ctx, v)
+			data, err := ec.unmarshalOAlbumSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7254,7 +7254,7 @@ func (ec *executionContext) unmarshalInputBandInput(ctx context.Context, obj int
 			it.Description = data
 		case "albums":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("albums"))
-			data, err := ec.unmarshalOAlbumInput2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumInputᚄ(ctx, v)
+			data, err := ec.unmarshalOAlbumInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7309,7 +7309,7 @@ func (ec *executionContext) unmarshalInputPerformanceInput(ctx context.Context, 
 			it.Duration = data
 		case "performanceSongs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performanceSongs"))
-			data, err := ec.unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongInputᚄ(ctx, v)
+			data, err := ec.unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8758,7 +8758,7 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx context.Context, sel ast.SelectionSet, v *model.Album) graphql.Marshaler {
+func (ec *executionContext) marshalNAlbum2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbum(ctx context.Context, sel ast.SelectionSet, v *model.Album) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8768,12 +8768,12 @@ func (ec *executionContext) marshalNAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgr
 	return ec._Album(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNAlbumInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumInput(ctx context.Context, v interface{}) (*model.AlbumInput, error) {
+func (ec *executionContext) unmarshalNAlbumInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumInput(ctx context.Context, v interface{}) (*model.AlbumInput, error) {
 	res, err := ec.unmarshalInputAlbumInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAlbumSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.AlbumSong) graphql.Marshaler {
+func (ec *executionContext) marshalNAlbumSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.AlbumSong) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -8797,7 +8797,7 @@ func (ec *executionContext) marshalNAlbumSong2ᚕᚖgithubᚗcomᚋantch57ᚋgoo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNAlbumSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSong(ctx, sel, v[i])
+			ret[i] = ec.marshalNAlbumSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSong(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8817,7 +8817,7 @@ func (ec *executionContext) marshalNAlbumSong2ᚕᚖgithubᚗcomᚋantch57ᚋgoo
 	return ret
 }
 
-func (ec *executionContext) marshalNAlbumSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSong(ctx context.Context, sel ast.SelectionSet, v *model.AlbumSong) graphql.Marshaler {
+func (ec *executionContext) marshalNAlbumSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSong(ctx context.Context, sel ast.SelectionSet, v *model.AlbumSong) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8827,16 +8827,16 @@ func (ec *executionContext) marshalNAlbumSong2ᚖgithubᚗcomᚋantch57ᚋgoose�
 	return ec._AlbumSong(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongInput(ctx context.Context, v interface{}) (*model.AlbumSongInput, error) {
+func (ec *executionContext) unmarshalNAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongInput(ctx context.Context, v interface{}) (*model.AlbumSongInput, error) {
 	res, err := ec.unmarshalInputAlbumSongInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNBand2githubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx context.Context, sel ast.SelectionSet, v model.Band) graphql.Marshaler {
+func (ec *executionContext) marshalNBand2githubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx context.Context, sel ast.SelectionSet, v model.Band) graphql.Marshaler {
 	return ec._Band(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx context.Context, sel ast.SelectionSet, v *model.Band) graphql.Marshaler {
+func (ec *executionContext) marshalNBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx context.Context, sel ast.SelectionSet, v *model.Band) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8921,7 +8921,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v *model.Performance) graphql.Marshaler {
+func (ec *executionContext) marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v *model.Performance) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8931,7 +8931,7 @@ func (ec *executionContext) marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋgoos
 	return ec._Performance(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPerformanceSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PerformanceSong) graphql.Marshaler {
+func (ec *executionContext) marshalNPerformanceSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PerformanceSong) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -8955,7 +8955,7 @@ func (ec *executionContext) marshalNPerformanceSong2ᚕᚖgithubᚗcomᚋantch57
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSong(ctx, sel, v[i])
+			ret[i] = ec.marshalNPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8975,7 +8975,7 @@ func (ec *executionContext) marshalNPerformanceSong2ᚕᚖgithubᚗcomᚋantch57
 	return ret
 }
 
-func (ec *executionContext) marshalNPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSong(ctx context.Context, sel ast.SelectionSet, v *model.PerformanceSong) graphql.Marshaler {
+func (ec *executionContext) marshalNPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx context.Context, sel ast.SelectionSet, v *model.PerformanceSong) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8985,12 +8985,12 @@ func (ec *executionContext) marshalNPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋ
 	return ec._PerformanceSong(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongInput(ctx context.Context, v interface{}) (*model.PerformanceSongInput, error) {
+func (ec *executionContext) unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx context.Context, v interface{}) (*model.PerformanceSongInput, error) {
 	res, err := ec.unmarshalInputPerformanceSongInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v *model.Song) graphql.Marshaler {
+func (ec *executionContext) marshalNSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v *model.Song) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9015,7 +9015,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v *model.Venue) graphql.Marshaler {
+func (ec *executionContext) marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v *model.Venue) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9278,7 +9278,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Album) graphql.Marshaler {
+func (ec *executionContext) marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Album) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9305,7 +9305,7 @@ func (ec *executionContext) marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋgoose�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx, sel, v[i])
+			ret[i] = ec.marshalNAlbum2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbum(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9325,14 +9325,14 @@ func (ec *executionContext) marshalOAlbum2ᚕᚖgithubᚗcomᚋantch57ᚋgoose�
 	return ret
 }
 
-func (ec *executionContext) marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbum(ctx context.Context, sel ast.SelectionSet, v *model.Album) graphql.Marshaler {
+func (ec *executionContext) marshalOAlbum2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbum(ctx context.Context, sel ast.SelectionSet, v *model.Album) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Album(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOAlbumInput2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumInputᚄ(ctx context.Context, v interface{}) ([]*model.AlbumInput, error) {
+func (ec *executionContext) unmarshalOAlbumInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumInputᚄ(ctx context.Context, v interface{}) ([]*model.AlbumInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9344,7 +9344,7 @@ func (ec *executionContext) unmarshalOAlbumInput2ᚕᚖgithubᚗcomᚋantch57ᚋ
 	res := make([]*model.AlbumInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAlbumInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNAlbumInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -9352,7 +9352,7 @@ func (ec *executionContext) unmarshalOAlbumInput2ᚕᚖgithubᚗcomᚋantch57ᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOAlbumInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumInput(ctx context.Context, v interface{}) (*model.AlbumInput, error) {
+func (ec *executionContext) unmarshalOAlbumInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumInput(ctx context.Context, v interface{}) (*model.AlbumInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9360,14 +9360,14 @@ func (ec *executionContext) unmarshalOAlbumInput2ᚖgithubᚗcomᚋantch57ᚋgoo
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSong(ctx context.Context, sel ast.SelectionSet, v *model.AlbumSong) graphql.Marshaler {
+func (ec *executionContext) marshalOAlbumSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSong(ctx context.Context, sel ast.SelectionSet, v *model.AlbumSong) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AlbumSong(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOAlbumSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongInputᚄ(ctx context.Context, v interface{}) ([]*model.AlbumSongInput, error) {
+func (ec *executionContext) unmarshalOAlbumSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongInputᚄ(ctx context.Context, v interface{}) ([]*model.AlbumSongInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9379,7 +9379,7 @@ func (ec *executionContext) unmarshalOAlbumSongInput2ᚕᚖgithubᚗcomᚋantch5
 	res := make([]*model.AlbumSongInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -9387,7 +9387,7 @@ func (ec *executionContext) unmarshalOAlbumSongInput2ᚕᚖgithubᚗcomᚋantch5
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐAlbumSongInput(ctx context.Context, v interface{}) (*model.AlbumSongInput, error) {
+func (ec *executionContext) unmarshalOAlbumSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐAlbumSongInput(ctx context.Context, v interface{}) (*model.AlbumSongInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9395,7 +9395,7 @@ func (ec *executionContext) unmarshalOAlbumSongInput2ᚖgithubᚗcomᚋantch57�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOBand2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBandᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Band) graphql.Marshaler {
+func (ec *executionContext) marshalOBand2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBandᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Band) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9422,7 +9422,7 @@ func (ec *executionContext) marshalOBand2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx, sel, v[i])
+			ret[i] = ec.marshalNBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9442,14 +9442,14 @@ func (ec *executionContext) marshalOBand2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOBand2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBand(ctx context.Context, sel ast.SelectionSet, v *model.Band) graphql.Marshaler {
+func (ec *executionContext) marshalOBand2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBand(ctx context.Context, sel ast.SelectionSet, v *model.Band) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Band(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOBandInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐBandInput(ctx context.Context, v interface{}) (*model.BandInput, error) {
+func (ec *executionContext) unmarshalOBandInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐBandInput(ctx context.Context, v interface{}) (*model.BandInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9515,7 +9515,7 @@ func (ec *executionContext) marshalOID2ᚖint(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Performance) graphql.Marshaler {
+func (ec *executionContext) marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Performance) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9542,7 +9542,7 @@ func (ec *executionContext) marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx, sel, v[i])
+			ret[i] = ec.marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9562,14 +9562,14 @@ func (ec *executionContext) marshalOPerformance2ᚕᚖgithubᚗcomᚋantch57ᚋg
 	return ret
 }
 
-func (ec *executionContext) marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v *model.Performance) graphql.Marshaler {
+func (ec *executionContext) marshalOPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v *model.Performance) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Performance(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceInput(ctx context.Context, v interface{}) (*model.PerformanceInput, error) {
+func (ec *executionContext) unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceInput(ctx context.Context, v interface{}) (*model.PerformanceInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9577,14 +9577,14 @@ func (ec *executionContext) unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSong(ctx context.Context, sel ast.SelectionSet, v *model.PerformanceSong) graphql.Marshaler {
+func (ec *executionContext) marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx context.Context, sel ast.SelectionSet, v *model.PerformanceSong) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._PerformanceSong(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongInputᚄ(ctx context.Context, v interface{}) ([]*model.PerformanceSongInput, error) {
+func (ec *executionContext) unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInputᚄ(ctx context.Context, v interface{}) ([]*model.PerformanceSongInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9596,7 +9596,7 @@ func (ec *executionContext) unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.PerformanceSongInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -9604,7 +9604,7 @@ func (ec *executionContext) unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐPerformanceSongInput(ctx context.Context, v interface{}) (*model.PerformanceSongInput, error) {
+func (ec *executionContext) unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx context.Context, v interface{}) (*model.PerformanceSongInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9612,7 +9612,7 @@ func (ec *executionContext) unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋant
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Song) graphql.Marshaler {
+func (ec *executionContext) marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Song) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9639,7 +9639,7 @@ func (ec *executionContext) marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx, sel, v[i])
+			ret[i] = ec.marshalNSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9659,14 +9659,14 @@ func (ec *executionContext) marshalOSong2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalOSong2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v *model.Song) graphql.Marshaler {
+func (ec *executionContext) marshalOSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v *model.Song) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Song(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOSongInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐSongInput(ctx context.Context, v interface{}) (*model.SongInput, error) {
+func (ec *executionContext) unmarshalOSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSongInput(ctx context.Context, v interface{}) (*model.SongInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9690,7 +9690,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOVenue2ᚕᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenueᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Venue) graphql.Marshaler {
+func (ec *executionContext) marshalOVenue2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenueᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Venue) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9717,7 +9717,7 @@ func (ec *executionContext) marshalOVenue2ᚕᚖgithubᚗcomᚋantch57ᚋgoose�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx, sel, v[i])
+			ret[i] = ec.marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9737,14 +9737,14 @@ func (ec *executionContext) marshalOVenue2ᚕᚖgithubᚗcomᚋantch57ᚋgoose�
 	return ret
 }
 
-func (ec *executionContext) marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v *model.Venue) graphql.Marshaler {
+func (ec *executionContext) marshalOVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v *model.Venue) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Venue(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOVenueInput2ᚖgithubᚗcomᚋantch57ᚋgooseᚋgraphᚋmodelᚐVenueInput(ctx context.Context, v interface{}) (*model.VenueInput, error) {
+func (ec *executionContext) unmarshalOVenueInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenueInput(ctx context.Context, v interface{}) (*model.VenueInput, error) {
 	if v == nil {
 		return nil, nil
 	}

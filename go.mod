@@ -1,4 +1,4 @@
-module github.com/antch57/goose
+module github.com/antch57/jam-statz
 
 go 1.21.5
 

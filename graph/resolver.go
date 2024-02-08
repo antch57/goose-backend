@@ -1,9 +1,9 @@
 package graph
 
 import (
-	"github.com/antch57/goose/pkg/albums"
-	"github.com/antch57/goose/pkg/bands"
-	"github.com/antch57/goose/pkg/songs"
+	"github.com/antch57/jam-statz/pkg/albums"
+	"github.com/antch57/jam-statz/pkg/bands"
+	"github.com/antch57/jam-statz/pkg/songs"
 )
 
 // This file will not be regenerated automatically.

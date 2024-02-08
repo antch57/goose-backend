@@ -20,15 +20,15 @@ flow goes like this:
 ### setup db for deving
 
 step 1 build dockerfile:
-- `docker build -t my-mariadb internal/db/`
+- `docker build -t jam-statz-mariadb pkg/db/`
 
 step 2 run dockerfile:
-- `docker run --detach --name test-mariadb --env MARIADB_ROOT_PASSWORD=my-secret-pw -p 3306:3306 my-mariadb`
+- `docker run --detach --name test-jam-statz-mariadb --env MARIADB_ROOT_PASSWORD=my-secret-pw -p 3306:3306 jam-statz-mariadb --general_log_file=/var/lib/mysql/mysql.log --general_log=1`
 
 you now have your db setup.
 
 if you want to access your db just run:
-- `docker exec -it test-mariadb mariadb -u root -p`
+- `docker exec -it test-jam-statz-mariadb mariadb -u root -p`
 
 just be sure to swap out for your creds.
 
@@ -41,6 +41,9 @@ just be sure to swap out for your creds.
 - to test out your grahpql:
     - start graphql server
     - go to localhost:8080
+
+- tail db logs:
+    - `docker exec -it test-jam-statz-mariadb tail -f /var/lib/mysql/mysql.log`
 
 ## TODO:
 

@@ -44,8 +44,12 @@ type ResolverRoot interface {
 	AlbumSong() AlbumSongResolver
 	Band() BandResolver
 	Mutation() MutationResolver
+	Performance() PerformanceResolver
+	PerformanceSong() PerformanceSongResolver
 	Query() QueryResolver
 	Song() SongResolver
+	Venue() VenueResolver
+	PerformanceInput() PerformanceInputResolver
 }
 
 type DirectiveRoot struct {
@@ -186,6 +190,17 @@ type MutationResolver interface {
 	UpdateAlbumSong(ctx context.Context, id int, input *model.AlbumSongInput) (*model.AlbumSong, error)
 	DeleteAlbumSong(ctx context.Context, id int) (bool, error)
 }
+type PerformanceResolver interface {
+	Band(ctx context.Context, obj *model.Performance) (*model.Band, error)
+	Venue(ctx context.Context, obj *model.Performance) (*model.Venue, error)
+
+	Duration(ctx context.Context, obj *model.Performance) (time.Duration, error)
+}
+type PerformanceSongResolver interface {
+	Song(ctx context.Context, obj *model.PerformanceSong) (*model.Song, error)
+
+	Performance(ctx context.Context, obj *model.PerformanceSong) (*model.Performance, error)
+}
 type QueryResolver interface {
 	Band(ctx context.Context, id int) (*model.Band, error)
 	Bands(ctx context.Context) ([]*model.Band, error)
@@ -204,6 +219,15 @@ type QueryResolver interface {
 }
 type SongResolver interface {
 	Band(ctx context.Context, obj *model.Song) (*model.Band, error)
+}
+type VenueResolver interface {
+	Performances(ctx context.Context, obj *model.Venue) ([]*model.Performance, error)
+}
+
+type PerformanceInputResolver interface {
+	Venue(ctx context.Context, obj *model.PerformanceInput, data int) error
+
+	Duration(ctx context.Context, obj *model.PerformanceInput, data *time.Duration) error
 }
 
 type executableSchema struct {
@@ -3687,7 +3711,7 @@ func (ec *executionContext) _Performance_band(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Band, nil
+		return ec.resolvers.Performance().Band(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3708,8 +3732,8 @@ func (ec *executionContext) fieldContext_Performance_band(ctx context.Context, f
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -3745,7 +3769,7 @@ func (ec *executionContext) _Performance_venue(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Venue, nil
+		return ec.resolvers.Performance().Venue(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3766,8 +3790,8 @@ func (ec *executionContext) fieldContext_Performance_venue(ctx context.Context, 
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -3843,7 +3867,7 @@ func (ec *executionContext) _Performance_duration(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Duration, nil
+		return ec.resolvers.Performance().Duration(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3864,8 +3888,8 @@ func (ec *executionContext) fieldContext_Performance_duration(ctx context.Contex
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Duration does not have child fields")
 		},
@@ -3989,7 +4013,7 @@ func (ec *executionContext) _PerformanceSong_song(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Song, nil
+		return ec.resolvers.PerformanceSong().Song(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4010,8 +4034,8 @@ func (ec *executionContext) fieldContext_PerformanceSong_song(ctx context.Contex
 	fc = &graphql.FieldContext{
 		Object:     "PerformanceSong",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -4085,7 +4109,7 @@ func (ec *executionContext) _PerformanceSong_performance(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Performance, nil
+		return ec.resolvers.PerformanceSong().Performance(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4106,8 +4130,8 @@ func (ec *executionContext) fieldContext_PerformanceSong_performance(ctx context
 	fc = &graphql.FieldContext{
 		Object:     "PerformanceSong",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5466,7 +5490,7 @@ func (ec *executionContext) _Venue_performances(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Performances, nil
+		return ec.resolvers.Venue().Performances(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5484,8 +5508,8 @@ func (ec *executionContext) fieldContext_Venue_performances(ctx context.Context,
 	fc = &graphql.FieldContext{
 		Object:     "Venue",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -7451,7 +7475,9 @@ func (ec *executionContext) unmarshalInputPerformanceInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
-			it.Venue = data
+			if err = ec.resolvers.PerformanceInput().Venue(ctx, &it, data); err != nil {
+				return it, err
+			}
 		case "performanceDate":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performanceDate"))
 			data, err := ec.unmarshalNDate2timeᚐTime(ctx, v)
@@ -7465,7 +7491,9 @@ func (ec *executionContext) unmarshalInputPerformanceInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
-			it.Duration = data
+			if err = ec.resolvers.PerformanceInput().Duration(ctx, &it, data); err != nil {
+				return it, err
+			}
 		case "performanceSongs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performanceSongs"))
 			data, err := ec.unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInputᚄ(ctx, v)
@@ -8095,32 +8123,125 @@ func (ec *executionContext) _Performance(ctx context.Context, sel ast.SelectionS
 		case "id":
 			out.Values[i] = ec._Performance_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "band":
-			out.Values[i] = ec._Performance_band(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Performance_band(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
 			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "venue":
-			out.Values[i] = ec._Performance_venue(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Performance_venue(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
 			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "performanceDate":
 			out.Values[i] = ec._Performance_performanceDate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "duration":
-			out.Values[i] = ec._Performance_duration(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Performance_duration(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
 			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "songs":
 			out.Values[i] = ec._Performance_songs(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -8159,27 +8280,89 @@ func (ec *executionContext) _PerformanceSong(ctx context.Context, sel ast.Select
 		case "id":
 			out.Values[i] = ec._PerformanceSong_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "song":
-			out.Values[i] = ec._PerformanceSong_song(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._PerformanceSong_song(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
 			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "duration":
 			out.Values[i] = ec._PerformanceSong_duration(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "performance":
-			out.Values[i] = ec._PerformanceSong_performance(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._PerformanceSong_performance(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
 			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "isCover":
 			out.Values[i] = ec._PerformanceSong_isCover(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "notes":
 			out.Values[i] = ec._PerformanceSong_notes(ctx, field, obj)
@@ -8616,17 +8799,48 @@ func (ec *executionContext) _Venue(ctx context.Context, sel ast.SelectionSet, ob
 		case "id":
 			out.Values[i] = ec._Venue_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "name":
 			out.Values[i] = ec._Venue_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "location":
 			out.Values[i] = ec._Venue_location(ctx, field, obj)
 		case "performances":
-			out.Values[i] = ec._Venue_performances(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Venue_performances(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9129,6 +9343,10 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
+func (ec *executionContext) marshalNPerformance2githubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v model.Performance) graphql.Marshaler {
+	return ec._Performance(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNPerformance2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformance(ctx context.Context, sel ast.SelectionSet, v *model.Performance) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9198,6 +9416,10 @@ func (ec *executionContext) unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋant
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNSong2githubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v model.Song) graphql.Marshaler {
+	return ec._Song(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalNSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v *model.Song) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9221,6 +9443,10 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNVenue2githubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v model.Venue) graphql.Marshaler {
+	return ec._Venue(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVenue2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐVenue(ctx context.Context, sel ast.SelectionSet, v *model.Venue) graphql.Marshaler {

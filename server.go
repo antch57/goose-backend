@@ -12,6 +12,7 @@ import (
 	"github.com/antch57/jam-statz/pkg/bands"
 	"github.com/antch57/jam-statz/pkg/db"
 	"github.com/antch57/jam-statz/pkg/songs"
+	"github.com/antch57/jam-statz/pkg/venues"
 )
 
 // Defining the Graphql handler
@@ -46,6 +47,7 @@ func main() {
 		BandRepo:  bands.BandRepo{DB: DB},
 		AlbumRepo: albums.AlbumRepo{DB: DB},
 		SongRepo:  songs.SongRepo{DB: DB},
+		VenueRepo: venues.VenueRepo{DB: DB},
 	}
 
 	// Setting up Gin

@@ -73,17 +73,32 @@ func (r *mutationResolver) DeleteAlbum(ctx context.Context, id int) (bool, error
 
 // CreateVenue is the resolver for the createVenue field.
 func (r *mutationResolver) CreateVenue(ctx context.Context, input *model.VenueInput) (*model.Venue, error) {
-	panic(fmt.Errorf("not implemented: CreateVenue - createVenue"))
+	res, err := r.VenueRepo.CreateVenue(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // UpdateVenue is the resolver for the updateVenue field.
 func (r *mutationResolver) UpdateVenue(ctx context.Context, id int, input *model.VenueInput) (*model.Venue, error) {
-	panic(fmt.Errorf("not implemented: UpdateVenue - updateVenue"))
+	res, err := r.VenueRepo.UpdateVenue(id, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // DeleteVenue is the resolver for the deleteVenue field.
 func (r *mutationResolver) DeleteVenue(ctx context.Context, id int) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteVenue - deleteVenue"))
+	res, err := r.VenueRepo.DeleteVenue(id)
+	if err != nil {
+		return false, err
+	}
+
+	return res, nil
 }
 
 // CreatePerformance is the resolver for the createPerformance field.
@@ -218,12 +233,22 @@ func (r *queryResolver) Albums(ctx context.Context) ([]*model.Album, error) {
 
 // Venue is the resolver for the venue field.
 func (r *queryResolver) Venue(ctx context.Context, id int) (*model.Venue, error) {
-	panic(fmt.Errorf("not implemented: Venue - venue"))
+	res, err := r.VenueRepo.GetVenue(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Venues is the resolver for the venues field.
 func (r *queryResolver) Venues(ctx context.Context) ([]*model.Venue, error) {
-	panic(fmt.Errorf("not implemented: Venues - venues"))
+	res, err := r.VenueRepo.GetVenues()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Performance is the resolver for the performance field.

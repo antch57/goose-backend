@@ -23,12 +23,22 @@ func (r *mutationResolver) CreateBand(ctx context.Context, input *model.BandInpu
 
 // UpdateBand is the resolver for the updateBand field.
 func (r *mutationResolver) UpdateBand(ctx context.Context, id int, input *model.BandInput) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: UpdateBand - updateBand"))
+	res, err := r.BandRepo.UpdateBand(id, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // DeleteBand is the resolver for the deleteBand field.
-func (r *mutationResolver) DeleteBand(ctx context.Context, id int) (*bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteBand - deleteBand"))
+func (r *mutationResolver) DeleteBand(ctx context.Context, id int) (bool, error) {
+	res, err := r.BandRepo.DeleteBand(id)
+	if err != nil {
+		return false, err
+	}
+
+	return res, nil
 }
 
 // CreateAlbum is the resolver for the createAlbum field.
@@ -148,7 +158,12 @@ func (r *mutationResolver) DeleteAlbumSong(ctx context.Context, id int) (*bool, 
 
 // Band is the resolver for the band field.
 func (r *queryResolver) Band(ctx context.Context, id int) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: Band - band query resolver"))
+	res, err := r.BandRepo.GetBandById(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Bands is the resolver for the bands field.
@@ -163,12 +178,22 @@ func (r *queryResolver) Bands(ctx context.Context) ([]*model.Band, error) {
 
 // Album is the resolver for the album field.
 func (r *queryResolver) Album(ctx context.Context, id int) (*model.Album, error) {
-	panic(fmt.Errorf("not implemented: Album - album"))
+	res, err := r.AlbumRepo.GetAlbumByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Albums is the resolver for the albums field.
 func (r *queryResolver) Albums(ctx context.Context) ([]*model.Album, error) {
-	panic(fmt.Errorf("not implemented: Albums - albums, query resolver"))
+	res, err := r.AlbumRepo.GetAlbums()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Venue is the resolver for the venue field.

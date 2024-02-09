@@ -19,7 +19,7 @@ type Query {
 type Mutation {
   createBand(input: BandInput): Band
   updateBand(id: ID!, input: BandInput): Band
-  deleteBand(id: ID!): Boolean
+  deleteBand(id: ID!): Boolean!
   createAlbum(input: AlbumInput): Album
   updateAlbum(id: ID!, input: AlbumInput): Album
   deleteAlbum(id: ID!): Boolean

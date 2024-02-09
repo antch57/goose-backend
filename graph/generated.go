@@ -165,7 +165,7 @@ type BandResolver interface {
 type MutationResolver interface {
 	CreateBand(ctx context.Context, input *model.BandInput) (*model.Band, error)
 	UpdateBand(ctx context.Context, id int, input *model.BandInput) (*model.Band, error)
-	DeleteBand(ctx context.Context, id int) (*bool, error)
+	DeleteBand(ctx context.Context, id int) (bool, error)
 	CreateAlbum(ctx context.Context, input *model.AlbumInput) (*model.Album, error)
 	UpdateAlbum(ctx context.Context, id int, input *model.AlbumInput) (*model.Album, error)
 	DeleteAlbum(ctx context.Context, id int) (*bool, error)
@@ -2467,11 +2467,14 @@ func (ec *executionContext) _Mutation_deleteBand(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_deleteBand(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7809,6 +7812,9 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBand(ctx, field)
 			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createAlbum":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createAlbum(ctx, field)

@@ -244,3 +244,27 @@ func TestAlbumRepo_GetAlbumSongs(t *testing.T) {
 	assert.Equal(t, 2, albumSongs[1].TrackNumber)
 	assert.Equal(t, false, *albumSongs[1].IsCover)
 }
+
+func TestAlbumRepo_GetAlbumSongsByAlbumId(t *testing.T) {
+	db, mock, err := mockDb()
+	if err != nil {
+		t.Errorf("Error creating mock database: %v", err)
+	}
+
+	testAlbumID := 1
+	rows := sqlmock.NewRows([]string{"id", "song_id", "album_id", "duration", "track_number", "is_cover"}).
+		AddRow(1, 1, testAlbumID, 180, 1, false)
+
+	mock.ExpectQuery("^SELECT \\* FROM `album_songs` WHERE `album_songs`.`album_id` = \\?$").WithArgs(testAlbumID).WillReturnRows(rows)
+
+	repo := &AlbumRepo{DB: db}
+
+	albumSongs, err := repo.GetAlbumSongsByAlbumId(testAlbumID)
+
+	assert.NoError(t, err)
+	assert.Equal(t, testAlbumID, albumSongs[0].AlbumID)
+	assert.Equal(t, 1, albumSongs[0].SongID)
+	assert.Equal(t, 180, albumSongs[0].Duration)
+	assert.Equal(t, 1, albumSongs[0].TrackNumber)
+	assert.Equal(t, false, *albumSongs[0].IsCover)
+}

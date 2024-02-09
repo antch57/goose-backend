@@ -97,3 +97,14 @@ func (a *AlbumRepo) GetAlbumSongs() ([]*model.AlbumSong, error) {
 
 	return albumSongsList, nil
 }
+
+func (a *AlbumRepo) GetAlbumSongsByAlbumId(albumId int) ([]*model.AlbumSong, error) {
+	var albumSongsList []*model.AlbumSong
+
+	res := a.DB.Where("`album_songs`.`album_id` = ?", albumId).Find(&albumSongsList)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return albumSongsList, nil
+}

@@ -10,7 +10,7 @@ type AlbumRepo struct {
 }
 
 // Album CRUD Operations
-// Create
+// CREATE
 func (a *AlbumRepo) CreateAlbum(input *model.AlbumInput) (*model.Album, error) {
 	var albumInsert = &model.Album{
 		Title:       input.Title,
@@ -59,7 +59,33 @@ func (a *AlbumRepo) GetAlbumsByBandId(bandId int) ([]*model.Album, error) {
 	return albumsList, nil
 }
 
+func (a *AlbumRepo) UpdateAlbum(albumId int, input *model.AlbumInput) (*model.Album, error) {
+	var albumUpdate = &model.Album{
+		ID:          albumId,
+		Title:       input.Title,
+		ReleaseDate: input.ReleaseDate,
+		BandID:      input.BandID,
+	}
+
+	res := a.DB.Model(&model.Album{}).Where("id = ?", albumId).Updates(albumUpdate)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return albumUpdate, nil
+}
+
+func (a *AlbumRepo) DeleteAlbum(albumId int) (bool, error) {
+	res := a.DB.Delete(&model.Band{}, albumId)
+	if res.Error != nil {
+		return false, res.Error
+	}
+
+	return true, nil
+}
+
 // AlbumSong CRUD Operations
+// CREATE
 func (a *AlbumRepo) CreateAlbumSong(input *model.AlbumSongInput) (*model.AlbumSong, error) {
 	var albumSongInsert = &model.AlbumSong{
 		SongID:      input.SongID,
@@ -77,6 +103,7 @@ func (a *AlbumRepo) CreateAlbumSong(input *model.AlbumSongInput) (*model.AlbumSo
 	return albumSongInsert, nil
 }
 
+// READ
 func (a *AlbumRepo) GetAlbumSongByID(albumSongId int) (*model.AlbumSong, error) {
 	var albumSong *model.AlbumSong
 
@@ -107,4 +134,33 @@ func (a *AlbumRepo) GetAlbumSongsByAlbumId(albumId int) ([]*model.AlbumSong, err
 	}
 
 	return albumSongsList, nil
+}
+
+// UPDATE
+func (a *AlbumRepo) UpdateAlbumSong(albumSongId int, input *model.AlbumSongInput) (*model.AlbumSong, error) {
+	var albumSongUpdate = &model.AlbumSong{
+		ID:          albumSongId,
+		SongID:      input.SongID,
+		AlbumID:     input.AlbumID,
+		Duration:    input.Duration,
+		IsCover:     &input.IsCover,
+		TrackNumber: input.TrackNumber,
+	}
+
+	res := a.DB.Model(&model.AlbumSong{}).Where("id = ?", albumSongId).Updates(albumSongUpdate)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	return albumSongUpdate, nil
+}
+
+// DELETE
+func (a *AlbumRepo) DeleteAlbumSong(albumSongId int) (bool, error) {
+	res := a.DB.Delete(&model.AlbumSong{}, albumSongId)
+	if res.Error != nil {
+		return false, res.Error
+	}
+
+	return true, nil
 }

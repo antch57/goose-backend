@@ -6,14 +6,13 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/antch57/jam-statz/graph/model"
 )
 
 // Band is the resolver for the band field.
 func (r *albumResolver) Band(ctx context.Context, obj *model.Album) (*model.Band, error) {
-	res, err := r.BandRepo.GetBandByID(obj.BandID)
+	res, err := r.BandRepo.GetBandById(obj.BandID)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +22,12 @@ func (r *albumResolver) Band(ctx context.Context, obj *model.Album) (*model.Band
 
 // Songs is the resolver for the songs field.
 func (r *albumResolver) Songs(ctx context.Context, obj *model.Album) ([]*model.AlbumSong, error) {
-	panic(fmt.Errorf("not implemented: Songs - songs album resolver"))
+	res, err := r.AlbumRepo.GetAlbumSongsByAlbumId(obj.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Song is the resolver for the song field.
@@ -46,20 +50,11 @@ func (r *albumSongResolver) Album(ctx context.Context, obj *model.AlbumSong) (*m
 	return res, nil
 }
 
-// AlbumSongs is the resolver for the albumSongs field.
-func (r *albumInputResolver) AlbumSongs(ctx context.Context, obj *model.AlbumInput, data []*model.AlbumSongInput) error {
-	panic(fmt.Errorf("not implemented: AlbumSongs - albumSongs, album song resolver"))
-}
-
 // Album returns AlbumResolver implementation.
 func (r *Resolver) Album() AlbumResolver { return &albumResolver{r} }
 
 // AlbumSong returns AlbumSongResolver implementation.
 func (r *Resolver) AlbumSong() AlbumSongResolver { return &albumSongResolver{r} }
 
-// AlbumInput returns AlbumInputResolver implementation.
-func (r *Resolver) AlbumInput() AlbumInputResolver { return &albumInputResolver{r} }
-
 type albumResolver struct{ *Resolver }
 type albumSongResolver struct{ *Resolver }
-type albumInputResolver struct{ *Resolver }

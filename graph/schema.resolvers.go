@@ -53,12 +53,22 @@ func (r *mutationResolver) CreateAlbum(ctx context.Context, input *model.AlbumIn
 
 // UpdateAlbum is the resolver for the updateAlbum field.
 func (r *mutationResolver) UpdateAlbum(ctx context.Context, id int, input *model.AlbumInput) (*model.Album, error) {
-	panic(fmt.Errorf("not implemented: UpdateAlbum - updateAlbum"))
+	res, err := r.AlbumRepo.UpdateAlbum(id, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // DeleteAlbum is the resolver for the deleteAlbum field.
-func (r *mutationResolver) DeleteAlbum(ctx context.Context, id int) (*bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteAlbum - deleteAlbum"))
+func (r *mutationResolver) DeleteAlbum(ctx context.Context, id int) (bool, error) {
+	res, err := r.AlbumRepo.DeleteAlbum(id)
+	if err != nil {
+		return false, err
+	}
+
+	return res, nil
 }
 
 // CreateVenue is the resolver for the createVenue field.
@@ -72,7 +82,7 @@ func (r *mutationResolver) UpdateVenue(ctx context.Context, id int, input *model
 }
 
 // DeleteVenue is the resolver for the deleteVenue field.
-func (r *mutationResolver) DeleteVenue(ctx context.Context, id int) (*bool, error) {
+func (r *mutationResolver) DeleteVenue(ctx context.Context, id int) (bool, error) {
 	panic(fmt.Errorf("not implemented: DeleteVenue - deleteVenue"))
 }
 
@@ -112,13 +122,13 @@ func (r *mutationResolver) UpdateSong(ctx context.Context, id int, input *model.
 }
 
 // DeleteSong is the resolver for the deleteSong field.
-func (r *mutationResolver) DeleteSong(ctx context.Context, id int) (*bool, error) {
+func (r *mutationResolver) DeleteSong(ctx context.Context, id int) (bool, error) {
 	res, err := r.SongRepo.DeleteSong(id)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
 
-	return &res, nil
+	return res, nil
 }
 
 // CreatePerformanceSong is the resolver for the createPerformanceSong field.
@@ -132,7 +142,7 @@ func (r *mutationResolver) UpdatePerformanceSong(ctx context.Context, id int, in
 }
 
 // DeletePerformanceSong is the resolver for the deletePerformanceSong field.
-func (r *mutationResolver) DeletePerformanceSong(ctx context.Context, id int) (*bool, error) {
+func (r *mutationResolver) DeletePerformanceSong(ctx context.Context, id int) (bool, error) {
 	panic(fmt.Errorf("not implemented: DeletePerformanceSong - deletePerformanceSong"))
 }
 
@@ -148,12 +158,22 @@ func (r *mutationResolver) CreateAlbumSong(ctx context.Context, input *model.Alb
 
 // UpdateAlbumSong is the resolver for the updateAlbumSong field.
 func (r *mutationResolver) UpdateAlbumSong(ctx context.Context, id int, input *model.AlbumSongInput) (*model.AlbumSong, error) {
-	panic(fmt.Errorf("not implemented: UpdateAlbumSong - updateAlbumSong"))
+	res, err := r.AlbumRepo.UpdateAlbumSong(id, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // DeleteAlbumSong is the resolver for the deleteAlbumSong field.
-func (r *mutationResolver) DeleteAlbumSong(ctx context.Context, id int) (*bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteAlbumSong - deleteAlbumSong"))
+func (r *mutationResolver) DeleteAlbumSong(ctx context.Context, id int) (bool, error) {
+	res, err := r.AlbumRepo.DeleteAlbumSong(id)
+	if err != nil {
+		return false, err
+	}
+
+	return res, nil
 }
 
 // Band is the resolver for the band field.
@@ -243,7 +263,32 @@ func (r *queryResolver) PerformanceSong(ctx context.Context, id int) (*model.Per
 
 // AlbumSong is the resolver for the albumSong field.
 func (r *queryResolver) AlbumSong(ctx context.Context, id int) (*model.AlbumSong, error) {
-	panic(fmt.Errorf("not implemented: AlbumSong - albumSong"))
+	res, err := r.AlbumRepo.GetAlbumSongByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// AlbumSongs is the resolver for the albumSongs field.
+func (r *queryResolver) AlbumSongs(ctx context.Context) ([]*model.AlbumSong, error) {
+	res, err := r.AlbumRepo.GetAlbumSongs()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, err
+}
+
+// AlbumSongsByAlbum is the resolver for the albumSongsByAlbum field.
+func (r *queryResolver) AlbumSongsByAlbum(ctx context.Context, albumID int) ([]*model.AlbumSong, error) {
+	res, err := r.AlbumRepo.GetAlbumSongsByAlbumId(albumID)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Mutation returns MutationResolver implementation.

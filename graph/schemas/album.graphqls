@@ -10,7 +10,6 @@ input AlbumInput {
   title: String!
   bandId: ID!
   releaseDate: Date!
-  albumSongs: [AlbumSongInput!]
 }
 
 type AlbumSong {

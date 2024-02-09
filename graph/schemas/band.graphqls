@@ -12,5 +12,4 @@ input BandInput {
   genre: String!
   year: Int!
   description: String
-  albums: [AlbumInput!]
 }

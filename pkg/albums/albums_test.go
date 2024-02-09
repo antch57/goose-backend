@@ -157,6 +157,60 @@ func TestAlbumRepo_GetAlbumsByBandId(t *testing.T) {
 	assert.Equal(t, testReleaseDate, albums[1].ReleaseDate)
 }
 
+func TestAlbumRepo_UpdateAlbum(t *testing.T) {
+	db, mock, err := mockDb()
+	if err != nil {
+		t.Errorf("Error creating mock database: %v", err)
+	}
+
+	layout := "2006-01-02"
+	releaseDate, err := time.Parse(layout, "2021-01-01")
+	if err != nil {
+		t.Errorf("Error parsing release date: %v", err)
+	}
+
+	albumID := 1
+	input := &model.AlbumInput{
+		Title:       "Test Album",
+		BandID:      1,
+		ReleaseDate: releaseDate,
+	}
+
+	mock.ExpectBegin()
+	mock.ExpectExec("^UPDATE `albums` SET `id`=\\?,`title`=\\?,`band_id`=\\?,`release_date`=\\? WHERE id = \\?$").WithArgs(albumID, input.Title, input.BandID, input.ReleaseDate, albumID).WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	repo := &AlbumRepo{DB: db}
+
+	album, err := repo.UpdateAlbum(albumID, input)
+
+	assert.NoError(t, err)
+	assert.Equal(t, albumID, album.ID)
+	assert.Equal(t, input.Title, album.Title)
+	assert.Equal(t, input.BandID, album.BandID)
+	assert.Equal(t, input.ReleaseDate, album.ReleaseDate)
+}
+
+func TestAlbumRepo_DeleteAlbum(t *testing.T) {
+	db, mock, err := mockDb()
+	if err != nil {
+		t.Errorf("Error creating mock database: %v", err)
+	}
+
+	albumID := 1
+
+	mock.ExpectBegin()
+	mock.ExpectExec("^DELETE FROM `bands` WHERE `bands`.`id` = \\?$").WithArgs(albumID).WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	repo := &AlbumRepo{DB: db}
+
+	deleted, err := repo.DeleteAlbum(albumID)
+
+	assert.NoError(t, err)
+	assert.True(t, deleted)
+}
+
 // AlbumSong tests
 func TestAlbumRepo_CreateAlbumSong(t *testing.T) {
 	db, mock, err := mockDb()
@@ -267,4 +321,58 @@ func TestAlbumRepo_GetAlbumSongsByAlbumId(t *testing.T) {
 	assert.Equal(t, 180, albumSongs[0].Duration)
 	assert.Equal(t, 1, albumSongs[0].TrackNumber)
 	assert.Equal(t, false, *albumSongs[0].IsCover)
+}
+
+func TestAlbumRepo_UpdateAlbumSong(t *testing.T) {
+	db, mock, err := mockDb()
+	if err != nil {
+		t.Errorf("Error creating mock database: %v", err)
+	}
+
+	albumSongID := 1
+	input := &model.AlbumSongInput{
+		AlbumID:     1,
+		SongID:      1,
+		Duration:    180,
+		IsCover:     false,
+		TrackNumber: 1,
+	}
+
+	mock.ExpectBegin()
+	mock.ExpectExec("^UPDATE `album_songs` SET `id`=\\?,`song_id`=\\?,`album_id`=\\?,`duration`=\\?,`track_number`=\\?,`is_cover`=\\? WHERE id = \\?$").
+		WithArgs(albumSongID, input.SongID, input.AlbumID, input.Duration, input.TrackNumber, input.IsCover, albumSongID).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	repo := &AlbumRepo{DB: db}
+
+	albumSong, err := repo.UpdateAlbumSong(albumSongID, input)
+
+	assert.NoError(t, err)
+	assert.Equal(t, albumSongID, albumSong.ID)
+	assert.Equal(t, input.AlbumID, albumSong.AlbumID)
+	assert.Equal(t, input.SongID, input.SongID)
+	assert.Equal(t, input.Duration, albumSong.Duration)
+	assert.Equal(t, input.IsCover, *albumSong.IsCover)
+	assert.Equal(t, input.TrackNumber, albumSong.TrackNumber)
+}
+
+func TestAlbumRepo_DeleteAlbumSong(t *testing.T) {
+	db, mock, err := mockDb()
+	if err != nil {
+		t.Errorf("Error creating mock database: %v", err)
+	}
+
+	albumSongID := 1
+
+	mock.ExpectBegin()
+	mock.ExpectExec("^DELETE FROM `album_songs` WHERE `album_songs`.`id` = \\?$").WithArgs(albumSongID).WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	repo := &AlbumRepo{DB: db}
+
+	deleted, err := repo.DeleteAlbumSong(albumSongID)
+
+	assert.NoError(t, err)
+	assert.True(t, deleted)
 }

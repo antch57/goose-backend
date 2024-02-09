@@ -2,51 +2,58 @@
 
 package model
 
-type Album struct {
-	ID          string  `json:"id"`
-	Title       string  `json:"title"`
-	ReleaseDate string  `json:"releaseDate"`
-	Songs       []*Song `json:"songs"`
-	BandID      string  `json:"bandId"`
-}
-
-type AlbumInput struct {
-	Title       string       `json:"title"`
-	ReleaseDate string       `json:"releaseDate"`
-	Songs       []*SongInput `json:"songs"`
-}
-
-type Band struct {
-	ID          string   `json:"id"`
-	Name        string   `json:"name"`
-	Genre       string   `json:"genre"`
-	Albums      []*Album `json:"albums,omitempty"`
-	Year        int      `json:"year"`
-	Description *string  `json:"description,omitempty"`
-	Songs       []*Song  `json:"songs,omitempty"`
-}
-
-type Bands struct {
-	Bands []*Band `json:"bands,omitempty"`
-}
+import (
+	"time"
+)
 
 type Mutation struct {
+}
+
+type Performance struct {
+	ID              int                `json:"id"`
+	Band            *Band              `json:"band"`
+	Venue           *Venue             `json:"venue"`
+	PerformanceDate time.Time          `json:"performanceDate"`
+	Duration        time.Duration      `json:"duration"`
+	Songs           []*PerformanceSong `json:"songs"`
+}
+
+type PerformanceInput struct {
+	BandID           int                     `json:"bandId"`
+	Venue            int                     `json:"venue"`
+	PerformanceDate  time.Time               `json:"performanceDate"`
+	Duration         *time.Duration          `json:"duration,omitempty"`
+	PerformanceSongs []*PerformanceSongInput `json:"performanceSongs,omitempty"`
+}
+
+type PerformanceSong struct {
+	ID          int           `json:"id"`
+	Song        *Song         `json:"song"`
+	Duration    time.Duration `json:"duration"`
+	Performance *Performance  `json:"performance"`
+	IsCover     bool          `json:"isCover"`
+	Notes       *string       `json:"notes,omitempty"`
+}
+
+type PerformanceSongInput struct {
+	SongID        int           `json:"songId"`
+	Duration      time.Duration `json:"duration"`
+	PerformanceID int           `json:"performanceId"`
+	Notes         *string       `json:"notes,omitempty"`
+	IsCover       bool          `json:"isCover"`
 }
 
 type Query struct {
 }
 
-type Song struct {
-	ID       string  `json:"id"`
-	Title    string  `json:"title"`
-	Duration int     `json:"duration"`
-	AlbumID  *string `json:"albumId,omitempty"`
-	BandID   string  `json:"bandId"`
+type Venue struct {
+	ID           int            `json:"id"`
+	Name         string         `json:"name"`
+	Location     *string        `json:"location,omitempty"`
+	Performances []*Performance `json:"performances,omitempty"`
 }
 
-type SongInput struct {
-	Title    string  `json:"title"`
-	Duration int     `json:"duration"`
-	AlbumID  *string `json:"albumId,omitempty"`
-	BandID   *string `json:"bandId,omitempty"`
+type VenueInput struct {
+	Name     string `json:"name"`
+	Location string `json:"location"`
 }

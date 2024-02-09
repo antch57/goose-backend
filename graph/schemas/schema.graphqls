@@ -1,0 +1,43 @@
+scalar Date
+scalar Duration
+
+type Query {
+  band(id: ID!): Band
+  bands: [Band!]
+  album(id: ID!): Album
+  albums: [Album!]
+  venue(id: ID!): Venue
+  venues: [Venue!]
+  performance(id: ID!): Performance
+  performances: [Performance!]
+  song(id: ID!): Song
+  songs: [Song!]
+  performanceSong(id: ID!): PerformanceSong
+  albumSong(id: ID!): AlbumSong
+  albumSongs: [AlbumSong!]
+  albumSongsByAlbum(albumId: ID!): [AlbumSong!]!
+}
+
+type Mutation {
+  createBand(input: BandInput): Band
+  updateBand(id: ID!, input: BandInput): Band
+  deleteBand(id: ID!): Boolean!
+  createAlbum(input: AlbumInput): Album
+  updateAlbum(id: ID!, input: AlbumInput): Album
+  deleteAlbum(id: ID!): Boolean!
+  createVenue(input: VenueInput): Venue
+  updateVenue(id: ID!, input: VenueInput): Venue
+  deleteVenue(id: ID!): Boolean!
+  createPerformance(input: PerformanceInput): Performance
+  updatePerformance(id: ID!, input: PerformanceInput): Performance
+  deletePerformance(id: ID!): Boolean
+  createSong(input: SongInput): Song
+  updateSong(id: ID!, input: SongInput): Song
+  deleteSong(id: ID!): Boolean!
+  createPerformanceSong(input: PerformanceSongInput): PerformanceSong
+  updatePerformanceSong(id: ID!, input: PerformanceSongInput): PerformanceSong
+  deletePerformanceSong(id: ID!): Boolean!
+  createAlbumSong(input: AlbumSongInput): AlbumSong
+  updateAlbumSong(id: ID!, input: AlbumSongInput): AlbumSong
+  deleteAlbumSong(id: ID!): Boolean!
+}

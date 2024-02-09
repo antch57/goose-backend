@@ -1,0 +1,34 @@
+type Album {
+  id: ID!
+  title: String!
+  band: Band!
+  releaseDate: Date!
+  songs: [AlbumSong!]!
+}
+
+input AlbumInput {
+  title: String!
+  bandId: ID!
+  releaseDate: Date!
+}
+
+type AlbumSong {
+  id: ID!
+  song: Song
+  album: Album
+  # FIXME: Duration scalar
+  # duration: Duration!
+  duration: Int!
+  track_number: Int!
+  isCover: Boolean
+}
+
+input AlbumSongInput {
+  songId: ID!
+  albumId: ID!
+  # FIXME: Duration scalar
+  # duration: Duration!
+  duration: Int!
+  trackNumber: Int!
+  isCover: Boolean!
+}

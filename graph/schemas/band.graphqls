@@ -1,0 +1,15 @@
+type Band {
+  id: ID!
+  name: String!
+  genre: String!
+  year: Int!
+  description: String
+  albums: [Album!]
+}
+
+input BandInput {
+  name: String!
+  genre: String!
+  year: Int!
+  description: String
+}

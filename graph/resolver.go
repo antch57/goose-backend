@@ -4,6 +4,7 @@ import (
 	"github.com/antch57/jam-statz/pkg/albums"
 	"github.com/antch57/jam-statz/pkg/bands"
 	"github.com/antch57/jam-statz/pkg/songs"
+	"github.com/antch57/jam-statz/pkg/venues"
 )
 
 // This file will not be regenerated automatically.
@@ -14,4 +15,5 @@ type Resolver struct {
 	BandRepo  bands.BandRepo
 	AlbumRepo albums.AlbumRepo
 	SongRepo  songs.SongRepo
+	VenueRepo venues.VenueRepo
 }

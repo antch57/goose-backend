@@ -2,58 +2,8 @@
 
 package model
 
-import (
-	"time"
-)
-
 type Mutation struct {
 }
 
-type Performance struct {
-	ID              int                `json:"id"`
-	Band            *Band              `json:"band"`
-	Venue           *Venue             `json:"venue"`
-	PerformanceDate time.Time          `json:"performanceDate"`
-	Duration        time.Duration      `json:"duration"`
-	Songs           []*PerformanceSong `json:"songs"`
-}
-
-type PerformanceInput struct {
-	BandID           int                     `json:"bandId"`
-	Venue            int                     `json:"venue"`
-	PerformanceDate  time.Time               `json:"performanceDate"`
-	Duration         *time.Duration          `json:"duration,omitempty"`
-	PerformanceSongs []*PerformanceSongInput `json:"performanceSongs,omitempty"`
-}
-
-type PerformanceSong struct {
-	ID          int           `json:"id"`
-	Song        *Song         `json:"song"`
-	Duration    time.Duration `json:"duration"`
-	Performance *Performance  `json:"performance"`
-	IsCover     bool          `json:"isCover"`
-	Notes       *string       `json:"notes,omitempty"`
-}
-
-type PerformanceSongInput struct {
-	SongID        int           `json:"songId"`
-	Duration      time.Duration `json:"duration"`
-	PerformanceID int           `json:"performanceId"`
-	Notes         *string       `json:"notes,omitempty"`
-	IsCover       bool          `json:"isCover"`
-}
-
 type Query struct {
-}
-
-type Venue struct {
-	ID           int            `json:"id"`
-	Name         string         `json:"name"`
-	Location     *string        `json:"location,omitempty"`
-	Performances []*Performance `json:"performances,omitempty"`
-}
-
-type VenueInput struct {
-	Name     string `json:"name"`
-	Location string `json:"location"`
 }

@@ -1,8 +1,6 @@
 package songs
 
 import (
-	"fmt"
-
 	"github.com/antch57/jam-statz/graph/model"
 	"gorm.io/gorm"
 )
@@ -37,7 +35,6 @@ func (s *SongRepo) GetSongs() ([]*model.Song, error) {
 		return nil, res.Error
 	}
 
-	fmt.Println("songsList ", songsList)
 	return songsList, nil
 }
 

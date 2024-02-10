@@ -6,14 +6,18 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/antch57/jam-statz/graph/model"
 )
 
 // Performances is the resolver for the performances field.
 func (r *venueResolver) Performances(ctx context.Context, obj *model.Venue) ([]*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: Performances - performances"))
+	res, err := r.PerformanceRepo.GetPerformancesByVenueID(obj.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Venue returns VenueResolver implementation.

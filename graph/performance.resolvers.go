@@ -6,45 +6,58 @@ package graph
 
 import (
 	"context"
-	"fmt"
-	"time"
 
 	"github.com/antch57/jam-statz/graph/model"
 )
 
 // Band is the resolver for the band field.
 func (r *performanceResolver) Band(ctx context.Context, obj *model.Performance) (*model.Band, error) {
-	panic(fmt.Errorf("not implemented: Band - band"))
+	res, err := r.PerformanceRepo.GetBand(obj.BandID)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Venue is the resolver for the venue field.
 func (r *performanceResolver) Venue(ctx context.Context, obj *model.Performance) (*model.Venue, error) {
-	panic(fmt.Errorf("not implemented: Venue - venue"))
+	res, err := r.PerformanceRepo.GetVenue(obj.VenueID)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-// Duration is the resolver for the duration field.
-func (r *performanceResolver) Duration(ctx context.Context, obj *model.Performance) (time.Duration, error) {
-	panic(fmt.Errorf("not implemented: Duration - duration"))
+// Songs is the resolver for the songs field.
+func (r *performanceResolver) Songs(ctx context.Context, obj *model.Performance) ([]*model.PerformanceSong, error) {
+	res, err := r.PerformanceRepo.GetPerformanceSongs(obj.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Song is the resolver for the song field.
 func (r *performanceSongResolver) Song(ctx context.Context, obj *model.PerformanceSong) (*model.Song, error) {
-	panic(fmt.Errorf("not implemented: Song - song"))
+	res, err := r.PerformanceRepo.GetSong(obj.SongID)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Performance is the resolver for the performance field.
 func (r *performanceSongResolver) Performance(ctx context.Context, obj *model.PerformanceSong) (*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: Performance - performance"))
-}
+	res, err := r.PerformanceRepo.GetPerformance(obj.PerformanceID)
+	if err != nil {
+		return nil, err
+	}
 
-// Venue is the resolver for the venue field.
-func (r *performanceInputResolver) Venue(ctx context.Context, obj *model.PerformanceInput, data int) error {
-	panic(fmt.Errorf("not implemented: Venue - venue"))
-}
-
-// Duration is the resolver for the duration field.
-func (r *performanceInputResolver) Duration(ctx context.Context, obj *model.PerformanceInput, data *time.Duration) error {
-	panic(fmt.Errorf("not implemented: Duration - duration"))
+	return res, nil
 }
 
 // Performance returns PerformanceResolver implementation.
@@ -53,9 +66,5 @@ func (r *Resolver) Performance() PerformanceResolver { return &performanceResolv
 // PerformanceSong returns PerformanceSongResolver implementation.
 func (r *Resolver) PerformanceSong() PerformanceSongResolver { return &performanceSongResolver{r} }
 
-// PerformanceInput returns PerformanceInputResolver implementation.
-func (r *Resolver) PerformanceInput() PerformanceInputResolver { return &performanceInputResolver{r} }
-
 type performanceResolver struct{ *Resolver }
 type performanceSongResolver struct{ *Resolver }
-type performanceInputResolver struct{ *Resolver }

@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/antch57/jam-statz/graph/model"
 )
@@ -103,17 +102,32 @@ func (r *mutationResolver) DeleteVenue(ctx context.Context, id int) (bool, error
 
 // CreatePerformance is the resolver for the createPerformance field.
 func (r *mutationResolver) CreatePerformance(ctx context.Context, input *model.PerformanceInput) (*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: CreatePerformance - createPerformance"))
+	res, err := r.PerformanceRepo.CreatePerformance(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // UpdatePerformance is the resolver for the updatePerformance field.
 func (r *mutationResolver) UpdatePerformance(ctx context.Context, id int, input *model.PerformanceInput) (*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: UpdatePerformance - updatePerformance"))
+	res, err := r.PerformanceRepo.UpdatePerformance(id, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // DeletePerformance is the resolver for the deletePerformance field.
 func (r *mutationResolver) DeletePerformance(ctx context.Context, id int) (*bool, error) {
-	panic(fmt.Errorf("not implemented: DeletePerformance - deletePerformance"))
+	res, err := r.PerformanceRepo.DeletePerformance(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
 }
 
 // CreateSong is the resolver for the createSong field.
@@ -148,17 +162,32 @@ func (r *mutationResolver) DeleteSong(ctx context.Context, id int) (bool, error)
 
 // CreatePerformanceSong is the resolver for the createPerformanceSong field.
 func (r *mutationResolver) CreatePerformanceSong(ctx context.Context, input *model.PerformanceSongInput) (*model.PerformanceSong, error) {
-	panic(fmt.Errorf("not implemented: CreatePerformanceSong - createPerformanceSong"))
+	res, err := r.PerformanceRepo.CreatePerformanceSong(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // UpdatePerformanceSong is the resolver for the updatePerformanceSong field.
 func (r *mutationResolver) UpdatePerformanceSong(ctx context.Context, id int, input *model.PerformanceSongInput) (*model.PerformanceSong, error) {
-	panic(fmt.Errorf("not implemented: UpdatePerformanceSong - updatePerformanceSong"))
+	res, err := r.PerformanceRepo.UpdatePerformanceSong(id, input)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // DeletePerformanceSong is the resolver for the deletePerformanceSong field.
 func (r *mutationResolver) DeletePerformanceSong(ctx context.Context, id int) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeletePerformanceSong - deletePerformanceSong"))
+	res, err := r.PerformanceRepo.DeletePerformanceSong(id)
+	if err != nil {
+		return false, err
+	}
+
+	return res, nil
 }
 
 // CreateAlbumSong is the resolver for the createAlbumSong field.
@@ -253,12 +282,22 @@ func (r *queryResolver) Venues(ctx context.Context) ([]*model.Venue, error) {
 
 // Performance is the resolver for the performance field.
 func (r *queryResolver) Performance(ctx context.Context, id int) (*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: Performance - performance"))
+	res, err := r.PerformanceRepo.GetPerformance(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Performances is the resolver for the performances field.
 func (r *queryResolver) Performances(ctx context.Context) ([]*model.Performance, error) {
-	panic(fmt.Errorf("not implemented: Performances - performances"))
+	res, err := r.PerformanceRepo.GetPerformances()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // Song is the resolver for the song field.
@@ -283,7 +322,22 @@ func (r *queryResolver) Songs(ctx context.Context) ([]*model.Song, error) {
 
 // PerformanceSong is the resolver for the performanceSong field.
 func (r *queryResolver) PerformanceSong(ctx context.Context, id int) (*model.PerformanceSong, error) {
-	panic(fmt.Errorf("not implemented: PerformanceSong - performanceSong"))
+	res, err := r.PerformanceRepo.GetPerformanceSong(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// PerformanceSongs is the resolver for the performanceSongs field.
+func (r *queryResolver) PerformanceSongs(ctx context.Context) ([]*model.PerformanceSong, error) {
+	res, err := r.PerformanceRepo.GetPerformanceSongsAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 // AlbumSong is the resolver for the albumSong field.

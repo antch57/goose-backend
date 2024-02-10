@@ -49,7 +49,6 @@ type ResolverRoot interface {
 	Query() QueryResolver
 	Song() SongResolver
 	Venue() VenueResolver
-	PerformanceInput() PerformanceInputResolver
 }
 
 type DirectiveRoot struct {
@@ -134,6 +133,7 @@ type ComplexityRoot struct {
 		Bands             func(childComplexity int) int
 		Performance       func(childComplexity int, id int) int
 		PerformanceSong   func(childComplexity int, id int) int
+		PerformanceSongs  func(childComplexity int) int
 		Performances      func(childComplexity int) int
 		Song              func(childComplexity int, id int) int
 		Songs             func(childComplexity int) int
@@ -194,7 +194,7 @@ type PerformanceResolver interface {
 	Band(ctx context.Context, obj *model.Performance) (*model.Band, error)
 	Venue(ctx context.Context, obj *model.Performance) (*model.Venue, error)
 
-	Duration(ctx context.Context, obj *model.Performance) (time.Duration, error)
+	Songs(ctx context.Context, obj *model.Performance) ([]*model.PerformanceSong, error)
 }
 type PerformanceSongResolver interface {
 	Song(ctx context.Context, obj *model.PerformanceSong) (*model.Song, error)
@@ -213,6 +213,7 @@ type QueryResolver interface {
 	Song(ctx context.Context, id int) (*model.Song, error)
 	Songs(ctx context.Context) ([]*model.Song, error)
 	PerformanceSong(ctx context.Context, id int) (*model.PerformanceSong, error)
+	PerformanceSongs(ctx context.Context) ([]*model.PerformanceSong, error)
 	AlbumSong(ctx context.Context, id int) (*model.AlbumSong, error)
 	AlbumSongs(ctx context.Context) ([]*model.AlbumSong, error)
 	AlbumSongsByAlbum(ctx context.Context, albumID int) ([]*model.AlbumSong, error)
@@ -222,12 +223,6 @@ type SongResolver interface {
 }
 type VenueResolver interface {
 	Performances(ctx context.Context, obj *model.Venue) ([]*model.Performance, error)
-}
-
-type PerformanceInputResolver interface {
-	Venue(ctx context.Context, obj *model.PerformanceInput, data int) error
-
-	Duration(ctx context.Context, obj *model.PerformanceInput, data *time.Duration) error
 }
 
 type executableSchema struct {
@@ -796,6 +791,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.PerformanceSong(childComplexity, args["id"].(int)), true
+
+	case "Query.performanceSongs":
+		if e.complexity.Query.PerformanceSongs == nil {
+			break
+		}
+
+		return e.complexity.Query.PerformanceSongs(childComplexity), true
 
 	case "Query.performances":
 		if e.complexity.Query.Performances == nil {
@@ -3867,7 +3869,7 @@ func (ec *executionContext) _Performance_duration(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Performance().Duration(rctx, obj)
+		return obj.Duration, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3879,19 +3881,19 @@ func (ec *executionContext) _Performance_duration(ctx context.Context, field gra
 		}
 		return graphql.Null
 	}
-	res := resTmp.(time.Duration)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNDuration2timeᚐDuration(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Performance_duration(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Duration does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3911,7 +3913,7 @@ func (ec *executionContext) _Performance_songs(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Songs, nil
+		return ec.resolvers.Performance().Songs(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3932,8 +3934,8 @@ func (ec *executionContext) fieldContext_Performance_songs(ctx context.Context, 
 	fc = &graphql.FieldContext{
 		Object:     "Performance",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -4077,9 +4079,9 @@ func (ec *executionContext) _PerformanceSong_duration(ctx context.Context, field
 		}
 		return graphql.Null
 	}
-	res := resTmp.(time.Duration)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNDuration2timeᚐDuration(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PerformanceSong_duration(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4089,7 +4091,7 @@ func (ec *executionContext) fieldContext_PerformanceSong_duration(ctx context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Duration does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4881,6 +4883,61 @@ func (ec *executionContext) fieldContext_Query_performanceSong(ctx context.Conte
 	if fc.Args, err = ec.field_Query_performanceSong_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_performanceSongs(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_performanceSongs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().PerformanceSongs(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.PerformanceSong)
+	fc.Result = res
+	return ec.marshalOPerformanceSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_performanceSongs(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_PerformanceSong_id(ctx, field)
+			case "song":
+				return ec.fieldContext_PerformanceSong_song(ctx, field)
+			case "duration":
+				return ec.fieldContext_PerformanceSong_duration(ctx, field)
+			case "performance":
+				return ec.fieldContext_PerformanceSong_performance(ctx, field)
+			case "isCover":
+				return ec.fieldContext_PerformanceSong_isCover(ctx, field)
+			case "notes":
+				return ec.fieldContext_PerformanceSong_notes(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PerformanceSong", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -7455,7 +7512,7 @@ func (ec *executionContext) unmarshalInputPerformanceInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"bandId", "venue", "performanceDate", "duration", "performanceSongs"}
+	fieldsInOrder := [...]string{"bandId", "venueId", "performanceDate", "duration"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -7469,15 +7526,13 @@ func (ec *executionContext) unmarshalInputPerformanceInput(ctx context.Context, 
 				return it, err
 			}
 			it.BandID = data
-		case "venue":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("venue"))
+		case "venueId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("venueId"))
 			data, err := ec.unmarshalNID2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			if err = ec.resolvers.PerformanceInput().Venue(ctx, &it, data); err != nil {
-				return it, err
-			}
+			it.VenueID = data
 		case "performanceDate":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performanceDate"))
 			data, err := ec.unmarshalNDate2timeᚐTime(ctx, v)
@@ -7487,20 +7542,11 @@ func (ec *executionContext) unmarshalInputPerformanceInput(ctx context.Context, 
 			it.PerformanceDate = data
 		case "duration":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("duration"))
-			data, err := ec.unmarshalODuration2ᚖtimeᚐDuration(ctx, v)
+			data, err := ec.unmarshalOInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			if err = ec.resolvers.PerformanceInput().Duration(ctx, &it, data); err != nil {
-				return it, err
-			}
-		case "performanceSongs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performanceSongs"))
-			data, err := ec.unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInputᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PerformanceSongs = data
+			it.Duration = data
 		}
 	}
 
@@ -7530,7 +7576,7 @@ func (ec *executionContext) unmarshalInputPerformanceSongInput(ctx context.Conte
 			it.SongID = data
 		case "duration":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("duration"))
-			data, err := ec.unmarshalNDuration2timeᚐDuration(ctx, v)
+			data, err := ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8203,6 +8249,11 @@ func (ec *executionContext) _Performance(ctx context.Context, sel ast.SelectionS
 				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "duration":
+			out.Values[i] = ec._Performance_duration(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "songs":
 			field := field
 
 			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
@@ -8211,7 +8262,7 @@ func (ec *executionContext) _Performance(ctx context.Context, sel ast.SelectionS
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Performance_duration(ctx, field, obj)
+				res = ec._Performance_songs(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -8238,11 +8289,6 @@ func (ec *executionContext) _Performance(ctx context.Context, sel ast.SelectionS
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "songs":
-			out.Values[i] = ec._Performance_songs(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8608,6 +8654,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_performanceSong(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "performanceSongs":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_performanceSongs(ctx, field)
 				return res
 			}
 
@@ -9298,21 +9363,6 @@ func (ec *executionContext) marshalNDate2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) unmarshalNDuration2timeᚐDuration(ctx context.Context, v interface{}) (time.Duration, error) {
-	res, err := graphql.UnmarshalDuration(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNDuration2timeᚐDuration(ctx context.Context, sel ast.SelectionSet, v time.Duration) graphql.Marshaler {
-	res := graphql.MarshalDuration(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
-}
-
 func (ec *executionContext) unmarshalNID2int(ctx context.Context, v interface{}) (int, error) {
 	res, err := graphql.UnmarshalIntID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -9409,11 +9459,6 @@ func (ec *executionContext) marshalNPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋ
 		return graphql.Null
 	}
 	return ec._PerformanceSong(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx context.Context, v interface{}) (*model.PerformanceSongInput, error) {
-	res, err := ec.unmarshalInputPerformanceSongInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNSong2githubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐSong(ctx context.Context, sel ast.SelectionSet, v model.Song) graphql.Marshaler {
@@ -9924,22 +9969,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) unmarshalODuration2ᚖtimeᚐDuration(ctx context.Context, v interface{}) (*time.Duration, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalDuration(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalODuration2ᚖtimeᚐDuration(ctx context.Context, sel ast.SelectionSet, v *time.Duration) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	res := graphql.MarshalDuration(*v)
-	return res
-}
-
 func (ec *executionContext) unmarshalOID2ᚖint(ctx context.Context, v interface{}) (*int, error) {
 	if v == nil {
 		return nil, nil
@@ -9953,6 +9982,16 @@ func (ec *executionContext) marshalOID2ᚖint(ctx context.Context, sel ast.Selec
 		return graphql.Null
 	}
 	res := graphql.MarshalIntID(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
 	return res
 }
 
@@ -10018,31 +10057,58 @@ func (ec *executionContext) unmarshalOPerformanceInput2ᚖgithubᚗcomᚋantch57
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalOPerformanceSong2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PerformanceSong) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalOPerformanceSong2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSong(ctx context.Context, sel ast.SelectionSet, v *model.PerformanceSong) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._PerformanceSong(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOPerformanceSongInput2ᚕᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInputᚄ(ctx context.Context, v interface{}) ([]*model.PerformanceSongInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
-	var err error
-	res := make([]*model.PerformanceSongInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
 }
 
 func (ec *executionContext) unmarshalOPerformanceSongInput2ᚖgithubᚗcomᚋantch57ᚋjamᚑstatzᚋgraphᚋmodelᚐPerformanceSongInput(ctx context.Context, v interface{}) (*model.PerformanceSongInput, error) {

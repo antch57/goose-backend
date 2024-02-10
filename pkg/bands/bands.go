@@ -50,7 +50,6 @@ func (b *BandRepo) GetBandById(id int) (*model.Band, error) {
 	return band, nil
 }
 
-// TODO: move this over to the SongRepo
 // TODO: add test for this in song package
 func (b *BandRepo) GetBandBySongId(id int) (*model.Band, error) {
 	var band = &model.Band{}

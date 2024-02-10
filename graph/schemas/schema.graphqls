@@ -1,5 +1,5 @@
 scalar Date
-scalar Duration
+# scalar Duration
 
 type Query {
   band(id: ID!): Band
@@ -13,6 +13,7 @@ type Query {
   song(id: ID!): Song
   songs: [Song!]
   performanceSong(id: ID!): PerformanceSong
+  performanceSongs: [PerformanceSong!]
   albumSong(id: ID!): AlbumSong
   albumSongs: [AlbumSong!]
   albumSongsByAlbum(albumId: ID!): [AlbumSong!]!

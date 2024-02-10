@@ -59,6 +59,7 @@ func (a *AlbumRepo) GetAlbumsByBandId(bandId int) ([]*model.Album, error) {
 	return albumsList, nil
 }
 
+// UPDATE
 func (a *AlbumRepo) UpdateAlbum(albumId int, input *model.AlbumInput) (*model.Album, error) {
 	var albumUpdate = &model.Album{
 		ID:          albumId,
@@ -75,6 +76,7 @@ func (a *AlbumRepo) UpdateAlbum(albumId int, input *model.AlbumInput) (*model.Al
 	return albumUpdate, nil
 }
 
+// DELETE
 func (a *AlbumRepo) DeleteAlbum(albumId int) (bool, error) {
 	res := a.DB.Delete(&model.Band{}, albumId)
 	if res.Error != nil {

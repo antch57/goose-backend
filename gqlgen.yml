@@ -85,7 +85,7 @@ models:
     model:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
-      - github.com/99designs/gqlgen/graphql.Int32
+  # TODO: figure out how to make duration work...
   Duration:
     model:
       - github.com/99designs/gqlgen/graphql.Duration
@@ -122,29 +122,28 @@ models:
     fields:
       band:
         resolver: true
-# TODO: go through this config and make sure i resolv the fields that i need to be resolved.
   Venue:
     model:
       - github.com/antch57/jam-statz/graph/model.Venue
     fields:
       performances:
         resolver: true
-  # Performance:
-  #   model:
-  #     - github.com/antch57/jam-statz/graph/model.Performance
-  #   fields:
-  #     venue:
-  #       resolver: true
-  #     band:
-  #       resolver: true
-  #     songs:
-  #       resolver: true
-  # PerformanceSong:
-  #   model:
-  #     - github.com/antch57/jam-statz/graph/model.PerformanceSong
-  #   fields:
-  #     performance:
-  #       resolver: true
-  #     song:
-  #       resolver: true
+  Performance:
+    model:
+      - github.com/antch57/jam-statz/graph/model.Performance
+    fields:
+      venue:
+        resolver: true
+      band:
+        resolver: true
+      songs:
+        resolver: true
+  PerformanceSong:
+    model:
+      - github.com/antch57/jam-statz/graph/model.PerformanceSong
+    fields:
+      performance:
+        resolver: true
+      song:
+        resolver: true
 

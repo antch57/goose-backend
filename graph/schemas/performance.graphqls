@@ -3,22 +3,27 @@ type Performance {
   band: Band!
   venue: Venue!
   performanceDate: Date!
-  duration: Duration!
+  # // FIXME: should be using Duration
+  # duration: Duration!
+  duration: Int!
   songs: [PerformanceSong!]!
 }
 
 input PerformanceInput {
   bandId: ID!
-  venue: ID!
+  venueId: ID!
   performanceDate: Date!
-  duration: Duration
-  performanceSongs: [PerformanceSongInput!]
+  # // FIXME: should be using Duration
+  # duration: Duration!
+  duration: Int
 }
 
 type PerformanceSong {
   id: ID!
   song: Song!
-  duration: Duration!
+  # // FIXME: should be using Duration
+  # duration: Duration!
+  duration: Int!
   performance: Performance!
   isCover: Boolean!
   notes: String
@@ -26,7 +31,9 @@ type PerformanceSong {
 
 input PerformanceSongInput {
   songId: ID!
-  duration: Duration!
+  # // FIXME: should be using Duration
+  # duration: Duration!
+  duration: Int!
   performanceId: ID!
   notes: String
   isCover: Boolean!

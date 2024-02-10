@@ -11,6 +11,7 @@ import (
 	"github.com/antch57/jam-statz/pkg/albums"
 	"github.com/antch57/jam-statz/pkg/bands"
 	"github.com/antch57/jam-statz/pkg/db"
+	"github.com/antch57/jam-statz/pkg/performances"
 	"github.com/antch57/jam-statz/pkg/songs"
 	"github.com/antch57/jam-statz/pkg/venues"
 )
@@ -44,10 +45,11 @@ func main() {
 	}
 
 	resolvers := &graph.Resolver{
-		BandRepo:  bands.BandRepo{DB: DB},
-		AlbumRepo: albums.AlbumRepo{DB: DB},
-		SongRepo:  songs.SongRepo{DB: DB},
-		VenueRepo: venues.VenueRepo{DB: DB},
+		BandRepo:        bands.BandRepo{DB: DB},
+		AlbumRepo:       albums.AlbumRepo{DB: DB},
+		SongRepo:        songs.SongRepo{DB: DB},
+		VenueRepo:       venues.VenueRepo{DB: DB},
+		PerformanceRepo: performances.PerformanceRepo{DB: DB},
 	}
 
 	// Setting up Gin

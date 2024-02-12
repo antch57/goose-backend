@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 
@@ -54,6 +55,10 @@ func main() {
 
 	// Setting up Gin
 	r := gin.Default()
+
+	// Apply the middleware to the router (Allow all origins)
+	r.Use(cors.Default())
+
 	r.POST("/query", graphqlHandler(resolvers))
 	r.GET("/", playgroundHandler())
 	r.Run()

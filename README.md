@@ -48,7 +48,5 @@ just be sure to swap out for your creds.
 ## TODO:
 
 major stuffs:
-- redo db layer
 - impliment dataloader for graphql
 - create auth workflow
-- setup db schema for tracking statz

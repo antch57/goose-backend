@@ -1,52 +1,52 @@
-# graphql with go, gin, gqlgen
+# Jam Statz Backend
 
+## Overview
+This is the backend for a website that will track a band's performances and albums. The project is actively being worked on and is not yet fully built out. Right now jam-statz-backend is written in go using the gin web framework. It utilizes graphql as the query language and MariaDB for storage.
 
-end goal is to make a website with this...
+This project is linked directly with the [jam-statz-frontend](https://github.com/antch57/jam-statz-frontend) repo. If you run both repos locally they will integrate out of the box.
 
-run: `go server.go` to start the graphql server
+## Quick Start:
 
-run: `go run github.com/99designs/gqlgen generate` to regenerate resolvers if you make changes to your graphql schema.
+### Dev Database setup
 
+Build dockerfile:
+- `docker build -t jam-statz-db pkg/db/`
 
-flow goes like this:
+Run docker image:
+- `docker run --detach --name jam-statz-db --env MARIADB_ROOT_PASSWORD=my-secret-pw -p 3306:3306 jam-statz-db --general_log_file=/var/lib/mysql/mysql.log --general_log=1`
 
-- `server.go` is your graphql entry point
-- `internal/` holds packages that get called from resolvers
-- `schema.graphqls` where you define all your data shapes
-- `schema.resolvers.go` where you call your packages you wrote in `internal/`
-- `graph/model/models_gen.go` import this file when you want to use your data structures as types. for example import into your packages that live in `internal/`.
-
-## to get started:
-### setup db for deving
-
-step 1 build dockerfile:
-- `docker build -t jam-statz-mariadb pkg/db/`
-
-step 2 run dockerfile:
-- `docker run --detach --name test-jam-statz-mariadb --env MARIADB_ROOT_PASSWORD=my-secret-pw -p 3306:3306 jam-statz-mariadb --general_log_file=/var/lib/mysql/mysql.log --general_log=1`
-
-you now have your db setup.
+you now have your db setup with logging enabled 👍
 
 if you want to access your db just run:
 - `docker exec -it test-jam-statz-mariadb mariadb -u root -p`
 
 just be sure to swap out for your creds.
 
-### handy commands
+### Install Dependencies and Start Backend
 
-- if you update schema.graphqls you have to regenerate by running the following command: `go run github.com/99designs/gqlgen generate`
+Installing dependencies:
+- `go mod download` 
+- `go mod tidy`
 
-- to start your graphql server: `go run server.go`
+Start backend:
+- `go run server.go`
 
-- to test out your grahpql:
-    - start graphql server
-    - go to localhost:8080
+  
+### Handy Commands
 
-- tail db logs:
-    - `docker exec -it test-jam-statz-mariadb tail -f /var/lib/mysql/mysql.log`
+if you update `graph/schemas/schema.graphqls` you have to regenerate by running the following command:
+- `go run github.com/99designs/gqlgen generate`
 
-## TODO:
+to start your graphql server:
+- `go run server.go`
 
-major stuffs:
-- impliment dataloader for graphql
-- create auth workflow
+to test out your grahpql:
+- start graphql server
+- go to localhost:8080
+
+to access db:
+- `docker exec -it test-jam-statz-mariadb mariadb -u root -p`
+
+to tail db logs:
+- `docker exec -it test-jam-statz-mariadb tail -f /var/lib/mysql/mysql.log`
+ 
